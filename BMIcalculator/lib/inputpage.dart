@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'container.dart';
+import 'IconText.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class inputpage extends StatefulWidget {
@@ -56,53 +58,5 @@ class _inputpageState extends State<inputpage> {
   }
 }
 
-class ReapeatTIwidget extends StatelessWidget {
-  ReapeatTIwidget({required this.icondata,this.label});
 
-  final IconData? icondata;
-  final String? label;
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 30),
-          child: Icon(
-            icondata,
-            size: 80.0,
-          ),
-        ),
-        SizedBox(
-          height: 15.0,
-        ),
-        Text(
-          label.toString(),
-          style: TextStyle(
-            fontSize: 20.0,
-            color: Color(0xFF8D8E98),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class Repeatcontainercode extends StatelessWidget {
-
-  Repeatcontainercode ({@required this.colors, this.cardWidget});
-  Color? colors;
-  Widget? cardWidget;
-  @override
-  Widget build(BuildContext context) {
-
-    return Container(
-      margin: EdgeInsets.all(15.0),
-      child: cardWidget,
-      decoration: BoxDecoration(
-          color: colors,
-          borderRadius: BorderRadius.circular(10.0)
-      ),
-    );
-  }
-}
