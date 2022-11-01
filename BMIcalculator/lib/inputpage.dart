@@ -4,8 +4,8 @@ import 'IconText.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
-const activecolor = Color(0xFF111328);
-const deactivecolor = Color(0xFF1D1E33);
+const activecolor = Color(0xFF1D1E33);
+const deactivecolor = Color(0xFF111328);
 
 enum gender{
   male,
