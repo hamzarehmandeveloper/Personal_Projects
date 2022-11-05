@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'container.dart';
 import 'IconText.dart';
 import 'constants.dart';
+import 'resultFile.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
@@ -210,7 +211,7 @@ class _inputpageState extends State<inputpage> {
           ),
           GestureDetector(
             onTap: () {
-
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>ResultPage()));
             },
             child: Container(
               margin: EdgeInsets.only(top: 10.0),
@@ -220,7 +221,7 @@ class _inputpageState extends State<inputpage> {
               color: Color(0xFFEB1555),
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
+                  padding: EdgeInsets.only(top: 15.0),
                   child: Text(
                     "Calculate",
                     style: TextStyle(
