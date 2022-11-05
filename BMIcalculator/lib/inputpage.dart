@@ -115,7 +115,6 @@ class _inputpageState extends State<inputpage> {
             ),
 
           ),),
-
           Expanded(child: Row(
             children: <Widget>[
               Expanded(child: Repeatcontainercode(
@@ -172,7 +171,7 @@ class _inputpageState extends State<inputpage> {
                       style: Klabelstyle,
                     ),
                     Text(
-                      weight.toString(),
+                      age.toString(),
                       style: TextStyle(
                         fontSize: 50.0,
                         fontWeight: FontWeight.w900,
@@ -185,7 +184,7 @@ class _inputpageState extends State<inputpage> {
                           icon: FontAwesomeIcons.plus,
                           onPressed: () {
                             setState(() {
-                              weight++;
+                              age++;
                             });
                           },
                         ),
@@ -196,7 +195,7 @@ class _inputpageState extends State<inputpage> {
                           icon: FontAwesomeIcons.minus,
                           onPressed: () {
                             setState(() {
-                              weight--;
+                              age--;
                             });
                           },
                         ),
@@ -207,8 +206,32 @@ class _inputpageState extends State<inputpage> {
               ),
               ),
             ],
-          )),
+          )
+          ),
+          GestureDetector(
+            onTap: () {
 
+            },
+            child: Container(
+              margin: EdgeInsets.only(top: 10.0),
+              padding: EdgeInsets.only(bottom: 20.0),
+              width: double.infinity,
+              height: 70.0,
+              color: Color(0xFFEB1555),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 15.0),
+                  child: Text(
+                    "Calculate",
+                    style: TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -226,8 +249,8 @@ class RoundIconButton extends StatelessWidget {
       onPressed: onPressed,
       child: Icon(icon),
       elevation: 6.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      fillColor: Colors.lightGreen,
+      shape: CircleBorder(),
+      fillColor: Color(0xFF4C4F5E),
       constraints: BoxConstraints.tightFor(width: 45.0, height: 45.0),
     );
   }
