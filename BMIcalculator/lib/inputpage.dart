@@ -120,10 +120,92 @@ class _inputpageState extends State<inputpage> {
             children: <Widget>[
               Expanded(child: Repeatcontainercode(
                 colors: Color(0xFF1D1E33),
-              ),),
+                cardWidget: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  Text(
+                  "Weight",
+                  style: Klabelstyle,
+                ),
+                Text(
+                  weight.toString(),
+                  style: TextStyle(
+                    fontSize: 50.0,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RoundIconButton(
+                      icon: FontAwesomeIcons.plus,
+                      onPressed: () {
+                        setState(() {
+                          weight++;
+                        });
+                      },
+                    ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    RoundIconButton(
+                      icon: FontAwesomeIcons.minus,
+                      onPressed: () {
+                        setState(() {
+                          weight--;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                ],
+              ),
+              ),
+    ),
               Expanded(child: Repeatcontainercode(
                 colors: Color(0xFF1D1E33),
-              ),),
+                cardWidget: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Age",
+                      style: Klabelstyle,
+                    ),
+                    Text(
+                      weight.toString(),
+                      style: TextStyle(
+                        fontSize: 50.0,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RoundIconButton(
+                          icon: FontAwesomeIcons.plus,
+                          onPressed: () {
+                            setState(() {
+                              weight++;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        RoundIconButton(
+                          icon: FontAwesomeIcons.minus,
+                          onPressed: () {
+                            setState(() {
+                              weight--;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              ),
             ],
           )),
 
@@ -133,5 +215,22 @@ class _inputpageState extends State<inputpage> {
   }
 }
 
+
+class RoundIconButton extends StatelessWidget {
+  RoundIconButton({@required this.icon, required this.onPressed});
+  final IconData? icon;
+  final VoidCallback onPressed;
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      onPressed: onPressed,
+      child: Icon(icon),
+      elevation: 6.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      fillColor: Colors.lightGreen,
+      constraints: BoxConstraints.tightFor(width: 45.0, height: 45.0),
+    );
+  }
+}
 
 
