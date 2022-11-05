@@ -5,6 +5,14 @@ import 'inputpage.dart';
 
 
 class ResultPage extends StatelessWidget {
+  ResultPage(
+      {required this.bmiresult, required this.resulttext, required this.interpretation,});
+
+  final String bmiresult;
+  final String resulttext;
+  final String interpretation;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,15 +44,15 @@ class ResultPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    'Normal',
+                    resulttext.toUpperCase(),
                     style: kResultTextStyle,
                   ),
                   Text(
-                    '18.3',
+                    bmiresult,
                     style: kBMITextStyle,
                   ),
                   Text(
-                    'situation',
+                    interpretation,
                     textAlign: TextAlign.center,
                     style:  TextStyle(
                       fontSize: 22.0,

@@ -3,6 +3,7 @@ import 'container.dart';
 import 'IconText.dart';
 import 'constants.dart';
 import 'resultFile.dart';
+import 'calculatorBrain.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
@@ -211,7 +212,12 @@ class _inputpageState extends State<inputpage> {
           ),
           GestureDetector(
             onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>ResultPage()));
+               CalculatorBrain calc=CalculatorBrain(height: height, weight: weight);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>ResultPage(
+                  bmiresult: calc.CalculateBMI(),
+                  resulttext: calc.getRusult(),
+                  interpretation: calc.getInterpretation(),
+                )));
             },
             child: Container(
               margin: EdgeInsets.only(top: 10.0),
