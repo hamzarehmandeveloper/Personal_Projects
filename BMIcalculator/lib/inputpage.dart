@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'container.dart';
 import 'IconText.dart';
+import 'constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
-const activecolor = Color(0xFF1D1E33);
-const deactivecolor = Color(0xFF111328);
+
 
 enum gender{
   male,
@@ -23,6 +23,9 @@ class _inputpageState extends State<inputpage> {
   Color malecolor=deactivecolor;
   Color femalecolor=deactivecolor;
 
+  int height = 180;
+  int weight = 50;
+  int age = 20;
   void updatecolor(gender gendertype){
     if(gendertype==gender.male){
       malecolor=activecolor;
@@ -40,6 +43,7 @@ class _inputpageState extends State<inputpage> {
         title: Text("BMI Calculator"),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Expanded(child: Row(
             children: <Widget>[
@@ -75,6 +79,41 @@ class _inputpageState extends State<inputpage> {
           )),
           Expanded(child: Repeatcontainercode(
             colors: Color(0xFF1D1E33),
+            cardWidget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text("Height" ,style: Klabelstyle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      height.toString(),
+                      style: TextStyle(
+                        fontSize: 50.0,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    Text(
+                      "cm",
+                      style: Klabelstyle,
+                    ),
+                  ],
+                ),
+                Slider(
+                  activeColor: Color(0xFFEB1555),
+                  inactiveColor: Color(0xFF8D8E98),
+                  value: height.toDouble(),
+                  onChanged: (double newValue) {
+                    setState(() {
+                      height = newValue.round();
+                    });
+                  },
+                  min: 120,
+                  max: 220,
+                )
+              ],
+            ),
+
           ),),
 
           Expanded(child: Row(

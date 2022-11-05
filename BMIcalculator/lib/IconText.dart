@@ -1,3 +1,4 @@
+import 'package:bmicalculator/constants.dart';
 import 'package:flutter/material.dart';
 
 class ReapeatTIwidget extends StatelessWidget {
@@ -22,10 +23,7 @@ class ReapeatTIwidget extends StatelessWidget {
         ),
         Text(
           label.toString(),
-          style: TextStyle(
-            fontSize: 20.0,
-            color: Color(0xFF8D8E98),
-          ),
+          style: Klabelstyle,
         ),
       ],
     );
