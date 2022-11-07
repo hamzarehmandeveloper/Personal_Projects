@@ -5,8 +5,7 @@ import 'inputpage.dart';
 
 
 class ResultPage extends StatelessWidget {
-  ResultPage(
-      {required this.bmiresult, required this.resulttext, required this.interpretation,});
+  ResultPage({required this.bmiresult, required this.resulttext, required this.interpretation,});
 
   final String bmiresult;
   final String resulttext;
