@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tasbeehapp/sharedPref.dart';
 
-void main(){
+void main() {
   runApp(Tasbeeh());
 }
 
@@ -11,15 +12,14 @@ class Tasbeeh extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-        home: mainpage(),
-        theme: ThemeData.dark().copyWith(
+      home: mainpage(),
+      theme: ThemeData.dark().copyWith(
         primaryColor: Color(0xFF0A0E21),
         scaffoldBackgroundColor: Color(0xFF0A0E21),
       ),
     );
   }
 }
-
 
 class mainpage extends StatefulWidget {
   const mainpage({Key? key}) : super(key: key);
@@ -29,7 +29,76 @@ class mainpage extends StatefulWidget {
 }
 
 class _mainpageState extends State<mainpage> {
+  SharedPref sharedPref = new SharedPref();
+  late int _count = 0;
+  String Tname = '';
+  List<tName> tnameclass = [];
 
+  void increament() {
+    setState(() {
+      _count++;
+    });
+    int i = tnameclass.indexWhere((element) => element.name == Tname);
+    tnameclass[i].count = _count;
+    tnameclass.forEach((element) {
+      print(element.name +' = '+ element.count.toString());
+    });
+    sharedPref.save('tName', tnameclass);
+  }
+
+  void reset() {
+    setState(() {
+      _count = 0;
+    });
+  }
+
+  getSavedT() async {
+    tnameclass = await sharedPref.read('tName');
+    tnameclass.forEach((element) {
+      print("Tname GetSavedT: "+element.name);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSavedT();
+  }
+
+  TextEditingController _textFieldController = TextEditingController();
+  _displayDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Enter Tasbeeh Name '),
+            content: TextField(
+              controller: _textFieldController,
+              decoration: InputDecoration(hintText: "Enter Text"),
+            ),
+            actions: [
+              TextButton(
+                child: new Text('SUBMIT'),
+                onPressed: () {
+                  setState(() {
+                    Tname = _textFieldController.value.text;
+                    tnameclass.add(tName(_textFieldController.value.text, 0));
+                  });
+                  tnameclass.forEach((element) {print(element.name);});
+                  sharedPref.save('tName', tnameclass);
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: new Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,71 +109,138 @@ class _mainpageState extends State<mainpage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(child: GestureDetector(
-            child: SizedBox(
-              child: Center(
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  side: BorderSide(width: 2.0, color: Colors.white),
+                ),
                 child: Padding(
-                  padding: EdgeInsets.only(top: 15.0),
-                  child: Text("Costomize"),
-                ),
-              ),
-            ),
-          ),
-          ),
-          Expanded(child: Container(
-            width: 200,
-            height: 200,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.red,
-              ),
-              borderRadius: BorderRadius.all(
-                Radius.circular(100),
-              ),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    '10',
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Customize',
                     style: TextStyle(
+                        fontSize: 20.0,
                         color: Colors.white,
-                        fontSize: 70),
+                        fontWeight: FontWeight.bold),
                   ),
-                ],
+                ),
+                onPressed: () {
+                  _displayDialog(context);
+                },
               ),
-            ),
             ),
           ),
-          Row(
-            children: [
-              Expanded(child: GestureDetector(
-                child: SizedBox(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 15.0),
-                      child: Text("Count"),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(Tname),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Container(
+              width: 250,
+              height: 250,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.red,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(150),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Center(
+                  child: Text(
+                    _count.toString(),
+                    style: TextStyle(
+                      fontSize: 100.0,
                     ),
                   ),
                 ),
               ),
-              ),
-              Expanded(child: GestureDetector(
-                child: SizedBox(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 15.0),
-                      child: Text("Reset"),
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 40, bottom: 40, left: 70, right: 70),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        side: BorderSide(width: 2.0, color: Colors.white),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Reset',
+                          style: TextStyle(fontSize: 20.0, color: Colors.white),
+                        ),
+                      ),
+                      onPressed: () {
+                        reset();
+                      },
                     ),
                   ),
                 ),
-              ),
-              ),
-            ],
+                Spacer(
+                  flex: 1,
+                ),
+                Expanded(
+                  child: Container(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        side: BorderSide(width: 2.0, color: Colors.white),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Count',
+                          style: TextStyle(fontSize: 20.0, color: Colors.white),
+                        ),
+                      ),
+                      onPressed: () {
+                        increament();
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           )
         ],
       ),
     );
   }
+}
+
+class tName {
+  String _name;
+  int _count;
+
+  String get name => _name;
+
+  set name(String value) {
+    _name = value;
+  }
+
+  int get count => _count;
+
+  set count(int value) {
+    _count = value;
+  }
+
+  tName(this._name, this._count);
 }
