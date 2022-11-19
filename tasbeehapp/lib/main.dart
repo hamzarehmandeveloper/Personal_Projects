@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasbeehapp/sharedPref.dart';
+import 'package:tasbeehapp/Saved.dart';
 
 void main() {
   runApp(Tasbeeh());
@@ -50,6 +51,12 @@ class _mainpageState extends State<mainpage> {
     setState(() {
       _count = 0;
     });
+    int i = tnameclass.indexWhere((element) => element.name == Tname);
+    tnameclass[i].count = _count;
+    tnameclass.forEach((element) {
+      print(element.name +' = '+ element.count.toString());
+    });
+    sharedPref.save('tName', tnameclass);
   }
 
   getSavedT() async {
@@ -109,6 +116,34 @@ class _mainpageState extends State<mainpage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  side: BorderSide(width: 2.0, color: Colors.white),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0,bottom: 8.0,left:27,right: 27),
+                  child: Text(
+                    'Saved',
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>savedpage(
+
+                  )));
+                },
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Container(
@@ -227,6 +262,7 @@ class _mainpageState extends State<mainpage> {
 }
 
 class tName {
+  tName(this._name, this._count);
   String _name;
   int _count;
 
@@ -242,5 +278,5 @@ class tName {
     _count = value;
   }
 
-  tName(this._name, this._count);
+
 }
