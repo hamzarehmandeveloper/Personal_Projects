@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tasbeehapp/sharedPref.dart';
 import 'package:tasbeehapp/Saved.dart';
+import 'constant.dart';
 
 void main() {
   runApp(Tasbeeh());
@@ -30,10 +31,8 @@ class mainpage extends StatefulWidget {
 }
 
 class _mainpageState extends State<mainpage> {
-  SharedPref sharedPref = new SharedPref();
   late int _count = 0;
   String Tname = '';
-  List<tName> tnameclass = [];
 
   void increament() {
     setState(() {
@@ -59,12 +58,6 @@ class _mainpageState extends State<mainpage> {
     sharedPref.save('tName', tnameclass);
   }
 
-  getSavedT() async {
-    tnameclass = await sharedPref.read('tName');
-    tnameclass.forEach((element) {
-      print("Tname GetSavedT: "+element.name);
-    });
-  }
 
   @override
   void initState() {
@@ -111,7 +104,8 @@ class _mainpageState extends State<mainpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tasbeeh Counter"),
+        title: Text("Tasbeeh Counter")
+            
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -137,7 +131,7 @@ class _mainpageState extends State<mainpage> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>savedpage(
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>saved(
 
                   )));
                 },
