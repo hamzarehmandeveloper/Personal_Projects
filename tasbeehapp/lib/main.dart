@@ -72,13 +72,22 @@ class _mainpageState extends State<mainpage> {
         builder: (context) {
           return AlertDialog(
             title: Text('Enter Tasbeeh Name '),
-            content: TextField(
-              controller: _textFieldController,
-              decoration: InputDecoration(hintText: "Enter Text"),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TextField(
+                  controller: _textFieldController,
+                  decoration: InputDecoration(hintText: "Enter Text"),
+                ),
+                TextField(
+                  decoration: InputDecoration(hintText: "Enter Limit"),
+                ),
+              ],
             ),
             actions: [
               TextButton(
-                child: new Text('SUBMIT'),
+                child: new Text('ADD'),
                 onPressed: () {
                   setState(() {
                     Tname = _textFieldController.value.text;
@@ -105,7 +114,7 @@ class _mainpageState extends State<mainpage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Tasbeeh Counter")
-            
+
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
