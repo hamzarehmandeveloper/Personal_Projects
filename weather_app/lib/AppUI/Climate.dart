@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../utils/apifile.dart' as util;
 import 'package:http/http.dart' as http;
+import 'ChangeCity.dart';
 import 'dart:convert';
 
 
@@ -17,7 +18,19 @@ class _ClimateState extends State<Climate> {
 
   String ? _cityEntered;
 
+  Future _goToNextScreen(BuildContext context) async {
+    Map? results = await Navigator.of(context)
+        .push(MaterialPageRoute<Map>(builder: (BuildContext context) {
+      //change to Map instead of dynamic for this to work
+      return ChangeCity();
+    }));
 
+    if (results != null && results.containsKey('enter')) {
+      _cityEntered = results['enter'];
+
+      print("From First screen" + _cityEntered!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +42,7 @@ class _ClimateState extends State<Climate> {
           IconButton(
               icon: Icon(Icons.menu),
               onPressed: () {
-
+                _goToNextScreen(context);
               })
         ],
       ),
