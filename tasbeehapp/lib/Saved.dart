@@ -3,7 +3,7 @@ import 'package:tasbeehapp/main.dart';
 import 'constant.dart';
 
 class saved extends StatelessWidget {
-  saved({Key?key}) : super(key: key);
+  const saved({Key?key}) : super(key: key);
 
 
 
@@ -14,6 +14,9 @@ class saved extends StatelessWidget {
   }
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('saved Tasbeeh'),
+      ),
       body: ListView.builder(
           padding: const EdgeInsets.all(8),
           itemCount: tnameclass.length,
