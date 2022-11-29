@@ -46,8 +46,6 @@ class _ChangeCityState extends State<ChangeCity> {
                       Navigator.pop(
                           context, {'enter': _cityFieldController.text});
                     },
-
-
                     child: Text('Get Weather')),
               )
             ],

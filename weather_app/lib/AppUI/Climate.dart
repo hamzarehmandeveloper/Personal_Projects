@@ -15,22 +15,9 @@ class _ClimateState extends State<Climate> {
     Map data = await getWeather(util.apiId, util.defaultCity);
     print(data.toString());
   }
-
+  var _cityFieldController = TextEditingController();
   String ? _cityEntered;
 
-  Future _goToNextScreen(BuildContext context) async {
-    Map? results = await Navigator.of(context)
-        .push(MaterialPageRoute<Map>(builder: (BuildContext context) {
-      //change to Map instead of dynamic for this to work
-      return ChangeCity();
-    }));
-
-    if (results != null && results.containsKey('enter')) {
-      _cityEntered = results['enter'];
-
-      print("From First screen" + _cityEntered!);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,41 +25,73 @@ class _ClimateState extends State<Climate> {
       appBar: AppBar(
         title: Text('ClimateApp'),
         backgroundColor: Colors.lightBlue,
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                _goToNextScreen(context);
-              })
-        ],
       ),
-      body: Stack(
+      body: Column(
         children: <Widget>[
-          Center(
-            child: Image(
-              image: AssetImage('images/umbrella.png'),
-              height: 1250.0,
-              width: 600.0,
-              fit: BoxFit.fill,
-            ),
+
+          Column(
+            children: [
+              ListTile(
+                title: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Enter City',
+                  ),
+                  controller: _cityFieldController,
+                  keyboardType: TextInputType.text,
+                ),
+              ),
+              ListTile(
+                title: TextButton(
+                    onPressed: () {
+                      _cityEntered=_cityFieldController.value.text;
+                      print("From First screen" + _cityEntered!);
+                    },
+
+
+                    child: Text('Get Weather')),
+              ),
+            ],
           ),
+
           Container(
-            alignment: Alignment.topRight,
-            margin: EdgeInsets.fromLTRB(0.0, 10.9, 20.9, 0.0),
-            child: Text(
-              '${_cityEntered == null ? util.defaultCity : _cityEntered}',
-              style: cityStyle(),
-            ),
+            alignment: Alignment.center,
+
           ),
           Center(
             child: Image(
               image: AssetImage('images/light_rain.png'),
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(30.0, 90.0, 0.0, 0.0),
-            child: updateTempWidget(
-                '${_cityEntered == null ? util.defaultCity : _cityEntered}'),
+          Column(
+            children:[
+              Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.red,
+                  ),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(150),
+                  ),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(1.0),
+                  child: Center(
+                    child: Text(
+                      '${_cityEntered == null ? util.defaultCity : _cityEntered}',
+                      style: TextStyle(
+                        fontSize: 50.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+              child: updateTempWidget(
+                  '${_cityEntered == null ? util.defaultCity : _cityEntered}'),
+            ),
+            ],
           ),
         ],
       ),
@@ -99,31 +118,29 @@ class _ClimateState extends State<Climate> {
           if (snapshot.hasData) {
             Map ? content = snapshot.data;
             return Container(
-              margin: const EdgeInsets.fromLTRB(30.0, 250.0, 0.0, 0.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ListTile(
-                    title: Text(
-                      content!['main']['temp'].toString() + " F",
-                      style: TextStyle(
-                          fontStyle: FontStyle.normal,
-                          fontSize: 49.9,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    subtitle: ListTile(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ListTile(
                       title: Text(
-                        "Humidity: ${content!['main']['humidity'].toString()}\n"
-                            "Min: ${content['main']['temp_min'].toString()} F\n"
-                            "Max: ${content['main']['temp_max'].toString()} F ",
-                        style: extraData(),
+                        content!['main']['temp'].toString() + " F",
+                        style: TextStyle(
+                            fontStyle: FontStyle.normal,
+                            fontSize: 49.9,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            );
+                      subtitle: Text(
+                          "Humidity: ${content!['main']['humidity'].toString()}\n"
+                              "Min: ${content['main']['temp_min'].toString()} F\n"
+                              "Max: ${content['main']['temp_max'].toString()} F ",
+                          style: extraData(),
+                        ),
+
+                    )
+                  ],
+                ),
+              );
           } else {
             return Container();
           }
@@ -133,7 +150,7 @@ class _ClimateState extends State<Climate> {
 
 TextStyle cityStyle() {
   return TextStyle(
-    color: Colors.white,
+    color: Colors.black,
     fontSize: 22.9,
 
   );
@@ -141,5 +158,5 @@ TextStyle cityStyle() {
 
 TextStyle extraData() {
   return TextStyle(
-      color: Colors.white70, fontStyle: FontStyle.normal, fontSize: 17.0);
+      color: Colors.black, fontStyle: FontStyle.normal, fontSize: 17.0);
 }
