@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/apifile.dart' as util;
 import 'package:http/http.dart' as http;
-import 'ChangeCity.dart';
 import 'dart:convert';
 
 
@@ -25,6 +24,7 @@ class _ClimateState extends State<Climate> {
       appBar: AppBar(
         title: Text('ClimateApp'),
         backgroundColor: Colors.lightBlue,
+        centerTitle: true,
       ),
       body: Column(
         children: <Widget>[
@@ -78,8 +78,7 @@ class _ClimateState extends State<Climate> {
                 child: Padding(
                   padding: EdgeInsets.all(1.0),
                   child: Center(
-                    child: Text(
-                      '${_cityEntered == null ? util.defaultCity : _cityEntered}',
+                    child: Text("${_cityEntered == null ? util.defaultCity : _cityEntered}",
                       style: TextStyle(
                         fontSize: 50.0,
                       ),
@@ -88,8 +87,7 @@ class _ClimateState extends State<Climate> {
                 ),
               ),
               Container(
-              child: updateTempWidget(
-                  '${_cityEntered == null ? util.defaultCity : _cityEntered}'),
+              child: updateTempWidget("${_cityEntered == null ? util.defaultCity : _cityEntered}"),
             ),
             ],
           ),
