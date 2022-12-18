@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sharedpref/sharedPref.dart';
 
 void main() => runApp(const MyApp());
 
@@ -13,7 +10,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Shared preferences demo',
       home: MyHomePage(title: 'Shared preferences demo'),
     );
@@ -31,9 +27,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
-  List<countclass> counterlist=[];
-
+  List<String> shared_list = [];
   @override
   void initState() {
     super.initState();
@@ -44,25 +38,28 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _loadCounter() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-
       _counter = (prefs.getInt('counter') ?? 0);
-
     });
   }
 
   //Incrementing counter after click
   Future<void> _incrementCounter() async {
+    _readcounter();
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _counter ++;
-
+      _counter = (prefs.getInt('counter') ?? 0) + 1;
+      prefs.setInt('counter', _counter);
     });
-    String d = jsonEncode(_counter);
-    int i=0;
-    counterlist[i]._ccount=_counter;
-    prefs.setString('counter', d);
   }
+  Future<void> _readcounter() async {
+    final prefs = await SharedPreferences.getInstance();
 
+// Try reading data from the counter key. If it doesn't exist, return 0.
+    final counter = prefs.getInt('counter') ?? 0;
+    String str = counter.toString();
+    shared_list.indexWhere((element) => element==str);
+    shared_list.add(_counter.toString());
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,10 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'You have pushed the button this many times:',
+              'count list:',
             ),
             Text(
-              '$_counter',
+              '$shared_list',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
@@ -92,21 +89,3 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-
-class countclass {
-  countclass(this._name, this._ccount);
-  String _name="counter";
-  int _ccount;
-
-  String get name => _name;
-
-
-
-  int get ccount => _ccount;
-
-  set ccount(int value) {
-    _ccount = value;
-  }
-
-
-}
