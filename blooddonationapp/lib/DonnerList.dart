@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 import 'db_manager.dart';
 
-class AddDonner extends StatefulWidget {
-  const AddDonner({Key? key}) : super(key: key);
+class DonnerList extends StatefulWidget {
+  const DonnerList({Key? key}) : super(key: key);
 
   @override
-  _AddDonnerState createState() => _AddDonnerState();
+  _DonnerListState createState() => _DonnerListState();
 }
 
-class _AddDonnerState extends State<AddDonner> {
+class _DonnerListState extends State<DonnerList> {
   final dbHelper = DatabaseHelper.instance;
   List<Map<String, dynamic>> allCategoryData = [];
 

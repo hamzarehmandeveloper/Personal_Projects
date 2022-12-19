@@ -15,7 +15,7 @@ class DatabaseHelper {
   static final columnName = 'name';
   static final columnLName = 'lname';
   static final columnMobile = 'mobile';
-  static final columnBG = 'mobile';
+  static final columnBG = 'bloodgroup';
   static final columnEmail = 'email';
   static final columnCategory = 'cat';
   static final columnProfile = 'profile';

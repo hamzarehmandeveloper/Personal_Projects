@@ -1,8 +1,8 @@
 
+import 'package:blooddonationapp/AddDonner.dart';
 import 'package:flutter/material.dart';
 import 'package:blooddonationapp/colors.dart';
 import 'package:blooddonationapp/DonnerList.dart';
-import 'package:blooddonationapp/models/category.dart';
 import 'package:sqflite/sqflite.dart';
 import 'db_manager.dart';
 
@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final dbHelper = DatabaseHelper.instance;
   List<Map<String, dynamic>> allCategoryData = [];
-  late final String _categoryName;
+  late String _categoryName="donner";
   final formGlobalKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                     child: GestureDetector(
                       onTap: (){
                         setState(() {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ContactList()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>DonnerList()));
                         });
                       },
                       child: Container(
@@ -66,7 +66,8 @@ class _HomePageState extends State<HomePage> {
                     child: GestureDetector(
                       onTap: (){
                         setState(() {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddContact()));
+                          _insert();
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddDonner()));
                         });
                       },
                       child: Container(
