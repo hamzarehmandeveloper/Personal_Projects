@@ -40,38 +40,55 @@ class _DonnerListState extends State<DonnerList> {
                   itemBuilder: (_, index) {
                     var item = allCategoryData[index];
                     Uint8List bytes = base64Decode(item['profile']);
-                    return Container(
-                      color: MyColors.orangeTile,
-                      padding: EdgeInsets.zero,
-                      margin: EdgeInsets.zero,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 20,
-                              ),
-                              CircleAvatar(child: Image.memory(bytes,fit: BoxFit.cover,),minRadius: 20,maxRadius: 25,),
-                              Text("${item['name']}"),
-                              Text("${item['lname']}"),
-                              Spacer(),
-                              IconButton(
-                                onPressed: null,
-                                icon: Icon(Icons.edit),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  _delete(item['_id']);
-                                },
-                                icon: Icon(Icons.delete),
-                              ),
-                            ],
-                          ),
-                          const Divider(
-                            color: MyColors.orangeDivider,
-                            thickness: 1,
-                          ),
-                        ],
+                    return Center(
+                      child: Container(
+                        color: MyColors.orangeTile,
+                        padding: EdgeInsets.zero,
+                        margin: EdgeInsets.zero,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                CircleAvatar(child: Image.memory(bytes,fit: BoxFit.cover,),minRadius: 30,maxRadius: 35,),
+                                Spacer(),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text("${item['name']} ",style:TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.white)),
+                                        Text("${item['lname']}",style:TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.white)),
+                                      ],
+                                    ),
+                                    Text("${item['mobile']} ",style:TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
+                                    Text("${item['bloodgroup']} ",style:TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
+                                    Text("${item['address']} ",style:TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
+                                  ],
+                                ),
+                                Spacer(),
+                                IconButton(
+                                  onPressed: null,
+                                  icon: Icon(Icons.edit),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    _delete(item['_id']);
+                                  },
+                                  icon: Icon(Icons.delete),
+                                ),
+                              ],
+                            ),
+
+                            const Divider(
+                              thickness: 1,
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

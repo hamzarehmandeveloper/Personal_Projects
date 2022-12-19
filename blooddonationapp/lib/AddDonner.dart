@@ -24,7 +24,8 @@ class _AddDonnerState extends State<AddDonner> {
   final TextEditingController _firstName = TextEditingController();
   final TextEditingController _lastName = TextEditingController();
   final TextEditingController _mobileNumber = TextEditingController();
-  final TextEditingController _emailAddress = TextEditingController();
+  final TextEditingController _Address = TextEditingController();
+  final TextEditingController _last = TextEditingController();
   final TextEditingController _BG = TextEditingController();
   final formGlobalKey = GlobalKey<FormState>();
   File? imageFile;
@@ -195,17 +196,45 @@ class _AddDonnerState extends State<AddDonner> {
                             borderSide: BorderSide(
                                 color: MyColors.primaryColor, width: 1.0),
                           ),
-                          hintText: 'Email Address',
+                          hintText: 'Last time blood donation',
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),
                         ),
-                        controller: _emailAddress,
+                        controller: _Address,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Enter Email Address';
                           }
                           return null;
                         },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.greenAccent, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: MyColors.primaryColor, width: 1.0),
+                          ),
+                          hintText: 'Address',
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                        ),
+                        controller: _Address,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter Email Address';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
                       ),
                       TextFormField(
                         decoration: InputDecoration(
@@ -298,7 +327,8 @@ class _AddDonnerState extends State<AddDonner> {
     Map<String, dynamic> row = {DatabaseHelper.columnName: _firstName.text,
       DatabaseHelper.columnLName: _lastName.text,
       DatabaseHelper.columnMobile: _mobileNumber.text,
-      DatabaseHelper.columnEmail: _emailAddress.text,
+      DatabaseHelper.columnAddress: _Address.text,
+      DatabaseHelper.columnlast: _last.text,
       DatabaseHelper.columnBG: _BG.text,
       DatabaseHelper.columnCategory: currentCategory,
       DatabaseHelper.columnProfile: base64image,

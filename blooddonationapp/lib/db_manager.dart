@@ -16,7 +16,8 @@ class DatabaseHelper {
   static final columnLName = 'lname';
   static final columnMobile = 'mobile';
   static final columnBG = 'bloodgroup';
-  static final columnEmail = 'email';
+  static final columnlast = 'last';
+  static final columnAddress = 'adress';
   static final columnCategory = 'cat';
   static final columnProfile = 'profile';
 
@@ -57,7 +58,8 @@ class DatabaseHelper {
             $columnLName TEXT NOT NULL, 
             $columnMobile TEXT NOT NULL, 
             $columnBG TEXT NOT NULL,
-            $columnEmail TEXT NOT NULL, 
+            $columnAddress TEXT NOT NULL,
+            $columnlast TEXT NOT NULL, 
             $columnCategory TEXT NOT NULL, 
             $columnProfile TEXT NOT NULL
           )
