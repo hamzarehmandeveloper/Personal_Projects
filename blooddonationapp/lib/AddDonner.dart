@@ -63,7 +63,7 @@ class _AddDonnerState extends State<AddDonner> {
         appBar: AppBar(
           backgroundColor: MyColors.primaryColor,
           centerTitle: true,
-          title: Text("Add Contact"),
+          title: Text("Add Donner"),
         ),
         body: ListView(
           children: [
@@ -108,11 +108,11 @@ class _AddDonnerState extends State<AddDonner> {
                           minRadius: 100,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.greenAccent, width: 2.0),
@@ -133,11 +133,11 @@ class _AddDonnerState extends State<AddDonner> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.greenAccent, width: 2.0),
@@ -158,11 +158,11 @@ class _AddDonnerState extends State<AddDonner> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.greenAccent, width: 2.0),
@@ -183,11 +183,11 @@ class _AddDonnerState extends State<AddDonner> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.greenAccent, width: 2.0),
@@ -200,7 +200,7 @@ class _AddDonnerState extends State<AddDonner> {
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),
                         ),
-                        controller: _Address,
+                        controller: _last,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Enter Email Address';
@@ -208,11 +208,11 @@ class _AddDonnerState extends State<AddDonner> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.greenAccent, width: 2.0),
@@ -233,11 +233,11 @@ class _AddDonnerState extends State<AddDonner> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Colors.greenAccent, width: 2.0),
@@ -258,7 +258,7 @@ class _AddDonnerState extends State<AddDonner> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Container(

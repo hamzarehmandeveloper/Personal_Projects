@@ -27,7 +27,7 @@ class _DonnerListState extends State<DonnerList> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: MyColors.primaryColor,
-          title: Text("contact list"),
+          title: Text("Donner list"),
           centerTitle: true,
         ),
         body: Column(
