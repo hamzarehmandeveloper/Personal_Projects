@@ -9,36 +9,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:signature/signature.dart';
+import 'package:blooddonationapp/donnor_model.dart';
 
 import 'DonnerList.dart';
 import 'colors.dart';
 import 'db_manager.dart';
 
-class AddDonner extends StatefulWidget {
-  const AddDonner({Key? key}) : super(key: key);
-
+class EditDonner extends StatefulWidget {
+  int id;
+  EditDonner({Key? key, required this.id}) : super(key: key);
   @override
-  _AddDonnerState createState() => _AddDonnerState();
+  _EditDonnerState createState() => _EditDonnerState();
 }
 
-class _AddDonnerState extends State<AddDonner> {
+class _EditDonnerState extends State<EditDonner> {
   final TextEditingController _firstName = TextEditingController();
-  // final TextEditingController _lastDate = TextEditingController();
   final TextEditingController _mobileNumber = TextEditingController();
   final TextEditingController _address = TextEditingController();
   final formGlobalKey = GlobalKey<FormState>();
 
   String currentCategory = "";
   String lastDate = "";
-  // var imageEncoded;
   List<String> allCategoryData = [ "A+","A-","B+","B-","AB+","AB-","O","O-"];
   final dbHelper = DatabaseHelper.instance;
-  // late Future<Uint8List> imageBytes;
-  // final SignatureController _controller = SignatureController(
-  //   penStrokeWidth: 5,
-  //   penColor: Colors.red,
-  //   exportBackgroundColor: Colors.blue,
-  // );
+
 
 // INITIALIZE. RESULT IS A WIDGET, SO IT CAN BE DIRECTLY USED IN BUILD METHOD
 
@@ -46,13 +40,8 @@ class _AddDonnerState extends State<AddDonner> {
   @override
   void initState() {
     super.initState();
-    // _query();
-    // var _signatureCanvas = Signature(
-    //   controller: _controller,
-    //   width: 300,
-    //   height: 300,
-    //   backgroundColor: Colors.lightBlueAccent,
-    // );
+    _query(widget.id);
+
   }
   @override
   Widget build(BuildContext context) {
@@ -62,7 +51,7 @@ class _AddDonnerState extends State<AddDonner> {
         appBar: AppBar(
           backgroundColor: MyColors.primaryColor,
           centerTitle: true,
-          title: const Text("Add Donner"),
+          title: const Text("Edit Donner"),
         ),
         body: ListView(
           children: [
@@ -229,9 +218,6 @@ class _AddDonnerState extends State<AddDonner> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
                       TextButtonTheme(
                         data: TextButtonThemeData(
                           style: ButtonStyle(
@@ -242,11 +228,11 @@ class _AddDonnerState extends State<AddDonner> {
                         child: TextButton(
                           onPressed: () {
                             if (formGlobalKey.currentState!.validate()) {
-                              _insert();
+                              _update(widget.id);
                             }
                           },
                           child: const Text(
-                            "Save",
+                            "Update",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -277,17 +263,42 @@ class _AddDonnerState extends State<AddDonner> {
       print('inserted row id: $id');
     }
     // _query();
-    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (_)=>DonnerList()));
   }
 
-  // void _query() async {
-  //   final allRows = await dbHelper.queryAllRows();
-  //   if (kDebugMode) {
-  //     print('query all rows:');
-  //   }
-  //   for (var element in allRows) {
-  //     allCategoryData.add(element["name"]);
-  //   }
-  //   setState(() {});
-  // }
+void _query(id) async {
+  List<Map> result = await dbHelper.getDonner(id);
+  if(result.isNotEmpty){
+    DonnerModel donner = DonnerModel(
+        id: result[0]["id"] ?? 0,
+        name: result[0]["name"] ?? "",
+        address: result[0]["address"] ?? "",
+        mobile: result[0]["mobile"] ?? "",
+        blood: result[0]["cat"] ?? "",
+        lastDate: result[0]["email"] ?? "");
+
+    _firstName.text = donner.name;
+    _address.text = donner.address;
+    _mobileNumber.text = donner.mobile;
+    currentCategory = donner.blood;
+    lastDate = donner.lastDate;
+  }
+
+
+  setState(() {});
 }
+  void _update(int rowId) async {
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnName: _firstName.text,
+      DatabaseHelper.columnLastDate: lastDate,
+      DatabaseHelper.columnMobile: _mobileNumber.text,
+      DatabaseHelper.columnAddress: _address.text,
+      DatabaseHelper.columnCategory: currentCategory,
+    };
+
+    final id = await dbHelper.updateDonner(row:row,id: rowId);
+    Navigator.pop(context);
+  }
+}
+
+

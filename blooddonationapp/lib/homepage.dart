@@ -1,9 +1,9 @@
 
-import 'package:blooddonationapp/AddDonner.dart';
 import 'package:flutter/material.dart';
-import 'package:blooddonationapp/colors.dart';
-import 'package:blooddonationapp/DonnerList.dart';
 import 'package:sqflite/sqflite.dart';
+import 'AddDonner.dart';
+import 'DonnerList.dart';
+import 'colors.dart';
 import 'db_manager.dart';
 
 
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   final formGlobalKey = GlobalKey<FormState>();
   @override
   void initState() {
-    _query();
+    // _query();
     super.initState();
   }
 
@@ -50,10 +50,10 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color(0xffb00505),
                         ),
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         child: Center(child: Text("Request", style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold,color: Colors.white),)),
                       ),
                     ),
@@ -70,10 +70,10 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color(0xffb00505),
                         ),
-                        child: Center(child: Text("I'm Donner", style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold,color: Colors.white),)),
+                        child: const Center(child: Text("I'm Donner", style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold,color: Colors.white),)),
                       ),
                     ),
                   ),
@@ -84,29 +84,29 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  void _insert() async {
-    // row to insert
-    Map<String, dynamic> row = {DatabaseHelper.columnName: _categoryName};
-    print('insert stRT');
-
-    final id = await dbHelper.insert(row);
-    print('inserted row id: $id');
-    _categoryName = "";
-    _query();
-  }
-
-  void _query() async {
-    final allRows = await dbHelper.queryAllRows();
-    print('query all rows:');
-    allRows.forEach(print);
-    allCategoryData = allRows;
-    setState(() {});
-  }
-
-  void _delete(int id) async {
-    // Assuming that the number of rows is the id for the last row.
-    final rowsDeleted = await dbHelper.delete(id);
-    print('deleted $rowsDeleted row(s): row $id');
-    _query();
-  }
+  // void _insert() async {
+  //   // row to insert
+  //   Map<String, dynamic> row = {DatabaseHelper.columnName: _categoryName};
+  //   print('insert stRT');
+  //
+  //   final id = await dbHelper.insert(row);
+  //   print('inserted row id: $id');
+  //   _categoryName = "";
+  //   _query();
+  // }
+  //
+  // void _query() async {
+  //   final allRows = await dbHelper.queryAllRows();
+  //   print('query all rows:');
+  //   allRows.forEach(print);
+  //   allCategoryData = allRows;
+  //   setState(() {});
+  // }
+  //
+  // void _delete(int id) async {
+  //   // Assuming that the number of rows is the id for the last row.
+  //   final rowsDeleted = await dbHelper.delete(id);
+  //   print('deleted $rowsDeleted row(s): row $id');
+  //   _query();
+  // }
 }

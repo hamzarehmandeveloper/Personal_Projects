@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:blooddonationapp/homepage.dart';
+import 'package:blooddonationapp/splashScreen.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: Splash(),
     );
   }
 }
