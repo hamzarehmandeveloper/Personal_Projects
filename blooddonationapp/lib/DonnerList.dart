@@ -290,7 +290,7 @@ class _DonnerListState extends State<DonnerList> {
                                       children: [
                                         FittedBox(
                                             child: Text(
-                                          searchData[index].name,
+                                          searchData[index].name + " " + "(" + searchData[index].blood + ")",
                                           style: TextStyle(fontSize: 20),
                                         )),
                                         const SizedBox(
@@ -318,20 +318,50 @@ class _DonnerListState extends State<DonnerList> {
                                               style: TextStyle(
                                                   color: Colors.black),
                                             ),
+                                            Text(
+                                              searchData[index].lastDate.substring(0,10),
+                                            ),
                                             // Text(timestampToLocaltime(donnerData[index].lastDate)
                                             //   ,
                                             // ),
+
                                           ],
                                         ),
+
                                       ],
                                     ),
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                  width: 100,
+
                                   child: Row(
                                     children: [
+                                      IconButton(
+                                      onPressed: () async {
+                                        try {
+                                          if (searchData[index]
+                                              .mobile
+                                              .isNotEmpty) {
+                                            searchData[index].mobile =
+                                                searchData[index]
+                                                    .mobile
+                                                    .replaceAll(" ", "");
+                                            if (await UrlLauncher.canLaunch("tel:"+
+                                                searchData[index].mobile)) {
+                                              await UrlLauncher.launch("tel:"+
+                                                  searchData[index].mobile);
+                                            }
+                                          }
+                                        } catch (e) {
+                                          print('Cannot launch url');
+                                        }
+                                      },
+                                      icon: Icon(
+                                        Icons.phone,
+                                        color: Colors.green,
+                                      ),
+                                    ),
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.push(
