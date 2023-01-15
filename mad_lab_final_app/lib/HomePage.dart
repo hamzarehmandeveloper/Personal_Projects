@@ -1,63 +1,150 @@
 import 'package:flutter/material.dart';
 
-class SignInPage extends StatefulWidget {
+import 'package:flutter/foundation.dart';
+
+import 'Tablepage.dart';
+import 'db_manager.dart';
+
+class Homepage extends StatefulWidget {
+  const Homepage({Key? key}) : super(key: key);
+
   @override
-  _SignInPageState createState() => _SignInPageState();
+  State<Homepage> createState() => _HomepageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
-  final _formKey = GlobalKey<FormState>();
-  late String _email, _password;
+class _HomepageState extends State<Homepage> {
+  final TextEditingController _tstr = TextEditingController();
+  final TextEditingController _tlast = TextEditingController();
+  final TextEditingController _table = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sign In"),
+        title: Text("Home"),
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            TextFormField(
-              validator: (input) {
-                if(input.isEmpty){
-                  return 'Provide an email';
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+
+          const SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.greenAccent, width: 2.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.pink, width: 1.0),
+              ),
+              hintText: 'Enter Table Number',
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: 10, vertical: 5),
+            ),
+            controller: _table,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Enter Table Number';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.greenAccent, width: 2.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.pink, width: 1.0),
+              ),
+              hintText: 'Enter Table Starting Number',
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: 10, vertical: 5),
+            ),
+            controller: _tstr,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Enter Table Starting Number';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.greenAccent, width: 2.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.pink, width: 1.0),
+              ),
+              hintText: 'Enter Table Ending Number',
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: 10, vertical: 5),
+            ),
+            controller: _tlast,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Enter Table Ending Number';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TextButtonTheme(
+            data: TextButtonThemeData(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Colors.white30),
+              ),
+            ),
+            child: TextButton(
+              onPressed: () {
+
                 }
               },
-              decoration: InputDecoration(
-                  labelText: 'Email'
+              child: const Text(
+                "Generate Table",
+                style: TextStyle(color: Colors.white),
               ),
-              onSaved: (input) => _email = input!,
             ),
-            TextFormField(
-              validator: (input) {
-                if(input.length < 6){
-                  return 'Longer password please';
-                }
-              },
-              decoration: InputDecoration(
-                  labelText: 'Password'
+            ),
+            TextButtonTheme(
+              data: TextButtonThemeData(
+              style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+              Colors.white30),
               ),
-              obscureText: true,
-              onSaved: (input) => _password = input,
-            ),
-            RaisedButton(
-              onPressed: signIn,
-              child: Text('Sign in'),
-            ),
-          ],
-        ),
+              ),
+              child: TextButton(
+                onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return Homepage(_);
+  }));
+                },
+                child: const Text(
+                "Generate Table",
+                style: TextStyle(color: Colors.white),
+                ),
+              ),
+              ),
+        ],
       ),
     );
   }
-
-  void signIn() {
-    if(_formKey.currentState.validate()){
-      _formKey.currentState.save();
-      //Add your sign in logic here, for example, checking against a mock database of users
-      print(_email);
-      print(_password);
-    }
-  }
 }
+

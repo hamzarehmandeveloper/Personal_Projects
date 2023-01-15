@@ -14,7 +14,7 @@ class _SplashState extends State<Splash> {
   void initState(){
     super.initState();
     Future.delayed(const Duration(seconds: 5), (){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Homepage()));
     });
   }
   @override
@@ -25,7 +25,7 @@ class _SplashState extends State<Splash> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/icon', height: 130,),
+            Image.asset('Assets/Icon.png', height: 130,),
             Text("Quiz App",style: TextStyle(
                 fontSize: 25,color: Colors.white
             ),),
