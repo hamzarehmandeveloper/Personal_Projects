@@ -1,24 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:mad_lab_final_app/Quiz.dart';
 
 class Tablepage extends StatefulWidget {
-  const Tablepage({Key? key}) : super(key: key);
+  Tablepage({required this.tstart, required this.tend, required this.tableno});
+  final int tstart;
+  final int tend;
+  final int tableno;
+
   @override
-  State<Tablepage> createState() => _TablepageState();
+  _TablepageState createState() => _TablepageState();
 }
 
 class _TablepageState extends State<Tablepage> {
-  Tablepage({required this.tstart, required this.tend, required this.tableno,});
-  late int tstart,tend,tablono;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Table"),
-
       ),
       body: Column(
         children: [
-
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget.tend - widget.tstart + 1,
+              itemBuilder: (context, index) {
+                final i = index + widget.tstart;
+                return Card(
+                  elevation: 5,
+                  margin: EdgeInsets.all(8),
+                  child: ListTile(
+                    leading: Text(
+                      '${widget.tableno}',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    title: Text('x   =    ${i}'),
+                    trailing: Text(
+                      '${widget.tableno * i}',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 20),
+          TextButton(
+            child: Text("Go to Home"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          SizedBox(height: 10),
+          TextButton(
+            child: Text("Create Quiz"),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>QuizPage(
+                tstart: widget.tstart,
+                tend: widget.tend,
+                tableno: widget.tableno,
+              )));
+            },
+          ),
         ],
       ),
     );

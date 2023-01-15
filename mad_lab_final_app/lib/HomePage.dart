@@ -1,150 +1,65 @@
+
 import 'package:flutter/material.dart';
+import 'package:mad_lab_final_app/Tablepage.dart';
 
-import 'package:flutter/foundation.dart';
 
-import 'Tablepage.dart';
-import 'db_manager.dart';
-
-class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
-
+class MyHomePage extends StatefulWidget {
   @override
-  State<Homepage> createState() => _HomepageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _HomepageState extends State<Homepage> {
-  final TextEditingController _tstr = TextEditingController();
-  final TextEditingController _tlast = TextEditingController();
-  final TextEditingController _table = TextEditingController();
+class _MyHomePageState extends State<MyHomePage> {
+  final _tstr = TextEditingController();
+  final _tlast = TextEditingController();
+  final _table = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: Text("Table"),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-
-          const SizedBox(
-            height: 20,
-          ),
-          TextFormField(
-            decoration: const InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: Colors.greenAccent, width: 2.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: Colors.pink, width: 1.0),
-              ),
-              hintText: 'Enter Table Number',
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: 10, vertical: 5),
-            ),
-            controller: _table,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Enter Table Number';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          TextFormField(
-            decoration: const InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: Colors.greenAccent, width: 2.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: Colors.pink, width: 1.0),
-              ),
-              hintText: 'Enter Table Starting Number',
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: 10, vertical: 5),
-            ),
-            controller: _tstr,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Enter Table Starting Number';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          TextFormField(
-            decoration: const InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: Colors.greenAccent, width: 2.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: Colors.pink, width: 1.0),
-              ),
-              hintText: 'Enter Table Ending Number',
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: 10, vertical: 5),
-            ),
-            controller: _tlast,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Enter Table Ending Number';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          TextButtonTheme(
-            data: TextButtonThemeData(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                    Colors.white30),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            TextField(
+              controller: _tstr,
+              decoration: InputDecoration(
+                hintText: 'Enter start value',
               ),
             ),
-            child: TextButton(
+            TextField(
+              controller: _tlast,
+              decoration: InputDecoration(
+                hintText: 'Enter end value',
+              ),
+            ),
+            TextField(
+              controller: _table,
+              decoration: InputDecoration(
+                hintText: 'Enter table number',
+              ),
+            ),
+            SizedBox(height: 10),
+            TextButton(
+              child: Text("Show Table"),
               onPressed: () {
-
-                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Tablepage(
+                        tstart: int.tryParse(_tstr.text) ?? 0,
+                        tend: int.tryParse(_tlast.text) ?? 0,
+                        tableno: int.tryParse(_table.text) ?? 0,
+                      )),
+                );
               },
-              child: const Text(
-                "Generate Table",
-                style: TextStyle(color: Colors.white),
-              ),
             ),
-            ),
-            TextButtonTheme(
-              data: TextButtonThemeData(
-              style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(
-              Colors.white30),
-              ),
-              ),
-              child: TextButton(
-                onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return Homepage();
-  }));
-                },
-                child: const Text(
-                "Generate Table",
-                style: TextStyle(color: Colors.white),
-                ),
-              ),
-              ),
-        ],
+
+          ],
+        ),
       ),
     );
   }
 }
-

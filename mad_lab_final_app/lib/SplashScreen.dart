@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mad_lab_final_app/HomePage.dart';
+import 'package:mad_lab_final_app/welcome.dart';
+
+import 'HomePage.dart';
 
 
 class Splash extends StatefulWidget {
@@ -14,7 +16,7 @@ class _SplashState extends State<Splash> {
   void initState(){
     super.initState();
     Future.delayed(const Duration(seconds: 5), (){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Homepage()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WelcomeScreen()));
     });
   }
   @override
