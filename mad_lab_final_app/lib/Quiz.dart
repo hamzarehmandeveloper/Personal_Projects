@@ -70,7 +70,7 @@ class _QuizPageState extends State<QuizPage> {
             ),
             child: TextButton(
                 onPressed: _nextQuestion,
-                child: Text("Go to Home", style: TextStyle(fontSize: 20, color: Colors.white))
+                child: Text("Next Question", style: TextStyle(fontSize: 20, color: Colors.white))
             ),
           ),
           SizedBox(height: 20),

@@ -78,7 +78,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Enter your Password')),
               SizedBox(
-                height: 24.0,
+                height: 8.0,
               ),
               TextField(
                   obscureText: true,
