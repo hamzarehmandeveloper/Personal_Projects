@@ -38,6 +38,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("LOGIN"),
+        centerTitle: true,
+      ),
       backgroundColor: Colors.white,
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
@@ -47,6 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Text("LOGIN",textAlign: TextAlign.center,style: TextStyle(
+                  fontSize: 25,color: Colors.black
+              ),),
+              SizedBox(height: 20),
               TextField(
                   keyboardType: TextInputType.emailAddress,
                   textAlign: TextAlign.center,

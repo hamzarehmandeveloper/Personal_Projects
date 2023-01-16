@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:mad_lab_final_app/Result.dart';
 
+import 'HomePage.dart';
+
 class QuizPage extends StatefulWidget {
   QuizPage({required this.tstart, required this.tend, required this.tableno});
   final int tstart;
@@ -60,16 +62,30 @@ class _QuizPageState extends State<QuizPage> {
             ),
           ),
           Text(_result),
-          TextButton(
-            child: Text("Next"),
-            onPressed: _nextQuestion,
+          Container(
+            width: 200,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.blueAccent
+            ),
+            child: TextButton(
+                onPressed: _nextQuestion,
+                child: Text("Go to Home", style: TextStyle(fontSize: 20, color: Colors.white))
+            ),
           ),
           SizedBox(height: 20),
-          TextButton(
-            child: Text("Go to Home"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+          Container(
+            width: 200,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.blueAccent
+            ),
+            child: TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MyHomePage()));
+                },
+                child: Text("Go to Home", style: TextStyle(fontSize: 20, color: Colors.white))
+            ),
           ),
         ],
       ),
@@ -78,7 +94,7 @@ class _QuizPageState extends State<QuizPage> {
 
   List<int> _generateQuizQuestions() {
     List<int> questions = [];
-    for (int i = widget.tstart; i <= widget.tend; i++) {
+    for (int i = widget.tstart; i <= 3; i++) {
       questions.add(i);
     }
     return questions;

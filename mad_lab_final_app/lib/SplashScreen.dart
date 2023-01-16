@@ -27,7 +27,6 @@ class _SplashState extends State<Splash> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('Assets/Icon.png', height: 130,),
             Text("Quiz App",style: TextStyle(
                 fontSize: 25,color: Colors.white
             ),),

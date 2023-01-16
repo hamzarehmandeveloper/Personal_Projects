@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mad_lab_final_app/Quiz.dart';
 
+import 'HomePage.dart';
+
 class Tablepage extends StatefulWidget {
   Tablepage({required this.tstart, required this.tend, required this.tableno});
   final int tstart;
@@ -34,7 +36,7 @@ class _TablepageState extends State<Tablepage> {
                       '${widget.tableno}',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    title: Text('x   =    ${i}'),
+                    title: Text('x'),
                     trailing: Text(
                       '${widget.tableno * i}',
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -45,22 +47,36 @@ class _TablepageState extends State<Tablepage> {
             ),
           ),
           SizedBox(height: 20),
-          TextButton(
-            child: Text("Go to Home"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.blueAccent
+            ),
+            child: TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MyHomePage()));
+                },
+                child: Text("Go to Home", style: TextStyle(fontSize: 20, color: Colors.white))
+            ),
           ),
           SizedBox(height: 10),
-          TextButton(
-            child: Text("Create Quiz"),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>QuizPage(
-                tstart: widget.tstart,
-                tend: widget.tend,
-                tableno: widget.tableno,
-              )));
-            },
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.blueAccent
+            ),
+            child: TextButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>QuizPage(
+                    tstart: widget.tstart,
+                    tend: widget.tend,
+                    tableno: widget.tableno,
+                  )));
+                },
+                child: Text("Create Quiz", style: TextStyle(fontSize: 20, color: Colors.white))
+            ),
           ),
         ],
       ),

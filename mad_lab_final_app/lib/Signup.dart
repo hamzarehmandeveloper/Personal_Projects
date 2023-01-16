@@ -37,6 +37,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("SIGN UP"),
+        centerTitle: true,
+      ),
       backgroundColor: Colors.white,
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
@@ -46,6 +50,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Text("Table Generator & Quiz",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 25,color: Colors.black,
+              ),),
+              SizedBox(height: 20),
               TextField(
                   keyboardType: TextInputType.emailAddress,
                   textAlign: TextAlign.center,
@@ -67,6 +77,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   },
                   decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Enter your Password')),
+              SizedBox(
+                height: 24.0,
+              ),
+              TextField(
+                  obscureText: true,
+                  textAlign: TextAlign.center,
+                  onChanged: (value) {
+                    password = value;
+                    //Do something with the user input.
+                  },
+                  decoration: kTextFieldDecoration.copyWith(
+                      hintText: 'Enter Name')),
               SizedBox(
                 height: 24.0,
               ),

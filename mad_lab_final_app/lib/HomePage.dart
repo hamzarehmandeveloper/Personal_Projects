@@ -42,19 +42,26 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             SizedBox(height: 10),
-            TextButton(
-              child: Text("Show Table"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Tablepage(
-                        tstart: int.tryParse(_tstr.text) ?? 0,
-                        tend: int.tryParse(_tlast.text) ?? 0,
-                        tableno: int.tryParse(_table.text) ?? 0,
-                      )),
-                );
-              },
+            Container(
+              width: 200,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.blueAccent
+              ),
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Tablepage(
+                            tstart: int.tryParse(_tstr.text) ?? 0,
+                            tend: int.tryParse(_tlast.text) ?? 0,
+                            tableno: int.tryParse(_table.text) ?? 0,
+                          )),
+                    );
+                  },
+                  child: Text("Show Table", style: TextStyle(fontSize: 20, color: Colors.white))
+              ),
             ),
 
           ],

@@ -19,6 +19,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                Text("Table Generator & Quiz",textAlign: TextAlign.center,style: TextStyle(
+                    fontSize: 25,color: Colors.black
+                ),),
+                SizedBox(height: 20),
+
                 RoundedButton(
                   colour: Colors.lightBlueAccent,
                   title: 'Log In',
