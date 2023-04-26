@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "364559782452",
+    "project_id": "fir-practice-11610",
+    "storage_bucket": "fir-practice-11610.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:364559782452:android:f8334d1477bcafb2c57061",
+        "android_client_info": {
+          "package_name": "com.example.quizappfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "364559782452-t8nceptnqvv0v7108lop17rdrtriuvco.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnOE-tY0ptJCrtGBte_KOPsXinkF7n2uE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "364559782452-t8nceptnqvv0v7108lop17rdrtriuvco.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -51,13 +51,13 @@ class _TablepageState extends State<Tablepage> {
             width: double.infinity,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
-                color: Colors.blueAccent
+                color: Colors.brown
             ),
             child: TextButton(
                 onPressed: () {
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MyHomePage()));
                 },
-                child: Text("Go to Home", style: TextStyle(fontSize: 20, color: Colors.white))
+                child: Text("Go to Home", style: TextStyle(fontSize: 20, color: Colors.black))
             ),
           ),
           SizedBox(height: 10),
@@ -65,7 +65,7 @@ class _TablepageState extends State<Tablepage> {
             width: double.infinity,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
-                color: Colors.blueAccent
+                color: Colors.brown
             ),
             child: TextButton(
                 onPressed: () {
@@ -75,7 +75,7 @@ class _TablepageState extends State<Tablepage> {
                     tableno: widget.tableno,
                   )));
                 },
-                child: Text("Create Quiz", style: TextStyle(fontSize: 20, color: Colors.white))
+                child: Text("Create Quiz", style: TextStyle(fontSize: 20, color: Colors.black))
             ),
           ),
         ],

@@ -113,14 +113,15 @@ class _mainpageState extends State<mainpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tasbeeh Counter")
+        title: Text("Tasbeeh Counter"),
+        centerTitle: true,
 
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.only(top: 40.0,),
             child: Container(
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
@@ -205,11 +206,10 @@ class _mainpageState extends State<mainpage> {
           ),
           Padding(
             padding:
-                const EdgeInsets.only(top: 40, bottom: 40, left: 70, right: 70),
+                const EdgeInsets.only(top: 80, bottom: 20, left: 70, right: 70),
             child: Row(
               children: [
-                Expanded(
-                  child: Container(
+                  Container(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -229,12 +229,11 @@ class _mainpageState extends State<mainpage> {
                       },
                     ),
                   ),
-                ),
+
                 Spacer(
                   flex: 1,
                 ),
-                Expanded(
-                  child: Container(
+                Container(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -254,7 +253,7 @@ class _mainpageState extends State<mainpage> {
                       },
                     ),
                   ),
-                ),
+
               ],
             ),
           )

@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 200,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  color: Colors.blueAccent
+                  color: Colors.brown
               ),
               child: TextButton(
                   onPressed: () {
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           )),
                     );
                   },
-                  child: Text("Show Table", style: TextStyle(fontSize: 20, color: Colors.white))
+                  child: Text("Show Table", style: TextStyle(fontSize: 20, color: Colors.black))
               ),
             ),
 

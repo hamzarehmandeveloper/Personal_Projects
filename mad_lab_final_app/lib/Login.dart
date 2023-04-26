@@ -16,11 +16,11 @@ const kTextFieldDecoration = InputDecoration(
       borderRadius: BorderRadius.all(Radius.circular(32.0)),
     ),
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+      borderSide: BorderSide(color: Colors.orangeAccent, width: 1.0),
       borderRadius: BorderRadius.all(Radius.circular(32.0)),
     ),
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+      borderSide: BorderSide(color: Colors.orangeAccent, width: 2.0),
       borderRadius: BorderRadius.all(Radius.circular(32.0)),
     ));
 
@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
         title: Text("LOGIN"),
         centerTitle: true,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Padding(
@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 24.0,
               ),
               RoundedButton(
-                  colour: Colors.lightBlueAccent,
+                  colour: Colors.brown,
                   title: 'Log In',
                   onPressed: () async {
                     setState(() {

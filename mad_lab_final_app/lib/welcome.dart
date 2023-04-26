@@ -25,14 +25,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 SizedBox(height: 20),
 
                 RoundedButton(
-                  colour: Colors.lightBlueAccent,
+                  colour: Colors.brown,
                   title: 'Log In',
                   onPressed: () {
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
                   },
                 ),
                 RoundedButton(
-                    colour: Colors.blueAccent,
+                    colour: Colors.brown,
                     title: 'Register',
                     onPressed: () {
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>RegistrationScreen()));
