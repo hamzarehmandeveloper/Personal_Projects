@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import '../screens/home.dart';
-
-
+import '../my_services/my_services_tab_screen.dart';
+import '../screens/home_screen/home.dart';
+import '../screens/profile_screen/profile_screen.dart';
+import '../screens/select_service.dart';
+import '../screens/work_description_screen.dart';
+import 'package:flutter/foundation.dart';
 
 class TabContainer extends StatefulWidget {
   TabContainer({Key? key}) : super(key: key);
@@ -18,20 +21,20 @@ class _TabContainerState extends State<TabContainer> {
 
   int tabIndex = 0;
   Color tabColor = const Color(0xff94959b);
-  Color selectedTabColor = Color(0xff007aff);
+  Color selectedTabColor = Colors.black;
 
   @override
   void initState() {
     super.initState();
 
     originalList = [
-      const HomePage(),
-      const HomePage(),
-      const HomePage(),
-      const HomePage(),
-
+      HomePage(),
+      SelectService(),
+      SubmitWorkScreen(),
+      MyServicesTab(),
+      ProfileScreen(),
     ];
-    originalDic = {0: true, 1: false, 2: false, 3: false};
+    originalDic = {0: true, 1: false, 2: false, 3: false, 4: false};
     listScreens = [originalList.first];
     listScreensIndex = [0];
   }
@@ -64,10 +67,10 @@ class _TabContainerState extends State<TabContainer> {
   Widget _buildTabBar() {
     var listItems = [
       BottomAppBarItem(iconData: Icons.home, text: 'Home'),
-      BottomAppBarItem(iconData: Icons.add_box_sharp, text: 'Learn More'),
-      BottomAppBarItem(
-          iconData: Icons.accessibility_new_outlined, text: 'Mistake Mastery'),
-      BottomAppBarItem(iconData: Icons.settings, text: 'Setting'),
+      BottomAppBarItem(iconData: Icons.category_rounded, text: 'Categories'),
+      BottomAppBarItem(iconData: Icons.add_circle, text: 'Post Job'),
+      BottomAppBarItem(iconData: Icons.my_library_books, text: 'My Services'),
+      BottomAppBarItem(iconData: Icons.person, text: 'Profile'),
     ];
 
     var items = List.generate(listItems.length, (int index) {

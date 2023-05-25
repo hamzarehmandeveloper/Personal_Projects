@@ -17,36 +17,32 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-      child: Container(
-
-        decoration: BoxDecoration(
-          color: Color(0xfff1f1f5),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: TextFormField(
-          controller: controller,
-          obscureText: obscureText,
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color:Color(0xff94959b),
-            ),
-            border: const OutlineInputBorder(
-              borderSide: BorderSide.none,
-            ),
-            suffixIcon: suffixIcon,
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(0xfff1f1f5),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color:Color(0xff94959b),
           ),
-          validator: (input) =>
-          input == null
-              ? 'Please enter a valid Data'
-              : null,
-          keyboardType: TextInputType.emailAddress,
-          style: const TextStyle(color: Colors.black),
+          border: const OutlineInputBorder(
+            borderSide: BorderSide.none,
+          ),
+          suffixIcon: suffixIcon,
         ),
+        validator: (input) =>
+        input == null
+            ? 'Please enter a valid Data'
+            : null,
+        keyboardType: TextInputType.emailAddress,
+        style: const TextStyle(color: Colors.black),
       ),
     );
   }

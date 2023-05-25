@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -40,76 +40,82 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         'Login',
                         style: TextStyle(
-                          fontSize: 32,
+                          fontSize: 38,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 10,
                     ),
                     Center(
                       child: Text(
                         'Sign in to continue',
                         style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: Color(0xff94959b)),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 40,
                     ),
                   ],
                 ),
                 const SizedBox(
-                  height: 48,
+                  height: 20,
                 ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      InputField(
-                        hintText: 'Email',
-                        suffixIcon: const SizedBox(),
-                        controller: emailController,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      InputField(
-                        hintText: 'Password',
-                        controller: passwordController,
-                        obscureText: !passwordVisible,
-                        suffixIcon: IconButton(
-                          color: Color(0xff94959b),
-                          splashRadius: 1,
-                          icon: Icon(passwordVisible
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined),
-                          onPressed: togglePassword,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        InputField(
+                          hintText: 'Email',
+                          suffixIcon: const SizedBox(),
+                          controller: emailController,
                         ),
-                      ),
-                    ],
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InputField(
+                          hintText: 'Password',
+                          controller: passwordController,
+                          obscureText: !passwordVisible,
+                          suffixIcon: IconButton(
+                            color: const Color(0xff94959b),
+                            splashRadius: 1,
+                            icon: Icon(passwordVisible
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined),
+                            onPressed: togglePassword,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
                   height: 32,
                 ),
-                SizedBox(
-                    child: customButton(
-                  title: 'Login',
-                  onTap: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TabContainer()));
-                  },
-                )),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: SizedBox(
+                      child: customButton(
+                    title: 'Login',
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TabContainer()));
+                    },
+                  )),
+                ),
                 const SizedBox(
                   height: 24,
                 ),
-                Center(
+                const Center(
                   child: Text(
                     '- OR -',
                     style: TextStyle(
@@ -129,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Don't have an account? ",
                         style: TextStyle(
                           fontSize: 16,
@@ -144,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               MaterialPageRoute(
                                   builder: (context) => RegisterScreen()));
                         },
-                        child: Text(
+                        child: const Text(
                           'Register',
                           style: TextStyle(
                             fontSize: 16,

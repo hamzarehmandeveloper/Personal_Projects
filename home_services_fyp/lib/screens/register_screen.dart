@@ -13,7 +13,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController nameController = TextEditingController(text: '');
   final TextEditingController emailController = TextEditingController(text: '');
   final TextEditingController passwordController =
-  TextEditingController(text: '');
+      TextEditingController(text: '');
 
   bool passwordVisible = false;
   final _formKey = GlobalKey<FormState>();
@@ -30,18 +30,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(24.0, 0, 24.0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Register new\naccount',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
+                    Center(
+                      child: Text(
+                        'Sign up',
+                        style: TextStyle(
+                          fontSize: 38,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: Text(
+                        'Register new account',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xff94959b)),
                       ),
                     ),
                     const SizedBox(
@@ -50,64 +64,70 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ],
                 ),
                 const SizedBox(
-                  height: 48,
+                  height: 20,
                 ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      InputField(
-                        hintText: 'Name',
-                        controller: nameController,
-                        suffixIcon: const SizedBox(),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      InputField(
-                        hintText: 'Email',
-                        controller: emailController,
-                        suffixIcon: const SizedBox(),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      InputField(
-                        hintText: 'Password',
-                        controller: passwordController,
-                        obscureText: !passwordVisible,
-                        suffixIcon: IconButton(
-                          color: Color(0xff94959b),
-                          splashRadius: 1,
-                          icon: Icon(passwordVisible
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined),
-                          onPressed: togglePassword,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        InputField(
+                          hintText: 'Name',
+                          controller: nameController,
+                          suffixIcon: const SizedBox(),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      InputField(
-                        hintText: 'City',
-                        controller: emailController,
-                        suffixIcon: const SizedBox(),
-                      ),
-                    ],
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InputField(
+                          hintText: 'Email',
+                          controller: emailController,
+                          suffixIcon: const SizedBox(),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InputField(
+                          hintText: 'Password',
+                          controller: passwordController,
+                          obscureText: !passwordVisible,
+                          suffixIcon: IconButton(
+                            color: Color(0xff94959b),
+                            splashRadius: 1,
+                            icon: Icon(passwordVisible
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined),
+                            onPressed: togglePassword,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InputField(
+                          hintText: 'City',
+                          controller: emailController,
+                          suffixIcon: const SizedBox(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
                   height: 32,
                 ),
-                SizedBox(
-                  child: customButton(
-                    title: 'Register',
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()));
-                    },
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: SizedBox(
+                    child: customButton(
+                      title: 'Register',
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()));
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -116,7 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Center(
                   child: Text(
                     '- OR -',
-                    style:TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
@@ -149,6 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: Text(
                           'Login',
                           style: TextStyle(
+                            color: Color(0xff007aff),
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
