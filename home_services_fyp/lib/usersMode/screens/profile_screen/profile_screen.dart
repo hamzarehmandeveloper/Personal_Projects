@@ -24,23 +24,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Container(
                         height: 100,
                         margin: EdgeInsets.only(bottom: 50),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.black,
                         ),
                         width: MediaQuery.of(context).size.width * 1,
-                        child: Center(
-                          child: Text(
-                            'Hamza Rehman',
-                            // Change this to the user's actual name
-                            style: TextStyle(
-                                fontSize: 42,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ),
                       ),
                     ),
-                    Align(
+                    const Align(
                       alignment: Alignment.bottomCenter,
                       child: CircleAvatar(
                         radius: 60,

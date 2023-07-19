@@ -1,6 +1,4 @@
-import 'package:home_services_fyp/animation/FadeAnimation.dart';
 import 'package:home_services_fyp/models/service.dart';
-import 'package:home_services_fyp/screens/cleaning.dart';
 import 'package:flutter/material.dart';
 
 class SelectService extends StatefulWidget {
@@ -16,22 +14,22 @@ class _SelectServiceState extends State<SelectService> {
 
   List<Service> services = [
     Service('Cleaning',
-        'https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/2x/external-cleaning-labour-day-vitaliy-gorbachev-flat-vitaly-gorbachev.png'),
+        'assets/icons/cleaning.png'),
     Service('Plumber',
-        'https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/2x/external-plumber-labour-day-vitaliy-gorbachev-flat-vitaly-gorbachev.png'),
+        'assets/icons/plumber.png'),
     Service('Electrician',
-        'https://img.icons8.com/external-wanicon-flat-wanicon/2x/external-multimeter-car-service-wanicon-flat-wanicon.png'),
+        'assets/icons/electrician.png'),
     Service('Painter',
-        'https://img.icons8.com/external-itim2101-flat-itim2101/2x/external-painter-male-occupation-avatar-itim2101-flat-itim2101.png'),
-    Service('Carpenter', 'https://img.icons8.com/fluency/2x/drill.png'),
+        'assets/icons/painter.png'),
+    Service('Carpenter', 'assets/icons/carpenter.png'),
     Service('Gardener',
-        'https://img.icons8.com/external-itim2101-flat-itim2101/2x/external-gardener-male-occupation-avatar-itim2101-flat-itim2101.png'),
-    Service('Tailor', 'https://img.icons8.com/fluency/2x/sewing-machine.png'),
-    Service('Maid', 'https://img.icons8.com/color/2x/housekeeper-female.png'),
+        'assets/icons/gardener.png'),
+    Service('Tailor', 'assets/icons/tailor.png'),
+    Service('Maid', 'assets/icons/maid.png'),
     Service('Driver',
-        'https://img.icons8.com/external-sbts2018-lineal-color-sbts2018/2x/external-driver-women-profession-sbts2018-lineal-color-sbts2018.png'),
+        'assets/icons/driver.png'),
     Service('Cook',
-        'https://img.icons8.com/external-wanicon-flat-wanicon/2x/external-cooking-daily-routine-wanicon-flat-wanicon.png'),
+        'assets/icons/cook.png'),
   ];
 
   int selectedService = -1;
@@ -40,16 +38,6 @@ class _SelectServiceState extends State<SelectService> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        floatingActionButton: selectedService >= 0
-            ? FloatingActionButton(
-                onPressed: () {},
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 20,
-                ),
-                backgroundColor: Colors.black,
-              )
-            : null,
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
@@ -81,10 +69,10 @@ class _SelectServiceState extends State<SelectService> {
                           crossAxisSpacing: 20.0,
                           mainAxisSpacing: 20.0,
                         ),
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: services.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return serviceContainer(services[index].imageURL,
+                          return serviceContainer(services[index].icon,
                               services[index].name, index);
                         }),
                   ),
@@ -93,7 +81,7 @@ class _SelectServiceState extends State<SelectService> {
         ));
   }
 
-  serviceContainer(String image, String name, int index) {
+  serviceContainer(String icon, String name, int index) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -101,31 +89,32 @@ class _SelectServiceState extends State<SelectService> {
             selectedService = -1;
           else
             selectedService = index;
-          serviceImage = image;
-          serviceTitle = name;
-          print(serviceTitle);
-          print(serviceImage);
+          print(name);
+
         });
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 300),
         padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-          color: selectedService == index
-              ? Colors.grey.shade100
-              : Colors.grey.shade100,
           border: Border.all(
-            color: selectedService == index
-                ? Colors.black
-                : Colors.blue.withOpacity(0),
+            color: Colors.grey.shade200,
             width: 2.0,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade200,
+              offset: Offset(0, 6),
+              blurRadius: 10.0,
+            ),
+          ],
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.network(image, height: 80),
+              Image.asset(icon),
               SizedBox(
                 height: 20,
               ),

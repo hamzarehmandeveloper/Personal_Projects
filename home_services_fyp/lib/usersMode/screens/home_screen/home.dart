@@ -5,7 +5,6 @@ import 'package:home_services_fyp/screens/select_service.dart';
 
 import '../../Widget/services_container.dart';
 import '../../Widget/worker_container.dart';
-import 'notification_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,19 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Service> services = [
-    Service('Cleaning',
-        'https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/2x/external-cleaning-labour-day-vitaliy-gorbachev-flat-vitaly-gorbachev.png'),
-    Service('Plumber',
-        'https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/2x/external-plumber-labour-day-vitaliy-gorbachev-flat-vitaly-gorbachev.png'),
-    Service('Electrician',
-        'https://img.icons8.com/external-wanicon-flat-wanicon/2x/external-multimeter-car-service-wanicon-flat-wanicon.png'),
-    Service('Painter',
-        'https://img.icons8.com/external-itim2101-flat-itim2101/2x/external-painter-male-occupation-avatar-itim2101-flat-itim2101.png'),
-    Service('Carpenter', 'https://img.icons8.com/fluency/2x/drill.png'),
-    Service('Gardener',
-        'https://img.icons8.com/external-itim2101-flat-itim2101/2x/external-gardener-male-occupation-avatar-itim2101-flat-itim2101.png'),
-  ];
 
   List<dynamic> workers = [
     ['Hamza rehman', 'Plumber', 'assets/images/demo.jpg', 4.8],
@@ -49,13 +35,10 @@ class _HomePageState extends State<HomePage> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationsScreen()));
+
               },
               icon: Icon(
-                Icons.notifications_none,
+                Icons.person_2_rounded,
                 color: Colors.grey.shade700,
                 size: 30,
               ),
@@ -172,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     TextButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SelectService()));
@@ -181,19 +164,23 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 300,
                 child: GridView.count(
+                  crossAxisSpacing: 5.0,
+                  mainAxisSpacing: 5.0,
                   crossAxisCount: 3,
                   physics: NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.all(20.0),
                   children: const <Widget>[
-                    ServiceContainer(icon: Icons.build, name: 'Plumber'),
-                    ServiceContainer(icon: Icons.landscape, name: 'Landscaper'),
-                    ServiceContainer(icon: Icons.flash_on, name: 'Electrical'),
-                    ServiceContainer(icon: Icons.cleaning_services, name: 'Cleaning'),
-                    ServiceContainer(icon: Icons.bug_report, name: 'Pest Control'),
-                    ServiceContainer(icon: Icons.security, name: 'Security'),
+                    ServiceContainer(icon: 'assets/icons/plumber.png', name: 'Plumber'),
+                    ServiceContainer(icon: 'assets/icons/painter.png', name: 'Painter'),
+                    ServiceContainer(icon: 'assets/icons/electrician.png', name: 'Electrical'),
+                    ServiceContainer(
+                        icon: 'assets/icons/cleaning.png', name: 'Cleaning'),
+                    ServiceContainer(
+                        icon: 'assets/icons/gardener.png', name: 'Gardener'),
+                    ServiceContainer(icon: 'assets/icons/carpenter.png', name: 'Carpenter'),
                   ],
                 ),
               ),
@@ -250,26 +237,44 @@ class _HomePageState extends State<HomePage> {
 }
 
 class ServiceContainer extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String name;
 
   const ServiceContainer({required this.icon, required this.name});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      padding: EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(icon, size: 40.0),
-          SizedBox(height: 10.0),
-          Text(name, style: TextStyle(fontSize: 18.0)),
-        ],
+    return GestureDetector(
+      onTap: (){},
+      child: Container(
+        padding: EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: Colors.grey.shade200,
+            width: 2.0,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade200,
+              offset: Offset(0, 4),
+              blurRadius: 10.0,
+            ),
+          ],
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(icon,height: 45,),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                name,
+                style: TextStyle(fontSize: 16),
+              )
+            ]),
       ),
     );
   }
