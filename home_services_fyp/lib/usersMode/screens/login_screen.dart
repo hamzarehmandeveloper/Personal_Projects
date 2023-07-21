@@ -1,8 +1,8 @@
-import 'package:home_services_fyp/screens/register_screen.dart';
 import 'package:home_services_fyp/Widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/Widget/input_field.dart';
-import '../buttomBar/buttombar.dart';
+import 'package:home_services_fyp/usersMode/screens/register_screen.dart';
+import '../../buttomBar/buttombar.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
@@ -115,18 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 24,
                 ),
-                const Center(
-                  child: Text(
-                    '- OR -',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff94959b)),
-                  ),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
+
                 const SizedBox(
                   height: 50,
                 ),

@@ -1,54 +1,69 @@
-import 'package:carrentalservices/widgets/homePage/car.dart';
-import 'package:carrentalservices/widgets/homePage/category.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:alsiraatapp/widgets/homePage/car.dart';
 import 'package:flutter/material.dart';
 
-Widget buildMostRented(Size size, bool isDarkMode) {
-  CollectionReference cars = FirebaseFirestore.instance.collection('cars');
+Widget buildMostRented(Size size) {
+  List<Car> cars = [
+    Car(
+      carImage: 'assets/images/yaris.png',
+      carClass: 'Sedan',
+      carName: 'Suzuki',
+      carPower: '200 HP',
+      people: 4,
+      avg: 18,
+    ),
+    Car(
+      carImage: 'assets/images/golf.png',
+      carClass: 'SUV',
+      carName: 'Suzuki',
+      carPower: '250 HP',
+      people: 6,
+      avg: 16,
+
+    ),
+    // Add more cars as needed
+  ];
+
   return Column(
     children: [
-      buildCategory('Most Rented', size, isDarkMode),
       Padding(
-        padding: EdgeInsets.only(
-          top: size.height * 0.015,
-          left: size.width * 0.03,
-          right: size.width * 0.03,
+        padding: EdgeInsets.all(
+          15
         ),
-        child: FutureBuilder<QuerySnapshot>(
-          future: cars.get(),
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<QuerySnapshot> snapshot,
-          ) {
-            if (snapshot.hasError) {
-              return const Text("Something went wrong");
-            }
-
-            if (snapshot.connectionState == ConnectionState.done) {
-              var data = snapshot.data;
-              return SizedBox(
-                height: size.width * 0.55,
-                width: data!.size * size.width * 0.5 * 1.03,
-                child: ListView.builder(
-                  primary: false,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: data.size,
-                  itemBuilder: (context, i) {
-                    return buildCar(
-                      i,
-                      size,
-                      isDarkMode,
-                      data,
-                    );
-                  },
-                ),
+        child: SizedBox(
+          child: ListView.builder(
+            primary: false,
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            itemCount: cars.length,
+            itemBuilder: (context, i) {
+              return buildCar(
+                i,
+                size,
+                cars,
               );
-            }
-            return const CircularProgressIndicator();
-          },
+            },
+          ),
         ),
       ),
     ],
   );
+}
+
+
+class Car {
+  final String carImage;
+  final String carClass;
+  final String carName;
+  final String carPower;
+  final int people;
+  final int avg;
+
+  Car({
+    required this.carImage,
+    required this.carClass,
+    required this.carName,
+    required this.carPower,
+    required this.people,
+    required this.avg,
+  });
 }

@@ -1,5 +1,5 @@
-import 'package:car_rental/pages/home_page.dart';
-import 'package:car_rental/widgets/bottom_nav_item.dart';
+import 'package:carrentalservices/pages/home_page.dart';
+import 'package:carrentalservices/widgets/bottom_nav_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

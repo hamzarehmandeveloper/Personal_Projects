@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class RatingScreen extends StatefulWidget {
+  const RatingScreen({super.key});
+
   @override
   _RatingScreenState createState() => _RatingScreenState();
 }

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:home_services_fyp/screens/profile_screen/profile_screen.dart';
-
-import '../../Widget/custom_button.dart';
-import '../../Widget/input_field.dart';
-import '../../animation/FadeAnimation.dart';
-import '../professionals_registration_screen.dart';
+import '../../../Widget/custom_button.dart';
+import '../../../Widget/input_field.dart';
+import '../../../buttomBar/workerBottombar.dart';
 
 class EditProfileScreen extends StatefulWidget {
   @override
@@ -57,7 +54,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     fit: StackFit.expand,
                     children: [
                       CircleAvatar(
-                        backgroundImage: AssetImage("assets/images/demo.jpg"),
+                        backgroundColor: Colors.white,
+                        backgroundImage: AssetImage("assets/images/demo.png"),
                       ),
                       Positioned(
                           bottom: 0,
@@ -150,7 +148,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                ProfessionalRegistrationScreen()));
+                                WorkerTabContainer()));
                     // Navigate to the Edit Profile screen or show a modal to edit the profile
                   },
                 )

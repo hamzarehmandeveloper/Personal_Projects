@@ -1,10 +1,11 @@
-import 'package:home_services_fyp/screens/login_screen.dart';
 import 'package:home_services_fyp/Widget/input_field.dart';
 import 'package:flutter/material.dart';
-import '../Widget/custom_button.dart';
-import '../Widget/primary_button.dart';
+import '../../Widget/custom_button.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -34,7 +35,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
@@ -46,7 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 10,
                     ),
                     Center(
@@ -58,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: Color(0xff94959b)),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 40,
                     ),
                   ],
@@ -127,18 +128,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             MaterialPageRoute(
                                 builder: (context) => LoginScreen()));
                       },
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Center(
-                  child: Text(
-                    '- OR -',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),

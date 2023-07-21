@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import '../my_services/my_services_tab_screen.dart';
-import '../screens/home_screen/home.dart';
-import '../screens/profile_screen/profile_screen.dart';
-import '../screens/select_service.dart';
-import '../screens/work_description_screen.dart';
-import 'package:flutter/foundation.dart';
+import '../my_services/service_finder_services.dart';
+import '../usersMode/screens/home_screen/home.dart';
+import '../usersMode/screens/profile_screen/profile_screen.dart';
+import '../usersMode/screens/select_service.dart';
+import '../usersMode/screens/work_description_screen.dart';
 
 class TabContainer extends StatefulWidget {
-  TabContainer({Key? key}) : super(key: key);
+  const TabContainer({Key? key}) : super(key: key);
 
   @override
   _TabContainerState createState() => _TabContainerState();
@@ -31,7 +30,7 @@ class _TabContainerState extends State<TabContainer> {
       HomePage(),
       SelectService(),
       SubmitWorkScreen(),
-      MyServicesTab(),
+      ServiceFinderServices(),
       ProfileScreen(),
     ];
     originalDic = {0: true, 1: false, 2: false, 3: false, 4: false};

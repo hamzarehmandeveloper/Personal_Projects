@@ -1,6 +1,6 @@
-import 'package:car_rental/widgets/bottom_nav_bar.dart';
-import 'package:car_rental/widgets/homePage/most_rented.dart';
-import 'package:car_rental/widgets/homePage/top_brands.dart';
+import 'package:carrentalservices/widgets/bottom_nav_bar.dart';
+import 'package:carrentalservices/widgets/homePage/most_rented.dart';
+import 'package:carrentalservices/widgets/homePage/top_brands.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unicons/unicons.dart';

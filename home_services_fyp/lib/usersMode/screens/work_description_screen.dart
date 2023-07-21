@@ -2,8 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
-import '../Widget/custom_button.dart';
-import '../animation/FadeAnimation.dart';
+import '../../Widget/custom_button.dart';
 
 class SubmitWorkScreen extends StatefulWidget {
   @override
@@ -15,7 +14,6 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
   String? _workDescription;
   String? _selectedCategory;
   List<XFile> _images = [];
-  late final AnimationController _controller;
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImages() async {
@@ -69,7 +67,7 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
         return <Widget>[
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.only(top: 30.0, right: 20.0, left: 20.0),
+              padding: EdgeInsets.only(top: 50.0, right: 20.0, left: 20.0),
               child: Text(
                 'Post job \nTo hire a worker',
                 style: TextStyle(
@@ -99,14 +97,14 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: "Description",
                     hintStyle: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Color(0xff94959b),
                     ),
-                    border: const OutlineInputBorder(
+                    border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                     ),
                   ),

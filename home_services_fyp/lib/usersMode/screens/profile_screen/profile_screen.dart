@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../Widget/custom_button.dart';
+import '../../../Widget/custom_button.dart';
 
 import 'edit_profile_screen.dart';
 
@@ -33,8 +33,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const Align(
                       alignment: Alignment.bottomCenter,
                       child: CircleAvatar(
+                        backgroundColor: Colors.white,
                         radius: 60,
-                        backgroundImage: AssetImage("assets/images/demo.jpg"),
+                        backgroundImage: AssetImage("assets/images/demo.png"),
                       ),
                     )
                   ],

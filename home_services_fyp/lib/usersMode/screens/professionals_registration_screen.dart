@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/Widget/custom_button.dart';
 import 'package:home_services_fyp/Widget/input_field.dart';
-import 'package:home_services_fyp/screens/perposal_submission_screen.dart';
 
 class ProfessionalRegistrationScreen extends StatefulWidget {
   @override
@@ -93,10 +92,6 @@ class _ProfessionalRegistrationScreenState
                         // Submit registration form
                         // Code to handle registration form submission
                       }
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => JobDetailsScreen()));
                     },
                   ),
                 ),

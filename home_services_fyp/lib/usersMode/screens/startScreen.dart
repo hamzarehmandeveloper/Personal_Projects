@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Widget/custom_button.dart';
+import '../../Widget/custom_button.dart';
 import 'login_screen.dart';
 import 'package:lottie/lottie.dart';
 

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unicons/unicons.dart';
-import 'package:car_rental/pages/maps.dart';
+import 'package:carrentalservices/pages/maps.dart';
 
 class DetailsPage extends StatefulWidget {
   final String carImage;

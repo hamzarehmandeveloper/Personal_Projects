@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:home_services_fyp/screens/work_rating_screen.dart';
+import 'package:home_services_fyp/usersMode/screens/work_rating_screen.dart';
 
 class WorkStatusScreen extends StatelessWidget {
   final bool isInProgress;

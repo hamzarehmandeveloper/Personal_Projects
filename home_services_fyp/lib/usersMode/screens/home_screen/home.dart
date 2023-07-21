@@ -1,10 +1,8 @@
-import 'package:home_services_fyp/animation/FadeAnimation.dart';
-import 'package:home_services_fyp/models/service.dart';
 import 'package:flutter/material.dart';
-import 'package:home_services_fyp/screens/select_service.dart';
-
-import '../../Widget/services_container.dart';
-import '../../Widget/worker_container.dart';
+import 'package:home_services_fyp/usersMode/screens/select_service.dart';
+import '../../../Widget/worker_container.dart';
+import '../worker_list_screen.dart';
+import '../worker_profile_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,11 +12,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   List<dynamic> workers = [
-    ['Hamza rehman', 'Plumber', 'assets/images/demo.jpg', 4.8],
-    ['Usman Mushtaq', 'Cleaner', 'assets/images/demo.jpg', 4.6],
-    ['Moiz Mazher', 'Driver', 'assets/images/demo.jpg', 4.4]
+    ['Hamza rehman', 'Plumber', 'assets/images/demo.png', 4.8],
+    ['Usman Mushtaq', 'Cleaner', 'assets/images/demo.png', 4.6],
+    ['Moiz Mazher', 'Driver', 'assets/images/demo.png', 4.4]
   ];
 
   @override
@@ -34,9 +31,7 @@ class _HomePageState extends State<HomePage> {
           elevation: 0,
           actions: [
             IconButton(
-              onPressed: () {
-
-              },
+              onPressed: () {},
               icon: Icon(
                 Icons.person_2_rounded,
                 color: Colors.grey.shade700,
@@ -91,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                           ClipRRect(
                               borderRadius: BorderRadius.circular(50.0),
                               child: Image.asset(
-                                'assets/images/demo.jpg',
+                                workers[0][2],
                                 width: 70,
                                 height: 70,
                                 fit: BoxFit.cover,
@@ -103,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Hamza Rehman",
+                                workers[0][0],
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
@@ -113,11 +108,29 @@ class _HomePageState extends State<HomePage> {
                                 height: 5,
                               ),
                               Text(
-                                "Worker",
+                                workers[0][1],
                                 style: TextStyle(
                                     color: Colors.black.withOpacity(0.7),
                                     fontSize: 18),
                               ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.orange,
+                                    size: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    workers[0][3].toString(),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              )
                             ],
                           )
                         ],
@@ -125,16 +138,32 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(15.0)),
-                        child: Center(
-                            child: Text(
-                          'View Profile',
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        )),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WorkerProfileScreen(
+                                  workerData: [
+                                    workers[0][0],
+                                    workers[0][1],
+                                    workers[0][2],
+                                    workers[0][3]
+                                  ]),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(15.0)),
+                          child: Center(
+                              child: Text(
+                            'View Profile',
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          )),
+                        ),
                       )
                     ],
                   ),
@@ -172,15 +201,79 @@ class _HomePageState extends State<HomePage> {
                   crossAxisCount: 3,
                   physics: NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.all(20.0),
-                  children: const <Widget>[
-                    ServiceContainer(icon: 'assets/icons/plumber.png', name: 'Plumber'),
-                    ServiceContainer(icon: 'assets/icons/painter.png', name: 'Painter'),
-                    ServiceContainer(icon: 'assets/icons/electrician.png', name: 'Electrical'),
+                  children: <Widget>[
                     ServiceContainer(
-                        icon: 'assets/icons/cleaning.png', name: 'Cleaning'),
+                      icon: 'assets/icons/plumber.png',
+                      name: 'Plumber',
+                      ontap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WorkerList(
+                                      skill: 'Plumber',
+                                    )));
+                      },
+                    ),
                     ServiceContainer(
-                        icon: 'assets/icons/gardener.png', name: 'Gardener'),
-                    ServiceContainer(icon: 'assets/icons/carpenter.png', name: 'Carpenter'),
+                      icon: 'assets/icons/painter.png',
+                      name: 'Painter',
+                      ontap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WorkerList(
+                                      skill: 'Painter',
+                                    )));
+                      },
+                    ),
+                    ServiceContainer(
+                      icon: 'assets/icons/electrician.png',
+                      name: 'Electrical',
+                      ontap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WorkerList(
+                                      skill: 'Electrical',
+                                    )));
+                      },
+                    ),
+                    ServiceContainer(
+                      icon: 'assets/icons/cleaning.png',
+                      name: 'Cleaning',
+                      ontap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WorkerList(
+                                      skill: 'Cleaning',
+                                    )));
+                      },
+                    ),
+                    ServiceContainer(
+                      icon: 'assets/icons/gardener.png',
+                      name: 'Gardener',
+                      ontap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WorkerList(
+                                      skill: 'Gardener',
+                                    )));
+                      },
+                    ),
+                    ServiceContainer(
+                      icon: 'assets/icons/carpenter.png',
+                      name: 'Carpenter',
+                      ontap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WorkerList(
+                                      skill: 'Carpenter',
+                                    )));
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -202,31 +295,33 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              workerContainer(
-                  name: workers[0][0],
-                  job: workers[0][1],
-                  image: workers[0][2],
-                  rating: workers[0][3]),
-              workerContainer(
-                  name: workers[0][0],
-                  job: workers[0][1],
-                  image: workers[0][2],
-                  rating: workers[0][3]),
-              workerContainer(
-                  name: workers[0][0],
-                  job: workers[0][1],
-                  image: workers[0][2],
-                  rating: workers[0][3]),
-              workerContainer(
-                  name: workers[0][0],
-                  job: workers[0][1],
-                  image: workers[0][2],
-                  rating: workers[0][3]),
-              workerContainer(
-                  name: workers[0][0],
-                  job: workers[0][1],
-                  image: workers[0][2],
-                  rating: workers[0][3]),
+              Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: workers.length,
+                    itemBuilder: (context, index) {
+                      List<dynamic> workerData = workers[index];
+                      return workerContainer(
+                        name: workerData[0],
+                        job: workerData[1],
+                        image: workerData[2],
+                        rating: workerData[3],
+                        ontap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  WorkerProfileScreen(workerData: workerData),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -239,13 +334,15 @@ class _HomePageState extends State<HomePage> {
 class ServiceContainer extends StatelessWidget {
   final String icon;
   final String name;
+  final Function() ontap;
 
-  const ServiceContainer({required this.icon, required this.name});
+  const ServiceContainer(
+      {required this.icon, required this.name, required this.ontap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){},
+      onTap: ontap,
       child: Container(
         padding: EdgeInsets.all(5.0),
         decoration: BoxDecoration(
@@ -266,7 +363,10 @@ class ServiceContainer extends StatelessWidget {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset(icon,height: 45,),
+              Image.asset(
+                icon,
+                height: 45,
+              ),
               SizedBox(
                 height: 10,
               ),

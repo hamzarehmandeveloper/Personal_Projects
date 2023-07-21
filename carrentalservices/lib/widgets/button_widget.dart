@@ -1,4 +1,4 @@
-import 'package:car_rental/widgets/build_snack_error.dart';
+import 'package:carrentalservices/widgets/build_snack_error.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';

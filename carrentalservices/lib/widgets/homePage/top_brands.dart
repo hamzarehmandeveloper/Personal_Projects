@@ -1,5 +1,5 @@
-import 'package:car_rental/widgets/homePage/brand_logo.dart';
-import 'package:car_rental/widgets/homePage/category.dart';
+import 'package:carrentalservices/widgets/homePage/brand_logo.dart';
+import 'package:carrentalservices/widgets/homePage/category.dart';
 import 'package:flutter/material.dart';
 
 Column buildTopBrands(Size size, bool isDarkMode) {

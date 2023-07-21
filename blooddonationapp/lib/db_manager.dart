@@ -17,7 +17,6 @@ class DatabaseHelper {
   static const columnName = 'name';
   static const columnAddress = 'address';
   static const columnMobile = 'mobile';
-  static const columnLastDate = 'email';
   static const columnCategory = 'cat';
 
   // make this a singleton class
@@ -59,7 +58,6 @@ class DatabaseHelper {
             $columnName TEXT NOT NULL, 
             $columnAddress TEXT NOT NULL, 
             $columnMobile TEXT NOT NULL, 
-            $columnLastDate TEXT NOT NULL, 
             $columnCategory TEXT NOT NULL 
           )
           ''');

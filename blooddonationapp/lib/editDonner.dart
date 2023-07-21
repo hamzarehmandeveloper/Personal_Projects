@@ -1,14 +1,8 @@
 
 
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:signature/signature.dart';
+
 import 'package:blooddonationapp/donnor_model.dart';
 
 import 'DonnerList.dart';
@@ -175,49 +169,7 @@ class _EditDonnerState extends State<EditDonner> {
                         height: 20,
                       ),
 
-                      TextButtonTheme(
-                        data: TextButtonThemeData(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                MyColors.primaryColor),
-                          ),
-                        ),
-                        child: TextButton(
-                          onPressed: () {
-                            DatePicker.showDatePicker(context,
-                                showTitleActions: true,
-                                minTime: DateTime(2018, 3, 5),
 
-                                theme: const DatePickerTheme(
-                                    headerColor: MyColors.primaryColor,
-                                    backgroundColor: Colors.white,
-                                    itemStyle: TextStyle(
-                                        color: Colors.black45,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                    doneStyle:
-                                    TextStyle(color: Colors.white, fontSize: 16)),
-                                onChanged: (date) {
-                                  print('change $date in time zone ' +
-                                      date.toString());
-                                  lastDate= date.toString();
-                                  setState(() {
-
-                                  });
-                                }, onConfirm: (date) {
-                                  print('confirm $date');
-                                  lastDate = date.toString();
-                                  setState(() {
-
-                                  });
-                                }, currentTime: DateTime.now(), locale: LocaleType.en);
-                          },
-                          child: const Text(
-                            "Pick Last Date",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
                       TextButtonTheme(
                         data: TextButtonThemeData(
                           style: ButtonStyle(
@@ -252,7 +204,6 @@ class _EditDonnerState extends State<EditDonner> {
 
     // row to insert
     Map<String, dynamic> row = {DatabaseHelper.columnName: _firstName.text,
-      DatabaseHelper.columnLastDate: lastDate,
       DatabaseHelper.columnMobile: _mobileNumber.text,
       DatabaseHelper.columnAddress: _address.text,
       DatabaseHelper.columnCategory: currentCategory,
@@ -290,7 +241,6 @@ void _query(id) async {
   void _update(int rowId) async {
     Map<String, dynamic> row = {
       DatabaseHelper.columnName: _firstName.text,
-      DatabaseHelper.columnLastDate: lastDate,
       DatabaseHelper.columnMobile: _mobileNumber.text,
       DatabaseHelper.columnAddress: _address.text,
       DatabaseHelper.columnCategory: currentCategory,

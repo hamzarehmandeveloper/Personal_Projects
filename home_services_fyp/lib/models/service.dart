@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
+
 class Service {
   final String name;
-  final String imageURL;
+  final String icon;
 
-  Service(this.name, this.imageURL);
+  Service(this.name, this.icon);
 }

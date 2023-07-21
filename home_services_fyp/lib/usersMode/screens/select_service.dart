@@ -1,5 +1,6 @@
 import 'package:home_services_fyp/models/service.dart';
 import 'package:flutter/material.dart';
+import 'package:home_services_fyp/usersMode/screens/worker_list_screen.dart';
 
 class SelectService extends StatefulWidget {
   const SelectService({Key? key}) : super(key: key);
@@ -43,7 +44,7 @@ class _SelectServiceState extends State<SelectService> {
             return <Widget>[
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 30.0, right: 20.0, left: 20.0),
+                  padding: EdgeInsets.only(top: 50.0, right: 20.0, left: 20.0),
                   child: Text(
                     'Which service \ndo you need?',
                     style: TextStyle(
@@ -63,7 +64,7 @@ class _SelectServiceState extends State<SelectService> {
                 children: <Widget>[
                   Expanded(
                     child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           childAspectRatio: 1.0,
                           crossAxisSpacing: 20.0,
@@ -90,6 +91,7 @@ class _SelectServiceState extends State<SelectService> {
           else
             selectedService = index;
           print(name);
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> WorkerList(skill: name,)));
 
         });
       },

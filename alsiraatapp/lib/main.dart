@@ -1,6 +1,7 @@
 
-import 'package:carrentalservices/pages/home_page.dart';
+import 'package:alsiraatapp/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 
 void main() async {
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Car Rental App',
         home: HomePage(),

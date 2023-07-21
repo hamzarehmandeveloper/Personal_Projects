@@ -6,11 +6,13 @@ class workerContainer extends StatelessWidget {
   final String job;
   final String image;
   final double rating;
-  const workerContainer({Key? key, required this.name, required this.job, required this.image, required this.rating}) : super(key: key);
+  final Function() ontap;
+  const workerContainer({Key? key, required this.name, required this.job, required this.image, required this.rating, required this.ontap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: ontap,
       child: AspectRatio(
         aspectRatio: 3.5,
         child: Padding(

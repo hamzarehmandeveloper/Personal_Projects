@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import '../models/proposalModel.dart';
-import '../usersMode/screens/perposal_selection_screen.dart';
 
 
-class ServiceFinderServices extends StatelessWidget {
-  ServiceFinderServices({super.key,});
+class WorkerServices extends StatelessWidget {
+  const WorkerServices({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +15,7 @@ class ServiceFinderServices extends StatelessWidget {
         title: const Text('My Services',style: TextStyle(color: Colors.black, fontSize: 28),),
       ),
       body: ListView.builder(
-        itemCount: proposals.length, // Replace with the actual number of service requests
+        itemCount: 5, // Replace with the actual number of service requests
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
@@ -39,14 +37,11 @@ class ServiceFinderServices extends StatelessWidget {
               ),
               child: ListTile(
                 leading: Icon(MdiIcons.briefcase, color: Colors.black),
-                title: Text(proposals[index].title,
-                    style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
-                subtitle: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: Text(proposals[index].description, style: TextStyle(color: Colors.black)),
-                ),
+                title: Text('Service Proposal ${index + 1}',
+                    style: TextStyle(color: Colors.black)),
+                subtitle: Text('Job description...', style: TextStyle(color: Colors.black)),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ProposalSelectionScreen()));
+
                 },
               ),
             ),
