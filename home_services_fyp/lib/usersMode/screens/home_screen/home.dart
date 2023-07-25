@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/usersMode/screens/select_service.dart';
 import '../../../Widget/worker_container.dart';
+import '../conversation_screen.dart';
 import '../worker_list_screen.dart';
 import '../worker_profile_screen.dart';
 
@@ -31,9 +32,16 @@ class _HomePageState extends State<HomePage> {
           elevation: 0,
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConversationsScreen(),
+                  ),
+                );
+              },
               icon: Icon(
-                Icons.person_2_rounded,
+                Icons.message,
                 color: Colors.grey.shade700,
                 size: 30,
               ),

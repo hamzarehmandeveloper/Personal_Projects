@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-class InputField extends StatelessWidget {
+class InputField extends StatefulWidget {
   final String hintText;
   final bool obscureText;
   final Widget suffixIcon;
@@ -16,6 +16,24 @@ class InputField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<InputField> createState() => _InputFieldState();
+}
+
+class _InputFieldState extends State<InputField> {
+  late final TextEditingController controller;
+
+  void initState() {
+    super.initState();
+    //controller = TextEditingController(text: widget.text);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -23,10 +41,10 @@ class InputField extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
+        controller: widget.controller,
+        obscureText: widget.obscureText,
         decoration: InputDecoration(
-          hintText: hintText,
+          hintText: widget.hintText,
           hintStyle: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -35,7 +53,7 @@ class InputField extends StatelessWidget {
           border: const OutlineInputBorder(
             borderSide: BorderSide.none,
           ),
-          suffixIcon: suffixIcon,
+          suffixIcon: widget.suffixIcon,
         ),
         validator: (input) =>
         input == null

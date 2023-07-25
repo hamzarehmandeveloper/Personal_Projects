@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:home_services_fyp/workerMode/screens/perposal_submission_screen.dart';
 
 import '../../Widget/input_field.dart';
-import '../../models/proposalModel.dart';
+import '../../models/workRequestModel.dart';
 
 
 class WHomePage extends StatefulWidget {
@@ -52,9 +52,9 @@ class _WHomePageState extends State<WHomePage> {
           ),
         ),
         body: ListView.builder(
-          itemCount: proposals.length,
+          itemCount: requestModel.length,
           itemBuilder: (context, index) {
-            return ProposalListItem(proposal: proposals[index]);
+            return ProposalListItem(proposal: requestModel[index]);
           },
         ),
     );
@@ -62,7 +62,7 @@ class _WHomePageState extends State<WHomePage> {
 }
 
 class ProposalListItem extends StatelessWidget {
-  final ProposalModel proposal;
+  final WorkRequestModel proposal;
 
   const ProposalListItem({super.key, required this.proposal});
 

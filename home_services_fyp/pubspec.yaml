@@ -41,6 +41,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   image_picker: ^0.8.7+4
   material_design_icons_flutter: ^6.0.7096
+  timeline_tile: ^2.0.0
 
 
 dev_dependencies:

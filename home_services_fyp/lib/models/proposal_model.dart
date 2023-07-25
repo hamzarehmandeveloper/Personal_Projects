@@ -4,7 +4,10 @@ class ProposalModel {
   final String description;
   final String location;
   final DateTime date;
-  final List<String> images;
+  final String orderStatus;
+  final int rate;
+  final String material;
+  final String estimatedTime;
 
   ProposalModel({
     required this.id,
@@ -12,22 +15,24 @@ class ProposalModel {
     required this.description,
     required this.location,
     required this.date,
-    required this.images,
+    required this.orderStatus,
+    required this.rate,
+    required this.material,
+    required this.estimatedTime,
   });
 }
-
 
 List<ProposalModel> proposals = [
   ProposalModel(
     id: "1",
     title: "Painting Service",
-    description: "Looking for someoneVehari to paint my living room.",
+    description: "Looking for someone to paint my living room.",
     location: "Vehari",
     date: DateTime(2023, 7, 25),
-    images: [
-      "assets/icons/plumber.png",
-      "assets/icons/painter.png",
-    ],
+    orderStatus: 'confirm',
+    rate: 100,
+    material: 'pipes,fitting, etc',
+    estimatedTime: '2 day',
   ),
   ProposalModel(
     id: "2",
@@ -35,10 +40,10 @@ List<ProposalModel> proposals = [
     description: "Need assistance with fixing a leaky faucet.",
     location: "Vehari",
     date: DateTime(2023, 7, 28),
-    images: [
-      "assets/icons/cleaning.png",
-      "assets/icons/painter.png",
-    ],
+    orderStatus: 'not confirm',
+    rate: 200,
+    material: 'pipes,fitting, etc',
+    estimatedTime: '1 day',
   ),
   ProposalModel(
     id: "3",
@@ -46,9 +51,9 @@ List<ProposalModel> proposals = [
     description: "Looking for someone to mow the lawn and trim hedges.",
     location: "Vehari",
     date: DateTime(2023, 7, 30),
-    images: [
-      "assets/icons/plumber.png",
-      "assets/icons/painter.png",
-    ],
+    orderStatus: 'confirm',
+    rate: 500,
+    material: 'pipes,fitting, etc',
+    estimatedTime: '1 day',
   ),
 ];

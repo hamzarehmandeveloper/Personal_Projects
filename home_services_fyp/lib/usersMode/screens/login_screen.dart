@@ -105,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: customButton(
                     title: 'Login',
                     onTap: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => TabContainer()));

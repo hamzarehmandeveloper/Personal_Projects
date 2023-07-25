@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../Widget/custom_button.dart';
-
+import 'package:home_services_fyp/Widget/profile.dart';
+import 'package:home_services_fyp/usersMode/screens/profile_screen/user_edit_profile.dart';
+import '../../../Widget/button.dart';
+import '../../../Widget/member.dart';
+import '../../../models/user_model.dart';
 import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -11,61 +14,49 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final user = UserPreferences.myUser;
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Stack(
-                  children: [
-                    Positioned(
-                      child: Container(
-                        height: 100,
-                        margin: EdgeInsets.only(bottom: 50),
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                        ),
-                        width: MediaQuery.of(context).size.width * 1,
-                      ),
-                    ),
-                    const Align(
-                      alignment: Alignment.bottomCenter,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 60,
-                        backgroundImage: AssetImage("assets/images/demo.png"),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Center(
-                child: Text(
-                  'hamzarehman@gmail.com',
-                  // Change this to the user's actual name
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
               SizedBox(height: 24),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: customButton(
-                  title: "Register as worker",
-                  onTap: () {
-                    Navigator.push(
-                        context,
+              Column(
+                children: [
+                  ProfileWidget(
+                    imagePath: user.imagePath,
+                    onClicked: () {
+                      Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (context) => EditProfileScreen()));
-                    // Navigate to the Edit Profile screen or show a modal to edit the profile
-                  },
-                ),
+                            builder: (context) => UserEditProfile()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  buildName(user),
+                  const SizedBox(height: 24),
+                  Center(
+                    child: ButtonWidget(
+                      text: 'Register as worker',
+                      onClicked: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfileScreen()));
+                      },
+                    ),
+                  ),
+                  /*const SizedBox(height: 24),
+                  NumbersWidget(),*/
+                  const SizedBox(height: 48),
+                  buildAbout(user),
+                  SizedBox(height: 24),
+                ],
               ),
-              SizedBox(height: 24),
               Padding(
-                padding:
-                    const EdgeInsets.only(left: 15, right: 15, bottom: 7.5),
+                padding: const EdgeInsets.only(
+                    left: 30, right: 30, bottom: 7.5, top: 24),
                 child: Material(
                   borderRadius: BorderRadius.circular(14.0),
                   elevation: 0,
@@ -83,24 +74,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     child: Column(
                       children: [
-                        ListTile(
-                          leading: const Icon(
-                            Icons.ios_share_sharp,
-                            color: Colors.black,
-                          ),
-                          title: const Text('About'),
-                          onTap: () => {},
-                        ),
-                        const Divider(),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.star_border,
-                            color: Colors.black,
-                          ),
-                          title: const Text('Leave a review'),
-                          onTap: () => {},
-                        ),
-                        const Divider(),
                         ListTile(
                           leading: const Icon(
                             Icons.warning_amber,
@@ -130,3 +103,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
+Widget buildName(User user) => Column(
+      children: [
+        Text(
+          user.name,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          user.email,
+          style: TextStyle(color: Colors.grey),
+        )
+      ],
+    );
+
+Widget buildAbout(User user) => Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+  child:   Container(
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade200,
+              offset: Offset(0, 4),
+              blurRadius: 10.0,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'About',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              user.about,
+              style: TextStyle(fontSize: 16, height: 1.4),
+            ),
+          ],
+        ),
+      ),
+);

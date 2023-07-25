@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:home_services_fyp/Widget/profile.dart';
 import '../../../Widget/custom_button.dart';
 import '../../../Widget/input_field.dart';
 import '../../../buttomBar/workerBottombar.dart';
+import '../../../models/user_model.dart';
 
 class EditProfileScreen extends StatefulWidget {
   @override
@@ -19,6 +21,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    User user = UserPreferences.myUser;
     return SafeArea(
       child: Scaffold(
           body: NestedScrollView(
@@ -45,35 +48,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                    child: SizedBox(
-                  height: 140,
-                  width: 140,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    fit: StackFit.expand,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        backgroundImage: AssetImage("assets/images/demo.png"),
-                      ),
-                      Positioned(
-                          bottom: 0,
-                          right: -25,
-                          child: RawMaterialButton(
-                            onPressed: () {},
-                            elevation: 2.0,
-                            fillColor: Color(0xFFF5F6F9),
-                            child: Icon(
-                              Icons.camera_alt_outlined,
-                              color: Colors.black,
-                            ),
-                            padding: EdgeInsets.all(5.0),
-                            shape: CircleBorder(),
-                          )),
-                    ],
-                  ),
-                )),
+                ProfileWidget(
+                  imagePath: user.imagePath,
+                  isEdit: true,
+                  onClicked: (){},
+                ),
                 SizedBox(height: 20),
                 const Text(
                   'Enter full name:',

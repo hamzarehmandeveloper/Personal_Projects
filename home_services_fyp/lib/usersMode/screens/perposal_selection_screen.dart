@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:home_services_fyp/usersMode/screens/work_description_screen.dart';
+import 'package:home_services_fyp/models/proposal_model.dart';
+import 'package:home_services_fyp/usersMode/screens/progress_screen.dart';
 
 class ProposalSelectionScreen extends StatefulWidget {
   const ProposalSelectionScreen({super.key});
@@ -11,7 +12,6 @@ class ProposalSelectionScreen extends StatefulWidget {
 
 class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
   int? _selectedIndex;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,8 +27,9 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
         ),),
       ),
       body: ListView.builder(
-        itemCount: 5, // replace with actual number of proposals
+        itemCount: proposals.length,
         itemBuilder: (BuildContext context, int index) {
+          var proposal = proposals[index];
           return Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
@@ -41,7 +42,7 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.shade200,
-                    offset: const Offset(0, 6),
+                    offset: Offset(0, 6),
                     blurRadius: 10.0,
                   ),
                 ],
@@ -51,6 +52,10 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
                 onTap: () {
                   setState(() {
                     _selectedIndex = index;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WorkStatusScreen(index: index,)));
                   });
                 },
                 child: Padding(
@@ -59,26 +64,25 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Proposal ${index + 1}',
+                        proposal.title,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const Text(
-                        'Rate: \$100', // replace with actual rate
+                       Text(
+                         'Rate : ${(proposal.rate.toString())} Rs',
                         style: TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 10),
-                      const Text(
-                        'Material: Pipes, fittings, etc.',
-                        // replace with actual material
+                      Text(
+                        'Material Required : ${(proposal.material)}',
                         style: TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 10),
-                      const Text(
-                        'Time: 2 days', // replace with actual time
+                      Text(
+                        'Estimated Time : ${(proposal.estimatedTime)}',
                         style: TextStyle(fontSize: 16),
                       ),
                     ],
@@ -89,22 +93,9 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
           );
         },
       ),
-      bottomNavigationBar: _selectedIndex == null
-          ? null
-          : BottomAppBar(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: ElevatedButton(
-                  child: const Text('Select Proposal'),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SubmitWorkScreen()));
-                  },
-                ),
-              ),
-            ),
+
     );
   }
 }
+
+

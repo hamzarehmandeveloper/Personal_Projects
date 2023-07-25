@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/usersMode/screens/work_rating_screen.dart';
 
-class WorkStatusScreen extends StatelessWidget {
+class WorkStatusScreenn extends StatelessWidget {
   final bool isInProgress;
 
-  const WorkStatusScreen({Key? key, required this.isInProgress})
+  const WorkStatusScreenn({Key? key, required this.isInProgress})
       : super(key: key);
 
   @override
