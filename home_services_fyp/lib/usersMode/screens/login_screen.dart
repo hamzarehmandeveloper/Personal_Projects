@@ -2,7 +2,12 @@ import 'package:home_services_fyp/Widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/Widget/input_field.dart';
 import 'package:home_services_fyp/usersMode/screens/register_screen.dart';
+import '../../Constants.dart';
+import '../../FireStore_repo/user_repo.dart';
 import '../../buttomBar/buttombar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../themes.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -13,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController(text: '');
   final TextEditingController passwordController =
       TextEditingController(text: '');
+  UserRepo userRepo = UserRepo();
 
   bool passwordVisible = false;
   final _formKey = GlobalKey<FormState>();
@@ -103,19 +109,29 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: SizedBox(
                       child: customButton(
-                    title: 'Login',
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => TabContainer()));
-                    },
-                  )),
+                          title: 'Login',
+                          onTap: () async {
+                            final String email = emailController.text.trim();
+                            final String password =
+                                passwordController.text.trim();
+                            User? user = await userRepo
+                                .signInWithEmailAndPassword(email, password);
+                            if (user != null) {
+                              Constants.userModel= await userRepo.fetchUserData();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TabContainer()),
+                              );
+                            } else {
+                              showErrorMessage(context,
+                                  'Invalid email or password. Please try again.');
+                            }
+                          })),
                 ),
                 const SizedBox(
                   height: 24,
                 ),
-
                 const SizedBox(
                   height: 50,
                 ),

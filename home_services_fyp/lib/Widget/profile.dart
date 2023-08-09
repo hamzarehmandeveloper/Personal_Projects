@@ -1,23 +1,29 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class ProfileWidget extends StatelessWidget {
-  final String imagePath;
-  final bool isEdit;
-  final VoidCallback onClicked;
+class ProfileWidget extends StatefulWidget {
+  String? imagePath;
+  bool? isEdit;
+  VoidCallback? onClicked;
 
-  const ProfileWidget({
+  ProfileWidget({
     Key? key,
-    required this.imagePath,
+    this.imagePath,
     this.isEdit = false,
-    required this.onClicked,
+    this.onClicked,
+
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.primary;
+  _ProfileWidgetState createState() => _ProfileWidgetState();
+}
 
+class _ProfileWidgetState extends State<ProfileWidget> {
+  final color = Colors.black;
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: Stack(
         children: [
@@ -25,7 +31,7 @@ class ProfileWidget extends StatelessWidget {
           Positioned(
             bottom: 0,
             right: 4,
-            child: buildEditIcon(color),
+            child: buildEditIcon(),
           ),
         ],
       ),
@@ -33,13 +39,13 @@ class ProfileWidget extends StatelessWidget {
   }
 
   Widget buildImage() {
-    final image = imagePath;
+    //const image = File(widget.imagePath);
 
     return ClipOval(
       child: Material(
         color: Colors.transparent,
         child: Image.asset(
-          image,
+          widget.imagePath.toString(),
           fit: BoxFit.cover,
           width: 128,
           height: 128,
@@ -48,14 +54,28 @@ class ProfileWidget extends StatelessWidget {
     );
   }
 
-  Widget buildEditIcon(Color color) => buildCircle(
+/*  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        widget.onClicked();
+        // Update the imagePath with the new image file path
+        // This will trigger the rebuild and update the displayed image
+        widget.imagePath = pickedFile.path;
+      });
+    }
+  }*/
+
+  Widget buildEditIcon() => buildCircle(
     color: Colors.white,
     all: 3,
     child: buildCircle(
       color: color,
       all: 8,
       child: Icon(
-        isEdit ? Icons.add_a_photo : Icons.edit,
+        widget.isEdit! ? Icons.add_a_photo : Icons.edit,
         color: Colors.white,
         size: 20,
       ),
@@ -68,7 +88,7 @@ class ProfileWidget extends StatelessWidget {
     required Color color,
   }) =>
       InkWell(
-        onTap: onClicked,
+        onTap: widget.onClicked,
         child: ClipOval(
           child: Container(
             padding: EdgeInsets.all(all),
@@ -78,3 +98,4 @@ class ProfileWidget extends StatelessWidget {
         ),
       );
 }
+

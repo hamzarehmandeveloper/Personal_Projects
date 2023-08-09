@@ -1,59 +1,57 @@
-class WorkRequestModel {
-  final String id;
-  final String title;
-  final String description;
-  final String location;
-  final DateTime date;
-  final List<String> images;
-  final String orderStatus;
+import 'package:home_services_fyp/Constants.dart';
 
-  WorkRequestModel({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.location,
-    required this.date,
-    required this.images,
-    required this.orderStatus,
+class WorkRequestProposal {
+  String? workDescription;
+  String? selectedCategory;
+  List<String>? imageUrls;
+  String? proposerId;
+  String? proposerName;
+  String? requestTitle;
+  String? proposalRequestId;
+  String? location;
+  dynamic timestamp;
+  bool? isAccept;
+
+  WorkRequestProposal({
+    this.workDescription,
+    this.selectedCategory,
+    this.imageUrls,
+    this.proposerId,
+    this.proposerName,
+    this.proposalRequestId,
+    this.timestamp,
+    this.requestTitle,
+    this.location,
+    this.isAccept,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'workDescription': workDescription,
+      'selectedCategory': selectedCategory,
+      'imageUrls': imageUrls,
+      'proposerId': proposerId,
+      'proposerName': proposerName,
+      'proposalId': proposalRequestId,
+      'timestamp': timestamp,
+      'requestTitle': requestTitle,
+      'location': location,
+      'isAccept': false,
+    };
+  }
+
+  factory WorkRequestProposal.fromJson(Map<String, dynamic> json, String proposalReqId ) {
+    return WorkRequestProposal(
+      workDescription: json['workDescription'],
+      selectedCategory: json['selectedCategory'],
+      imageUrls: json['imageUrls'] != null ? List<String>.from(json['imageUrls']) : [],
+      proposerId: json['proposerId'],
+      proposerName: json['proposerName'],
+      proposalRequestId: json['proposalId'],
+      timestamp: json['timestamp'] != null ? json['timestamp'] : null,
+      requestTitle: json['requestTitle'],
+      location: json['location'],
+      isAccept: json['isAccept'],
+    );
+  }
 }
-
-
-List<WorkRequestModel> requestModel = [
-  WorkRequestModel(
-    id: "1",
-    title: "Painting Service",
-    description: "Looking for someoneVehari to paint my living room.",
-    location: "Vehari",
-    date: DateTime(2023, 7, 25),
-    images: [
-      "assets/icons/plumber.png",
-      "assets/icons/painter.png",
-    ],
-      orderStatus : 'confirm'
-  ),
-  WorkRequestModel(
-    id: "2",
-    title: "Plumbing Repair",
-    description: "Need assistance with fixing a leaky faucet.",
-    location: "Vehari",
-    date: DateTime(2023, 7, 28),
-    images: [
-      "assets/icons/cleaning.png",
-      "assets/icons/painter.png",
-    ],
-      orderStatus : 'not confirm'
-  ),
-  WorkRequestModel(
-    id: "3",
-    title: "Gardening Help",
-    description: "Looking for someone to mow the lawn and trim hedges.",
-    location: "Vehari",
-    date: DateTime(2023, 7, 30),
-    images: [
-      "assets/icons/plumber.png",
-      "assets/icons/painter.png",
-    ],
-      orderStatus: 'confirm'
-  ),
-];

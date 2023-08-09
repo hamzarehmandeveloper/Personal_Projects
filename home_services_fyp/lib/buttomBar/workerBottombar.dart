@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../usersMode/screens/profile_screen/profile_screen.dart';
-import 'package:flutter/foundation.dart';
+import '../usersMode/screens/worker_profile_screen.dart';
 import '../workerMode/screens/w_home_screen.dart';
+import '../workerMode/screens/worker_profile_screen.dart';
 import '../workerMode/screens/worker_services.dart';
 
 class WorkerTabContainer extends StatefulWidget {
@@ -28,9 +29,13 @@ class _WorkerTabContainerState extends State<WorkerTabContainer> {
     originalList = [
       WHomePage(),
       WorkerServices(),
-      ProfileScreen(),
+      WorkerProfile(),
     ];
-    originalDic = {0: true, 1: false, 2: false,};
+    originalDic = {
+      0: true,
+      1: false,
+      2: false,
+    };
     listScreens = [originalList.first];
     listScreensIndex = [0];
   }

@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:home_services_fyp/FireStore_repo/user_repo.dart';
 import 'package:home_services_fyp/usersMode/screens/select_service.dart';
 import '../../../Widget/worker_container.dart';
+import '../../../models/user_model.dart';
 import '../conversation_screen.dart';
 import '../worker_list_screen.dart';
 import '../worker_profile_screen.dart';
@@ -13,11 +16,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<dynamic> workers = [
-    ['Hamza rehman', 'Plumber', 'assets/images/demo.png', 4.8],
-    ['Usman Mushtaq', 'Cleaner', 'assets/images/demo.png', 4.6],
-    ['Moiz Mazher', 'Driver', 'assets/images/demo.png', 4.4]
-  ];
+  List<dynamic> workers = [];
+  UserRepo userRepo = UserRepo();
+
+  Future<List<dynamic>> fetchWorkerData() async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot = await userRepo
+          .firestore
+          .collection("Users")
+          .where("isWorker", isEqualTo: true)
+          .get();
+
+      final workers = querySnapshot.docs
+          .map((doc) => UserModel.fromJson(doc.data(), doc.id))
+          .toList();
+      return workers;
+    } catch (e) {
+      print('Error fetching worker data: $e');
+      return [];
+    }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchWorkerData();
+    ;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +51,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,
-          title: Text(
+          title: const Text(
             'Dashboard',
             style: TextStyle(color: Colors.black, fontSize: 28),
           ),
@@ -48,292 +74,312 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Recent',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'View all',
-                        ))
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  height: 180,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.shade200,
-                        offset: Offset(0, 4),
-                        blurRadius: 10.0,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            final updatedWorkers = await fetchWorkerData();
+            setState(() {
+              workers = updatedWorkers;
+            });
+          },
+          child: SingleChildScrollView(
+            child: FutureBuilder<List<dynamic>>(
+              future: fetchWorkerData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Error fetching data.'),
+                  );
+                } else {
+                  workers = snapshot.data!;
+                  UserModel recentWorker = workers[0];
+                  return Column(
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: Image.asset(
-                                workers[0][2],
-                                width: 70,
-                                height: 70,
-                                fit: BoxFit.cover,
-                              )),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                workers[0][0],
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Recent',
+                              style:
+                              TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'View all',
+                                ))
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Container(
+                          padding: EdgeInsets.all(20.0),
+                          height: 180,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade200,
+                                offset: Offset(0, 4),
+                                blurRadius: 10.0,
                               ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                workers[0][1],
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.7),
-                                    fontSize: 18),
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.orange,
-                                    size: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    workers[0][3].toString(),
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )
                             ],
-                          )
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                               Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(50.0),
+                                child: Image.asset(
+                                  recentWorker.imagePath.toString(),
+                                  width: 70,
+                                  height: 70,
+                                  fit: BoxFit.cover,
+                                )),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  recentWorker.name.toString(),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  recentWorker.skill.toString(),
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7),
+                                      fontSize: 18),
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      color: Colors.orange,
+                                      size: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      recentWorker.rating.toString(),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => WorkerProfileScreen(
+                                    userId: recentWorker.userId.toString(),),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(15.0)),
+                            child: Center(
+                                child: Text(
+                              'View Profile',
+                              style: TextStyle(color: Colors.white, fontSize: 18),
+                            )),
+                          ),
+                        )
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.0, right: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Categories',
+                              style:
+                              TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SelectService()));
+                                },
+                                child: Text('View all'))
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 300,
+                        child: GridView.count(
+                          crossAxisSpacing: 5.0,
+                          mainAxisSpacing: 5.0,
+                          crossAxisCount: 3,
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.all(20.0),
+                          children: <Widget>[
+                            ServiceContainer(
+                              icon: 'assets/icons/plumber.png',
+                              name: 'Plumber',
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WorkerList(
+                                          skill: 'Plumber',
+                                        )));
+                              },
+                            ),
+                            ServiceContainer(
+                              icon: 'assets/icons/painter.png',
+                              name: 'Painter',
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WorkerList(
+                                          skill: 'Painter',
+                                        )));
+                              },
+                            ),
+                            ServiceContainer(
+                              icon: 'assets/icons/electrician.png',
+                              name: 'Electrician',
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WorkerList(
+                                          skill: 'Electricians',
+                                        )));
+                              },
+                            ),
+                            ServiceContainer(
+                              icon: 'assets/icons/cleaning.png',
+                              name: 'Cleaning',
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WorkerList(
+                                          skill: 'Cleaning',
+                                        )));
+                              },
+                            ),
+                            ServiceContainer(
+                              icon: 'assets/icons/gardener.png',
+                              name: 'Gardener',
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WorkerList(
+                                          skill: 'Gardener',
+                                        )));
+                              },
+                            ),
+                            ServiceContainer(
+                              icon: 'assets/icons/carpenter.png',
+                              name: 'Carpenter',
+                              ontap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WorkerList(
+                                          skill: 'Carpenter',
+                                        )));
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.0, right: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Top Rated',
+                              style:
+                              TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'View all',
+                                ))
+                          ],
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: workers.length,
+                            itemBuilder: (context, index) {
+                              UserModel workerData = workers[index];
+                              return workerContainer(
+                                name: workerData.name.toString(),
+                                job: workerData.skill.toString(),
+                                image: workerData.imagePath.toString(),
+                                rating: workerData.rating!.toStringAsFixed(1),
+                                ontap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          WorkerProfileScreen(userId: workerData.userId.toString()),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         ],
                       ),
                       SizedBox(
                         height: 20,
                       ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => WorkerProfileScreen(
-                                  workerData: [
-                                    workers[0][0],
-                                    workers[0][1],
-                                    workers[0][2],
-                                    workers[0][3]
-                                  ]),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(15.0)),
-                          child: Center(
-                              child: Text(
-                            'View Profile',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          )),
-                        ),
-                      )
                     ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20.0, right: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Categories',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SelectService()));
-                        },
-                        child: Text('View all'))
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 300,
-                child: GridView.count(
-                  crossAxisSpacing: 5.0,
-                  mainAxisSpacing: 5.0,
-                  crossAxisCount: 3,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.all(20.0),
-                  children: <Widget>[
-                    ServiceContainer(
-                      icon: 'assets/icons/plumber.png',
-                      name: 'Plumber',
-                      ontap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WorkerList(
-                                      skill: 'Plumber',
-                                    )));
-                      },
-                    ),
-                    ServiceContainer(
-                      icon: 'assets/icons/painter.png',
-                      name: 'Painter',
-                      ontap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WorkerList(
-                                      skill: 'Painter',
-                                    )));
-                      },
-                    ),
-                    ServiceContainer(
-                      icon: 'assets/icons/electrician.png',
-                      name: 'Electrical',
-                      ontap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WorkerList(
-                                      skill: 'Electrical',
-                                    )));
-                      },
-                    ),
-                    ServiceContainer(
-                      icon: 'assets/icons/cleaning.png',
-                      name: 'Cleaning',
-                      ontap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WorkerList(
-                                      skill: 'Cleaning',
-                                    )));
-                      },
-                    ),
-                    ServiceContainer(
-                      icon: 'assets/icons/gardener.png',
-                      name: 'Gardener',
-                      ontap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WorkerList(
-                                      skill: 'Gardener',
-                                    )));
-                      },
-                    ),
-                    ServiceContainer(
-                      icon: 'assets/icons/carpenter.png',
-                      name: 'Carpenter',
-                      ontap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WorkerList(
-                                      skill: 'Carpenter',
-                                    )));
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20.0, right: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Top Rated',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'View all',
-                        ))
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: workers.length,
-                    itemBuilder: (context, index) {
-                      List<dynamic> workerData = workers[index];
-                      return workerContainer(
-                        name: workerData[0],
-                        job: workerData[1],
-                        image: workerData[2],
-                        rating: workerData[3],
-                        ontap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  WorkerProfileScreen(workerData: workerData),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-            ],
+                  );
+                }
+              },
+            ),
           ),
         ));
   }

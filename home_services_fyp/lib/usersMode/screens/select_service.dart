@@ -70,7 +70,7 @@ class _SelectServiceState extends State<SelectService> {
                           crossAxisSpacing: 20.0,
                           mainAxisSpacing: 20.0,
                         ),
-                        physics: const NeverScrollableScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         itemCount: services.length,
                         itemBuilder: (BuildContext context, int index) {
                           return serviceContainer(services[index].icon,

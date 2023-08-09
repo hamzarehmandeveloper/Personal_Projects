@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatefulWidget {
-  final int maxLines;
-  final String label;
-  final String text;
-  final ValueChanged<String> onChanged;
+  int? maxLines;
+  String? label;
+  String? text;
+  ValueChanged<String>? onChanged;
+  final TextEditingController controller;
 
-  const TextFieldWidget({
+  TextFieldWidget({
     Key? key,
     this.maxLines = 1,
     required this.label,
     required this.text,
-    required this.onChanged,
+    this.onChanged,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -19,26 +21,21 @@ class TextFieldWidget extends StatefulWidget {
 }
 
 class _TextFieldWidgetState extends State<TextFieldWidget> {
-  late final TextEditingController controller;
+  late final TextEditingController initTextController;
 
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController(text: widget.text);
+    initTextController = TextEditingController(text: widget.text);
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.label,
+            widget.label!,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 8),
@@ -48,8 +45,13 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: TextField(
-              controller: controller,
+              controller: widget.controller,
+              onChanged: widget.onChanged,
               decoration: InputDecoration(
+                hintText: initTextController.text,
+                hintStyle: TextStyle(
+                  color: Colors.black
+                ),
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),

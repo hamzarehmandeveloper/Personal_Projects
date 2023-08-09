@@ -1,22 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:home_services_fyp/FireStore_repo/user_repo.dart';
+import 'package:home_services_fyp/FireStore_repo/worker_proposal_repo.dart';
+import 'package:home_services_fyp/models/workRequestModel.dart';
+import 'package:home_services_fyp/models/worker_proposals_model.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../Constants.dart';
 import '../../Widget/custom_button.dart';
 import '../../Widget/input_field.dart';
 
 class JobDetailsScreen extends StatefulWidget {
-  final String jobTitle;
-  final String description;
-  final String location;
-  final List<String> proposalImages;
+  WorkRequestProposal? workRequestdata;
+
   @override
-  const JobDetailsScreen({
+  JobDetailsScreen({
     Key? key,
-    required this.jobTitle,
-    required this.description,
-    required this.location,
-    required this.proposalImages,
+    required this.workRequestdata,
   }) : super(key: key);
+
   @override
   _JobDetailsScreenState createState() => _JobDetailsScreenState();
 }
@@ -25,8 +27,10 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController rateController = TextEditingController();
   final TextEditingController materialController = TextEditingController();
-  final TextEditingController completionTimeController = TextEditingController();
-
+  final TextEditingController completionTimeController =
+      TextEditingController();
+  UserRepo userRepo = UserRepo();
+  WorkerProposalRepo proposalRepo = WorkerProposalRepo();
 
   void showSubmittedPopup() {
     showDialog(
@@ -43,7 +47,9 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
             repeat: false,
           ),
           title: const Text('Submitted'),
-          content: const Text('Your Perposal has been submitted.',),
+          content: const Text(
+            'Your Perposal has been submitted.',
+          ),
           alignment: Alignment.centerLeft,
           actions: <Widget>[
             TextButton(
@@ -64,10 +70,11 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        iconTheme: const IconThemeData(
-          color: Colors.black
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text(
+          'Job Details',
+          style: TextStyle(color: Colors.black),
         ),
-        title: const Text('Job Details',style: TextStyle(color: Colors.black),),
         centerTitle: true,
       ),
       body: Padding(
@@ -98,29 +105,31 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.jobTitle,
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        widget.workRequestdata!.requestTitle.toString(),
+                        style: const TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        widget.description,
+                        widget.workRequestdata!.workDescription.toString(),
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        widget.location,
+                        widget.workRequestdata!.location.toString(),
                         style: const TextStyle(fontSize: 16),
                       ),
-                      Row(
-                        children: widget.proposalImages.map((imageAddress) {
+                      /*Row(
+                        children: widget.workRequestdata!.imageUrls.map((imageAddress) {
                           return Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
                               child: Image.asset(imageAddress),
                             ),
                           );
                         }).toList(),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
@@ -139,15 +148,26 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                 controller: materialController,
               ),
               const SizedBox(height: 16),
-              InputField(
-                hintText: 'Estimated Completion time',
-                suffixIcon: const SizedBox(),
-                controller: materialController,
-              ),
-              const SizedBox(height: 16),
               customButton(
                 title: "Save",
-                onTap: () {
+                onTap: () async {
+                  WorkerProposalModel rproposal = WorkerProposalModel(
+                    proposerId: widget.workRequestdata!.proposerId,
+                    proposerName: widget.workRequestdata!.proposerName,
+                    location: Constants.userModel!.city,
+                    workRequestPostId: widget.workRequestdata!.proposalRequestId,
+                    workDescription: widget.workRequestdata!.workDescription,
+                    selectedCategory: widget.workRequestdata!.selectedCategory,
+                    imageUrls: widget.workRequestdata!.imageUrls,
+                    workerName: Constants.userModel!.name,
+                    workerID: Constants.userModel!.userId,
+                    proposalTitle: widget.workRequestdata!.requestTitle,
+                    material: materialController.text.trim(),
+                    rate: rateController.text.trim(),
+                    timestamp: widget.workRequestdata!.timestamp
+                  );
+                  print(rproposal.proposalId);
+                  await proposalRepo.storeWorkRequestProposal(rproposal);
                   showSubmittedPopup();
                 },
               )

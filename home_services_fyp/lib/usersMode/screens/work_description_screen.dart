@@ -1,8 +1,13 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:home_services_fyp/FireStore_repo/user_repo.dart';
+import 'package:home_services_fyp/FireStore_repo/work_request_&_proposal_repo.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
+import '../../Constants.dart';
 import '../../Widget/custom_button.dart';
+import '../../models/workRequestModel.dart';
 
 class SubmitWorkScreen extends StatefulWidget {
   @override
@@ -13,8 +18,10 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? _workDescription;
   String? _selectedCategory;
+  String? _workTitle;
   List<XFile> _images = [];
   final ImagePicker _picker = ImagePicker();
+  WorkRequestRepo repo = WorkRequestRepo();
 
   Future<void> _pickImages() async {
     final List<XFile> pickedImages = await _picker.pickMultiImage();
@@ -24,6 +31,8 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
       });
     }
   }
+
+  UserRepo userRepo = UserRepo();
 
   @override
   void initState() {
@@ -87,10 +96,41 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
           child: ListView(
             children: <Widget>[
               const Text(
-                'Enter job descriptions',
+                'Enter job Title',
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 5),
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xfff1f1f5),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: "Title",
+                    hintStyle: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff94959b),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  maxLines: 1,
+                  keyboardType: TextInputType.multiline,
+                  validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a work Title';
+                    }
+                    return null;
+                  },
+                  onSaved: (String? value) {
+                    _workTitle = value;
+                  },
+                ),
+              ),
+              SizedBox(height: 16),
               Container(
                 decoration: BoxDecoration(
                   color: Color(0xfff1f1f5),
@@ -141,13 +181,16 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                     style: TextStyle(color: Color(0xff94959b)),
                   ),
                   items: <String>[
-                    'House cleaners',
-                    'Furniture assemblers',
-                    'Painters',
-                    'Electricians',
-                    'Plumbers',
-                    'HVAC technicians',
-                    'Gardeners',
+                    'Cleaning',
+                    'Plumber',
+                    'Electrician',
+                    'Painter',
+                    'Carpenter',
+                    'Gardener',
+                    'Tailor',
+                    'Maid',
+                    'Driver',
+                    'Cook',
                   ].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -201,13 +244,24 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
               SizedBox(height: 16),
               customButton(
                 title: 'Submit',
-                onTap: () {
+                onTap: () async {
                   if (!_formKey.currentState!.validate()) {
                     return;
                   }
                   _formKey.currentState!.save();
                   print(_workDescription);
-                  // Handle form submission logic
+
+                  WorkRequestProposal wrproposal = WorkRequestProposal(
+                    proposerId: userRepo.auth.currentUser!.uid,
+                    proposerName: Constants.userModel!.name,
+                    workDescription: _workDescription,
+                    selectedCategory: _selectedCategory,
+                    imageUrls: ['assets/icons/plumber.png', 'assets/icons/plumber.png'],
+                    timestamp: Timestamp.now(),
+                    requestTitle: _workTitle,
+                    location: Constants.userModel!.city,
+                  );
+                  await repo.storeWorkRequestProposal(wrproposal);
                   _showSubmittedPopup();
                 },
               ),

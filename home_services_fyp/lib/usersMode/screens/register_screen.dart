@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:home_services_fyp/FireStore_repo/user_repo.dart';
 import 'package:home_services_fyp/Widget/input_field.dart';
 import 'package:flutter/material.dart';
+import 'package:home_services_fyp/models/user_model.dart';
+import '../../FireStore_repo/user_repo.dart';
 import '../../Widget/custom_button.dart';
 import 'login_screen.dart';
 
@@ -11,19 +15,24 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController nameController = TextEditingController(text: '');
   final TextEditingController emailController = TextEditingController(text: '');
   final TextEditingController passwordController =
       TextEditingController(text: '');
+  final TextEditingController cityController =
+  TextEditingController(text: '');
+  UserRepo userRepo = UserRepo();
 
   bool passwordVisible = false;
-  final _formKey = GlobalKey<FormState>();
 
   void togglePassword() {
     setState(() {
       passwordVisible = !passwordVisible;
     });
   }
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         InputField(
                           hintText: 'City',
-                          controller: emailController,
+                          controller: cityController,
                           suffixIcon: const SizedBox(),
                         ),
                       ],
@@ -122,12 +131,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: SizedBox(
                     child: customButton(
                       title: 'Register',
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginScreen()));
-                      },
+                      onTap: () async {
+                        final String email = emailController.text.trim();
+                        final String password = passwordController.text.trim();
+                        final String name = nameController.text.trim();
+                        final String city = cityController.text.trim();
+
+                        User? regUser = await userRepo.registerWithEmailAndPassword(email, password);
+                        String userId = regUser!.uid;
+                        UserModel user = UserModel(
+                          imagePath: 'assets/images/demo.png',
+                          userId: userId,
+                          name: name,
+                          email: email,
+                          city: city,
+                        );
+                        userRepo.createUser(user);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                      }
                     ),
                   ),
                 ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:home_services_fyp/Constants.dart';
+import 'package:home_services_fyp/FireStore_repo/user_repo.dart';
 import '../../Widget/custom_button.dart';
+import '../../buttomBar/buttombar.dart';
 import 'login_screen.dart';
 import 'package:lottie/lottie.dart';
 
@@ -11,9 +14,15 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
+  UserRepo userRepo = UserRepo();
   @override
   void initState() {
     super.initState();
+    init();
+  }
+   init() async {
+    Constants.userModel = (await userRepo.fetchUserData())!;
+    print('done');
   }
 
   @override
@@ -27,8 +36,13 @@ class _StartPageState extends State<StartPage> {
             child: customButton(
               title: 'Get Start',
               onTap: () {
+                if (Constants.userModel!=null){
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
+                    MaterialPageRoute(builder: (context) => TabContainer()));
+                } else{
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()));
+                }
               },
             ),
           ),

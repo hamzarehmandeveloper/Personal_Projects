@@ -5,7 +5,7 @@ class workerContainer extends StatelessWidget {
   final String name;
   final String job;
   final String image;
-  final double rating;
+  final String rating;
   final Function() ontap;
   const workerContainer({Key? key, required this.name, required this.job, required this.image, required this.rating, required this.ontap}) : super(key: key);
 
@@ -61,7 +61,7 @@ class workerContainer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        rating.toString(),
+                        rating,
                         style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),

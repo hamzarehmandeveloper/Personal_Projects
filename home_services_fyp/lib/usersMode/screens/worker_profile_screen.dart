@@ -1,39 +1,69 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:home_services_fyp/FireStore_repo/user_repo.dart';
+import 'package:home_services_fyp/models/user_model.dart';
 
+import '../../Constants.dart';
 import '../../Widget/custom_button.dart';
+import '../../models/worker_review_model.dart';
 import 'chat_screen.dart';
 
-class WorkerProfileScreen extends StatelessWidget {
-  final List<dynamic> workerData;
+class WorkerProfileScreen extends StatefulWidget {
+  final String userId;
 
-  WorkerProfileScreen({required this.workerData});
+  WorkerProfileScreen({
+    required this.userId,
+  });
+
+  @override
+  State<WorkerProfileScreen> createState() => _WorkerProfileScreenState();
+}
+
+class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
+  UserRepo userRepo = UserRepo();
+  UserModel? workerProfile;
+  List<WorkerReviewModel> reviews = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchReviews();
+    //print( 'user name: ${(reviews[0].workerName)}');
+  }
+
+  Future<void> fetchReviews() async {
+    List<WorkerReviewModel> fetchedReviews =
+        await fetchWorkerReviews(widget.userId);
+    setState(() {
+      reviews = fetchedReviews;
+      print(reviews);
+    });
+  }
+
+  Future<List<WorkerReviewModel>> fetchWorkerReviews(String workerId) async {
+    try {
+      QuerySnapshot snapshot = await userRepo.firestore
+          .collection('WorkerReviews')
+          .where('workerID', isEqualTo: workerId)
+          .get();
+      List<WorkerReviewModel> reviews = snapshot.docs.map((doc) {
+        print(doc);
+        return WorkerReviewModel(
+          proposerName: doc['proposerName'],
+          userReview: doc['userReview'],
+        );
+      }).toList();
+      print(reviews[0].proposerName);
+      print('Reviews fetched');
+      return reviews;
+    } catch (e) {
+      print('Error fetching worker reviews: $e');
+      return [];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    String name = workerData[0];
-    String occupation = workerData[1];
-    String image = workerData[2];
-    double rating = workerData[3];
-
-    final List<workerReviewsModel> reviews = [
-      workerReviewsModel(
-          user: 'hamza',
-          reviewText:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
-      workerReviewsModel(
-          user: 'usman',
-          reviewText:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
-      workerReviewsModel(
-          user: 'abdullah',
-          reviewText:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
-      workerReviewsModel(
-          user: 'moiz',
-          reviewText:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
-    ];
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -45,179 +75,233 @@ class WorkerProfileScreen extends StatelessWidget {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 10.0),
-          child: Column(
-            children: [
-              SizedBox(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 5),
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          height: 170,
-                          width: 170,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                blurRadius: 10,
-                                spreadRadius: 2,
-                              ),
-                            ],
-                          ),
-                        ),
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 90,
-                          backgroundImage: AssetImage(image),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      name,
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      occupation,
-                      style: TextStyle(fontSize: 18, color: Colors.grey),
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.star, color: Colors.yellow, size: 24),
-                        SizedBox(width: 5),
-                        Text(
-                          'Rating: $rating',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'About',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                width: MediaQuery.of(context).size.width * 1,
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade200,
-                      offset: Offset(0, 4),
-                      blurRadius: 10.0,
-                    ),
-                  ],
-                ),
-                child: const Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-                  style: TextStyle(fontSize: 14, color: Colors.black),
-                ),
-              ),
-              SizedBox(height: 20),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Past Work Review',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: 20),
-              Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: reviews.length,
-                    padding: const EdgeInsets.all(8.0),
-                    itemBuilder: (context, index) {
-                      final message = reviews[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: 15,
-                                child: Image.asset('assets/images/demo.png'),
-                              ),
-                              Flexible(
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(12.0),
-                                    margin: const EdgeInsets.only(
-                                        bottom: 8.0, left: 8.0, right: 8.0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.shade200,
-                                          offset: Offset(0, 4),
-                                          blurRadius: 10.0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            message.user,
-                                            style: const TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          message.reviewText,
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
+      body: RefreshIndicator(
+        onRefresh: fetchReviews,
+        child: FutureBuilder(
+          future: userRepo.fetchWorkerProfileData(widget.userId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error fetching data.'),
+              );
+            } else {
+              workerProfile = snapshot.data;
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 10.0),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 5),
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  height: 170,
+                                  width: 170,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        blurRadius: 10,
+                                        spreadRadius: 2,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
+                                CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: 90,
+                                  backgroundImage: AssetImage(
+                                      workerProfile!.imagePath.toString()),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              workerProfile!.name.toString(),
+                              style: TextStyle(
+                                  fontSize: 28, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              workerProfile!.skill.toString(),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.grey),
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.star,
+                                    color: Colors.yellow, size: 24),
+                                SizedBox(width: 5),
+                                Text(
+                                  'Rating: ${(workerProfile!.rating?.toStringAsFixed(1))} (${(workerProfile!.numOfRatings.toString())})',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                          ],
                         ),
-                      );
-                    },
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'About',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 1,
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade200,
+                              offset: Offset(0, 4),
+                              blurRadius: 10.0,
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          workerProfile!.about.toString(),
+                          style: TextStyle(fontSize: 14, color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Past Work Review',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Column(
+                        children: [
+                          reviews.isEmpty
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'No reviews available for this worker.',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: reviews.length,
+                                  padding: const EdgeInsets.all(8.0),
+                                  itemBuilder: (context, index) {
+                                    final message = reviews[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5.0),
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundColor: Colors.white,
+                                              radius: 15,
+                                              child: Image.asset(
+                                                  'assets/images/demo.png'),
+                                            ),
+                                            Flexible(
+                                              child: ConstrainedBox(
+                                                constraints: BoxConstraints(
+                                                  maxWidth:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.9,
+                                                ),
+                                                child: Container(
+                                                  padding: const EdgeInsets.all(
+                                                      12.0),
+                                                  margin: const EdgeInsets.only(
+                                                      bottom: 8.0,
+                                                      left: 8.0,
+                                                      right: 8.0),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors
+                                                            .grey.shade200,
+                                                        offset: Offset(0, 4),
+                                                        blurRadius: 10.0,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Text(
+                                                          message.proposerName
+                                                              .toString(),
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 2,
+                                                      ),
+                                                      Text(
+                                                        message.userReview
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              );
+            }
+          },
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -232,7 +316,7 @@ class WorkerProfileScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => MessagingScreen(
-                                workerName: name,
+                                workerName: workerProfile!.name ?? "",
                                 workerImage: 'assets/images/demo.png',
                               )));
                 },
@@ -254,11 +338,4 @@ Widget skillTextContainer(String skillname) {
       style: const TextStyle(fontSize: 12, color: Colors.black),
     ),
   );
-}
-
-class workerReviewsModel {
-  late String user;
-  late String reviewText;
-
-  workerReviewsModel({required this.user, required this.reviewText});
 }

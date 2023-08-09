@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/Widget/profile.dart';
 import 'package:home_services_fyp/usersMode/screens/profile_screen/user_edit_profile.dart';
+import '../../../Constants.dart';
+import '../../../FireStore_repo/user_repo.dart';
 import '../../../Widget/button.dart';
-import '../../../Widget/member.dart';
-import '../../../models/user_model.dart';
-import 'edit_profile_screen.dart';
+import '../../../buttomBar/workerBottombar.dart';
+import '../../../workerMode/screens/worker_edit_profile_screen.dart';
+import '../login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -12,9 +15,16 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  UserRepo userRepo = UserRepo();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = UserPreferences.myUser;
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
@@ -25,33 +35,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Column(
                 children: [
                   ProfileWidget(
-                    imagePath: user.imagePath,
+                    imagePath: Constants.userModel?.imagePath,
                     onClicked: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (context) => UserEditProfile()),
+                            builder: (context) => UserEditProfile(
+                              name: Constants.userModel?.name,
+                              email: Constants.userModel?.email,
+                              imagePath: Constants.userModel?.imagePath,
+                              city: Constants.userModel?.city,
+                            )),
                       );
                     },
                   ),
                   const SizedBox(height: 24),
-                  buildName(user),
+                  buildName(Constants.userModel?.name, Constants.userModel?.email),
                   const SizedBox(height: 24),
                   Center(
                     child: ButtonWidget(
                       text: 'Register as worker',
-                      onClicked: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditProfileScreen()));
-                      },
-                    ),
+                      onClicked: () async {
+                        if (Constants.userModel?.isWorker == false) {
+                          try {
+                            bool isWorker = true;
+                            print(Constants.userModel?.isWorker);
+                            await userRepo.firestore
+                                .collection('Users')
+                                .doc(userRepo.currentUser)
+                                .update({
+                              "isWorker": isWorker,
+                            }).whenComplete(() async {
+                              print("updated");
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          WorkerEditProfileScreen()));
+                              Constants.userModel = (await userRepo.fetchUserData())!;
+                            });
+                          } catch (e) {
+                            print('Error updating user data: $e');
+                          }
+                        } else {
+                          userRepo.firestore
+                              .collection("Users")
+                              .where("isWorker", isEqualTo: true)
+                              .get()
+                              .then(
+                                (querySnapshot) {
+                              print("Successfully completed");
+                              for (var docSnapshot
+                              in querySnapshot.docs) {
+                                print(
+                                    '${docSnapshot.id} => ${docSnapshot.data()}');
+                              }
+                            },
+                            onError: (e) =>
+                                print("Error completing: $e"),
+                          );
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      WorkerTabContainer()));
+                        }
+                      },),
                   ),
-                  /*const SizedBox(height: 24),
-                  NumbersWidget(),*/
                   const SizedBox(height: 48),
-                  buildAbout(user),
-                  SizedBox(height: 24),
                 ],
               ),
               Padding(
@@ -72,26 +122,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(14.0),
                     ),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(
-                            Icons.warning_amber,
-                            color: Colors.black,
-                          ),
-                          title: const Text('Report an issue'),
-                          onTap: () => {},
-                        ),
-                        const Divider(),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.exit_to_app_rounded,
-                            color: Colors.black,
-                          ),
-                          title: const Text('Log out'),
-                          onTap: () => {},
-                        ),
-                      ],
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.exit_to_app_rounded,
+                        color: Colors.black,
+                      ),
+                      title: const Text('Log out'),
+                      onTap: () async {
+                        await userRepo.signOut();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -104,48 +148,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-Widget buildName(User user) => Column(
-      children: [
-        Text(
-          user.name,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          user.email,
-          style: TextStyle(color: Colors.grey),
-        )
-      ],
-    );
-
-Widget buildAbout(User user) => Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-  child:   Container(
-        padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade200,
-              offset: Offset(0, 4),
-              blurRadius: 10.0,
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'About',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              user.about,
-              style: TextStyle(fontSize: 16, height: 1.4),
-            ),
-          ],
-        ),
-      ),
-);
+Widget buildName(String? userName, String? userEmail) => userName != null
+    ? Column(
+        children: [
+          Text(
+            userName,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            userEmail!,
+            style: TextStyle(color: Colors.grey),
+          )
+        ],
+      )
+    : CircularProgressIndicator();

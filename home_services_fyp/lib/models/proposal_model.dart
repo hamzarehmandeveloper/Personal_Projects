@@ -4,10 +4,11 @@ class ProposalModel {
   final String description;
   final String location;
   final DateTime date;
-  final String orderStatus;
+  final bool orderStatus;
   final int rate;
   final String material;
   final String estimatedTime;
+  final String workerName;
 
   ProposalModel({
     required this.id,
@@ -19,6 +20,7 @@ class ProposalModel {
     required this.rate,
     required this.material,
     required this.estimatedTime,
+    required this.workerName,
   });
 }
 
@@ -29,10 +31,11 @@ List<ProposalModel> proposals = [
     description: "Looking for someone to paint my living room.",
     location: "Vehari",
     date: DateTime(2023, 7, 25),
-    orderStatus: 'confirm',
+    orderStatus: true,
     rate: 100,
     material: 'pipes,fitting, etc',
     estimatedTime: '2 day',
+    workerName: 'hamza rehman'
   ),
   ProposalModel(
     id: "2",
@@ -40,10 +43,11 @@ List<ProposalModel> proposals = [
     description: "Need assistance with fixing a leaky faucet.",
     location: "Vehari",
     date: DateTime(2023, 7, 28),
-    orderStatus: 'not confirm',
+    orderStatus: false,
     rate: 200,
     material: 'pipes,fitting, etc',
     estimatedTime: '1 day',
+    workerName: 'usman mushtaq'
   ),
   ProposalModel(
     id: "3",
@@ -51,9 +55,10 @@ List<ProposalModel> proposals = [
     description: "Looking for someone to mow the lawn and trim hedges.",
     location: "Vehari",
     date: DateTime(2023, 7, 30),
-    orderStatus: 'confirm',
+    orderStatus: true,
     rate: 500,
     material: 'pipes,fitting, etc',
     estimatedTime: '1 day',
+    workerName: 'Moiz'
   ),
 ];
