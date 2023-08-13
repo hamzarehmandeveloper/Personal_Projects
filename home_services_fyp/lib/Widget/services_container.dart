@@ -23,12 +23,12 @@ class serviceContainer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.network(image, height: 45),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Text(
                 name,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               )
             ]),
       ),

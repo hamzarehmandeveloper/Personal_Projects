@@ -37,7 +37,7 @@ class _InputFieldState extends State<InputField> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xfff1f1f5),
+        color: const Color(0xfff1f1f5),
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: TextFormField(
@@ -45,7 +45,7 @@ class _InputFieldState extends State<InputField> {
         obscureText: widget.obscureText,
         decoration: InputDecoration(
           hintText: widget.hintText,
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color:Color(0xff94959b),

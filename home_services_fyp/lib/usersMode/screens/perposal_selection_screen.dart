@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:home_services_fyp/models/proposal_model.dart';
+import 'package:home_services_fyp/FireStore_repo/APIsCall.dart';
 import 'package:home_services_fyp/usersMode/screens/progress_screen.dart';
 
 import '../../Constants.dart';
@@ -8,8 +8,10 @@ import '../../models/worker_proposals_model.dart';
 
 class ProposalSelectionScreen extends StatefulWidget {
   String proposalProposalId;
-  ProposalSelectionScreen({super.key,
-  required this.proposalProposalId,
+
+  ProposalSelectionScreen({
+    super.key,
+    required this.proposalProposalId,
   });
 
   @override
@@ -18,9 +20,7 @@ class ProposalSelectionScreen extends StatefulWidget {
 }
 
 class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
-  int? _selectedIndex;
   List<dynamic> proposalData = [];
-
 
   Future<List<WorkerProposalModel?>> fetchPendingWorkData() async {
     List<WorkerProposalModel> workerProposals = [];
@@ -46,7 +46,8 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
     }
   }
 
-  Future<void> confirmOrder(String? proposalId, String? requestId) async {
+  Future<void> confirmOrder(String? proposalId, String? requestId,
+      String? proposerName,String? proposalTitle , String? workerDeviceToken) async {
     print('this is request ID $requestId');
     print('this is proposal ID $proposalId');
     try {
@@ -59,9 +60,10 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
           .doc(requestId)
           .update({'isAccept': true});
       print('accepted');
-      setState(() {
-
-      });
+      APIsCall.sendNotification(
+          '$proposerName Accepted your proposal for $proposalTitle', workerDeviceToken,
+          'Work Confirmed');
+      setState(() {});
     } catch (e) {
       print('Error updating proposal: $e');
     }
@@ -84,16 +86,17 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
           future: fetchPendingWorkData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasError) {
-              return Center(
+              return const Center(
                 child: Text('Error fetching data.'),
               );
             } else {
               proposalData = snapshot.data!;
-              return proposalData.isNotEmpty ? ListView.builder(
+              return proposalData.isNotEmpty
+                  ? ListView.builder(
                 itemCount: proposalData.length,
                 itemBuilder: (BuildContext context, int index) {
                   WorkerProposalModel proposal = proposalData[index];
@@ -111,25 +114,23 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.shade200,
-                            offset: Offset(0, 6),
+                            offset: const Offset(0, 6),
                             blurRadius: 10.0,
                           ),
                         ],
                         borderRadius: BorderRadius.circular(14.0),
                       ),
                       child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _selectedIndex = index;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        UserSideWorkStatusScreen(
-                                          proposalId: proposal.proposalId.toString(),
-                                        )));
-                          });
-                        },
+                        onTap: proposal.isAccept == true ? () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      UserSideWorkStatusScreen(
+                                        proposalId: proposal.proposalId
+                                            .toString(),
+                                      )));
+                        } : null,
                         child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Column(
@@ -145,24 +146,37 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
                               const SizedBox(height: 10),
                               Text(
                                 'Rate : ${(proposal.rate.toString())} Rs',
-                                style: TextStyle(fontSize: 16),
+                                style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 10),
                               Text(
                                 'Material Required : ${(proposal.material)}',
-                                style: TextStyle(fontSize: 16),
+                                style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 10),
                               Text(
                                 'Estimated Time : ${(proposalTime.toDate())}',
-                                style: TextStyle(fontSize: 16),
+                                style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 10),
                               ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14.0),
+                                  ),
+                                ),
                                 onPressed: proposal.isAccept == true
                                     ? null
-                                    : () => confirmOrder(proposal.proposalId,proposal.workRequestPostId),
-                                child: Text('Confirm Order'),
+                                    : () {
+                                  confirmOrder(
+                                      proposal.proposalId,
+                                      proposal.workRequestPostId,
+                                      proposal.proposerName,
+                                      proposal.proposalTitle,
+                                      proposal.workerDeviceToken);
+                                },
+                                child: const Text('Confirm Order'),
                               ),
                             ],
                           ),
@@ -171,7 +185,8 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
                     ),
                   );
                 },
-              ): Center(
+              )
+                  : const Center(
                 child: Text('No proposal yet for this post'),
               );
             }

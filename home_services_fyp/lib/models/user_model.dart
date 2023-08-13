@@ -10,6 +10,7 @@ class UserModel {
   bool? isWorker;
   double? rating;
   int? numOfRatings;
+  String? userToken;
 
 
   UserModel({
@@ -23,7 +24,8 @@ class UserModel {
     this.phoneNo,
     this.isWorker,
     this.rating,
-    this.numOfRatings
+    this.numOfRatings,
+    this.userToken
   });
   Map<String, dynamic> toJson(){
     return{
@@ -38,6 +40,7 @@ class UserModel {
       'skill': skill,
       'rating': rating,
       'numOfRatings': numOfRatings,
+      'userToken': userToken,
     };
   }
   factory UserModel.fromJson(Map<String, dynamic> json, String id) {
@@ -53,6 +56,7 @@ class UserModel {
       skill: json["skill"] ?? "",
       rating: json["rating"] != null ? json["rating"].toDouble() : 0.0,
       numOfRatings: json['numOfRatings'] ?? 0,
+      userToken: json["userToken"] ?? "",
     );
   }
 }

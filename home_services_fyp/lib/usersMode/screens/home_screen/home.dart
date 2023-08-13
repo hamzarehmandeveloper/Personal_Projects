@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/FireStore_repo/user_repo.dart';
 import 'package:home_services_fyp/usersMode/screens/select_service.dart';
+import '../../../Constants.dart';
 import '../../../Widget/worker_container.dart';
 import '../../../models/user_model.dart';
 import '../conversation_screen.dart';
@@ -25,11 +26,13 @@ class _HomePageState extends State<HomePage> {
           .firestore
           .collection("Users")
           .where("isWorker", isEqualTo: true)
+          .where("userId", isNotEqualTo: Constants.userModel!.userId)
           .get();
 
       final workers = querySnapshot.docs
           .map((doc) => UserModel.fromJson(doc.data(), doc.id))
           .toList();
+      print(workers.length);
       return workers;
     } catch (e) {
       print('Error fetching worker data: $e');
@@ -42,8 +45,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     fetchWorkerData();
-    ;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -95,11 +98,76 @@ class _HomePageState extends State<HomePage> {
                   );
                 } else {
                   workers = snapshot.data!;
+
                   UserModel recentWorker = workers[0];
-                  return Column(
+                  return workers.isNotEmpty ? Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Container(
+                          padding: const EdgeInsets.all(20.0),
+                          height: 140,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade200,
+                                offset: const Offset(0, 4),
+                                blurRadius: 10.0,
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Welcome',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 34,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        Constants.userModel!.name.toString(),
+                                        style: TextStyle(
+                                            color: Colors.grey.shade800,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  ClipRRect(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      child: Image.asset(
+                                        recentWorker.imagePath.toString(),
+                                        width: 70,
+                                        height: 70,
+                                        fit: BoxFit.cover,
+                                      )),
+
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0, top: 10.0, right: 10.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -110,16 +178,16 @@ class _HomePageState extends State<HomePage> {
                             ),
                             TextButton(
                                 onPressed: () {},
-                                child: Text(
+                                child: const Text(
                                   'View all',
                                 ))
                           ],
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Container(
-                          padding: EdgeInsets.all(20.0),
+                          padding: const EdgeInsets.all(20.0),
                           height: 180,
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -127,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.shade200,
-                                offset: Offset(0, 4),
+                                offset: const Offset(0, 4),
                                 blurRadius: 10.0,
                               ),
                             ],
@@ -146,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                                   height: 70,
                                   fit: BoxFit.cover,
                                 )),
-                            SizedBox(
+                            const SizedBox(
                               width: 15,
                             ),
                             Column(
@@ -154,12 +222,12 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Text(
                                   recentWorker.name.toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
                                 Text(
@@ -170,17 +238,17 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.star,
                                       color: Colors.orange,
                                       size: 20,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 5,
                                     ),
                                     Text(
                                       recentWorker.rating.toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -190,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                             )
                           ],
                         ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               InkWell(
@@ -208,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                             decoration: BoxDecoration(
                                 color: Colors.black,
                                 borderRadius: BorderRadius.circular(15.0)),
-                            child: Center(
+                            child: const Center(
                                 child: Text(
                               'View Profile',
                               style: TextStyle(color: Colors.white, fontSize: 18),
@@ -219,15 +287,15 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 20.0, right: 10.0),
+                        padding: const EdgeInsets.only(left: 20.0, right: 10.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Categories',
                               style:
                               TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -237,9 +305,9 @@ class _HomePageState extends State<HomePage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => SelectService()));
+                                          builder: (context) => const SelectService()));
                                 },
-                                child: Text('View all'))
+                                child: const Text('View all'))
                           ],
                         ),
                       ),
@@ -249,8 +317,8 @@ class _HomePageState extends State<HomePage> {
                           crossAxisSpacing: 5.0,
                           mainAxisSpacing: 5.0,
                           crossAxisCount: 3,
-                          physics: NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.all(20.0),
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.all(20.0),
                           children: <Widget>[
                             ServiceContainer(
                               icon: 'assets/icons/plumber.png',
@@ -328,18 +396,18 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 20.0, right: 10.0),
+                        padding: const EdgeInsets.only(left: 20.0, right: 10.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Top Rated',
                               style:
                               TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                             TextButton(
                                 onPressed: () {},
-                                child: Text(
+                                child: const Text(
                                   'View all',
                                 ))
                           ],
@@ -372,11 +440,11 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                     ],
-                  );
+                  ): const Center(child: Text('No data Found'),);
                 }
               },
             ),
@@ -398,7 +466,7 @@ class ServiceContainer extends StatelessWidget {
     return GestureDetector(
       onTap: ontap,
       child: Container(
-        padding: EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(5.0),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(
@@ -408,7 +476,7 @@ class ServiceContainer extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.grey.shade200,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
               blurRadius: 10.0,
             ),
           ],
@@ -421,12 +489,12 @@ class ServiceContainer extends StatelessWidget {
                 icon,
                 height: 45,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 name,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               )
             ]),
       ),

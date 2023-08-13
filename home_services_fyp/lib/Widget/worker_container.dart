@@ -16,10 +16,10 @@ class workerContainer extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 3.5,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 15.0),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15.0),
           child: Container(
             height: 300,
-            padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+            padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
@@ -34,7 +34,7 @@ class workerContainer extends StatelessWidget {
                   ClipRRect(
                       borderRadius: BorderRadius.circular(50.0),
                       child: Image.asset(image,fit: BoxFit.cover,width: 70,height: 70,)),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   Column(
@@ -44,18 +44,18 @@ class workerContainer extends StatelessWidget {
                       Text(
                         name,
                         style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         job,
-                        style: TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 15),
                       )
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -63,12 +63,12 @@ class workerContainer extends StatelessWidget {
                       Text(
                         rating,
                         style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
-                      Icon(
+                      const Icon(
                         Icons.star,
                         color: Colors.orange,
                         size: 20,

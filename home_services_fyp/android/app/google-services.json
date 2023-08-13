@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "119904146680",
+    "project_id": "homeservicesfypapp",
+    "storage_bucket": "homeservicesfypapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:119904146680:android:be5efcb3520898b7bb570d",
+        "android_client_info": {
+          "package_name": "com.example.home_services_fyp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "119904146680-8kgcoakppaehlhlieq9m3o04irb79nv6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCytN4JyCXVojQnfbJA0wCw6b-dl3Oxypk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "119904146680-8kgcoakppaehlhlieq9m3o04irb79nv6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "119904146680-v633hrd0dqjcgsnb2hhbut1s7cbqboop.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.homeServicesFyp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

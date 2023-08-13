@@ -53,11 +53,11 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
             height: 100,
             repeat: false,
           ),
-          title: Text('Submitted'),
-          content: Text('Your work description has been submitted.'),
+          title: const Text('Submitted'),
+          content: const Text('Your work description has been submitted.'),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -76,7 +76,7 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
         return <Widget>[
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.only(top: 50.0, right: 20.0, left: 20.0),
+              padding: const EdgeInsets.only(top: 50.0, right: 20.0, left: 20.0),
               child: Text(
                 'Post job \nTo hire a worker',
                 style: TextStyle(
@@ -94,15 +94,16 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
         child: Form(
           key: _formKey,
           child: ListView(
+            physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
               const Text(
-                'Enter job Title',
+                'Enter work title',
                 style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xfff1f1f5),
+                  color: const Color(0xfff1f1f5),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: TextFormField(
@@ -130,10 +131,15 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                   },
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
+              const Text(
+                'Enter work Description',
+                style: TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 5),
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xfff1f1f5),
+                  color: const Color(0xfff1f1f5),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: TextFormField(
@@ -161,22 +167,22 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                   },
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               const Text(
                 'Select category',
                 style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xfff1f1f5),
+                  color: const Color(0xfff1f1f5),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(borderSide: BorderSide.none),
                   ),
-                  hint: Text(
+                  hint: const Text(
                     'Select a category',
                     style: TextStyle(color: Color(0xff94959b)),
                   ),
@@ -211,24 +217,24 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                   value: _selectedCategory,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               const Text(
                 'Please enter relevant image\nimage should be clear',
                 style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               TextButton.icon(
                 onPressed: _pickImages,
-                icon: Icon(
+                icon: const Icon(
                   Icons.photo_library,
                   color: Color(0xff94959b),
                 ),
-                label: Text(
+                label: const Text(
                   'Add Images',
                   style: TextStyle(color: Color(0xff94959b)),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Wrap(
                 spacing: 8,
                 children: _images
@@ -241,7 +247,7 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                     )
                     .toList(),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               customButton(
                 title: 'Submit',
                 onTap: () async {
@@ -260,6 +266,7 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                     timestamp: Timestamp.now(),
                     requestTitle: _workTitle,
                     location: Constants.userModel!.city,
+                    proposerDeviceToken: Constants.userModel!.userToken,
                   );
                   await repo.storeWorkRequestProposal(wrproposal);
                   _showSubmittedPopup();

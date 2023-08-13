@@ -5,10 +5,12 @@ class WorkerProposalModel {
   List<String>? imageUrls;
   String? proposerId;
   String? proposerName;
+  String? proposerDeviceToken;
   String? proposalId;
   String? workRequestPostId;
   String? workerID;
   String? workerName;
+  String? workerDeviceToken;
   String? material;
   String? rate;
   bool? isAccept;
@@ -37,6 +39,8 @@ class WorkerProposalModel {
     this.workReachTime,
     this.workStartTime,
     this.workEndTime,
+    this.proposerDeviceToken,
+    this.workerDeviceToken,
   });
 
   Map<String, dynamic> toJson() {
@@ -59,6 +63,8 @@ class WorkerProposalModel {
       'workReachTime': workReachTime,
       'workStartTime': workStartTime,
       'workEndTime': workEndTime,
+      'proposerDeviceToken': proposerDeviceToken,
+      'workerDeviceToken': workerDeviceToken,
     };
   }
 
@@ -82,6 +88,8 @@ class WorkerProposalModel {
       workStartTime: json['workStartTime'],
       workReachTime: json['workReachTime'],
       workEndTime: json['workEndTime'],
+      proposerDeviceToken: json['proposerDeviceToken'],
+      workerDeviceToken: json['workerDeviceToken']
     );
   }
 }

@@ -118,10 +118,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 .signInWithEmailAndPassword(email, password);
                             if (user != null) {
                               Constants.userModel= await userRepo.fetchUserData();
+                              userRepo.setupToken();
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => TabContainer()),
+                                    builder: (context) => const TabContainer()),
                               );
                             } else {
                               showErrorMessage(context,
@@ -153,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => RegisterScreen()));
+                                  builder: (context) => const RegisterScreen()));
                         },
                         child: const Text(
                           'Register',

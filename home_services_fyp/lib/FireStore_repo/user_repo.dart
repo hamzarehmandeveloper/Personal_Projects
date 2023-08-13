@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:home_services_fyp/models/user_model.dart';
 import 'package:home_services_fyp/models/workRequestModel.dart';
 
@@ -7,7 +8,40 @@ class UserRepo {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
   late String currentUser= auth.currentUser!.uid;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   WorkRequestProposal? workRequest;
+
+
+  Future<String?> getToken() async {
+    String? token;
+    try{
+      await _firebaseMessaging.getToken().then((value) {
+        token = value;
+        print('token: $token');
+        return token;
+      });
+    }catch (e){
+      print('error fetching token $e');
+    }
+    return token;
+  }
+
+  Future<void> saveTokenToDatabase(String? token) async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .update({
+      'userToken': token
+    });
+  }
+
+  Future<void> setupToken() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    await saveTokenToDatabase(token!);
+    FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
+  }
+
 
 
   Future<UserModel?> fetchWorkerProfileData(String userId) async {
@@ -16,9 +50,9 @@ class UserRepo {
       final Map<String, dynamic>? userData = await getUserData(userId);
       if (userData != null) {
         user = UserModel.fromJson(userData, userId);
-        print('User name: ${user!.name}');
-        print('User email: ${user!.email}');
-        print(user?.userId);
+        print('User name: ${user.name}');
+        print('User email: ${user.email}');
+        print(user.userId);
         return user;
       } else {
         print('User data not found.');
@@ -36,9 +70,9 @@ class UserRepo {
       final Map<String, dynamic>? userData = await getUserData(currentUser);
       if (userData != null) {
         user = UserModel.fromJson(userData, currentUser);
-        print('User name: ${user!.name}');
-        print('User email: ${user!.email}');
-        print(user?.userId);
+        print('User name: ${user.name}');
+        print('User email: ${user.email}');
+        print(user.userId);
         return user;
       } else {
         print('User data not found.');
@@ -123,15 +157,15 @@ class UserRepo {
     }
   }
 
-  Future<UserModel?> fetchWorkeModel(String?  workerID) async {
+  Future<UserModel?> fetchWorkerModel(String?  workerID) async {
     UserModel? worker;
     try {
       final Map<String, dynamic>? workerData = await getUserData(workerID!);
       if (workerData != null) {
         worker = UserModel.fromJson(workerData, currentUser);
-        print('Worker name: ${worker!.name}');
-        print('Worker email: ${worker!.email}');
-        print(worker?.userId);
+        print('Worker name: ${worker.name}');
+        print('Worker email: ${worker.email}');
+        print(worker.userId);
         return worker;
       } else {
         print('Worker data not found.');
@@ -144,7 +178,7 @@ class UserRepo {
   }
 
   Future<void> updateRatingForWorker(String? workerID, double newRating) async {
-    UserModel? workerModel = await fetchWorkeModel(workerID!);
+    UserModel? workerModel = await fetchWorkerModel(workerID!);
     try {
       if (workerModel != null) {
         int numberOfRatings = workerModel.numOfRatings ?? 0;

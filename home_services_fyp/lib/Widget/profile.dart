@@ -1,17 +1,18 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+
 
 class ProfileWidget extends StatefulWidget {
   String? imagePath;
   bool? isEdit;
   VoidCallback? onClicked;
+  String? email;
 
   ProfileWidget({
     Key? key,
     this.imagePath,
     this.isEdit = false,
     this.onClicked,
+    this.email,
 
   }) : super(key: key);
 
@@ -25,14 +26,20 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Stack(
+      child: Column(
         children: [
-          buildImage(),
-          Positioned(
-            bottom: 0,
-            right: 4,
-            child: buildEditIcon(),
+          Stack(
+            children: [
+              buildImage(),
+              Positioned(
+                bottom: 0,
+                right: 4,
+                child: buildEditIcon(),
+              ),
+            ],
           ),
+          const SizedBox(height: 10,),
+          widget.email != null ? Align(alignment: Alignment.bottomCenter ,child: Center(child: Text(widget.email!),)):const SizedBox(),
         ],
       ),
     );

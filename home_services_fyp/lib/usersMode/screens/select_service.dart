@@ -1,4 +1,3 @@
-import 'package:home_services_fyp/models/service.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/usersMode/screens/worker_list_screen.dart';
 
@@ -44,7 +43,7 @@ class _SelectServiceState extends State<SelectService> {
             return <Widget>[
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 50.0, right: 20.0, left: 20.0),
+                  padding: const EdgeInsets.only(top: 50.0, right: 20.0, left: 20.0),
                   child: Text(
                     'Which service \ndo you need?',
                     style: TextStyle(
@@ -58,7 +57,7 @@ class _SelectServiceState extends State<SelectService> {
             ];
           },
           body: Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -96,8 +95,8 @@ class _SelectServiceState extends State<SelectService> {
         });
       },
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        padding: EdgeInsets.all(10.0),
+        duration: const Duration(milliseconds: 300),
+        padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey.shade200,
@@ -107,7 +106,7 @@ class _SelectServiceState extends State<SelectService> {
           boxShadow: [
             BoxShadow(
               color: Colors.grey.shade200,
-              offset: Offset(0, 6),
+              offset: const Offset(0, 6),
               blurRadius: 10.0,
             ),
           ],
@@ -117,15 +116,22 @@ class _SelectServiceState extends State<SelectService> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(icon),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Text(
                 name,
-                style: TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
               )
             ]),
       ),
     );
   }
+}
+
+class Service {
+  final String name;
+  final String icon;
+
+  Service(this.name, this.icon);
 }

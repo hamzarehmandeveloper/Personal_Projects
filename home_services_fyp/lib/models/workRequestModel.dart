@@ -6,6 +6,7 @@ class WorkRequestProposal {
   List<String>? imageUrls;
   String? proposerId;
   String? proposerName;
+  String? proposerDeviceToken;
   String? requestTitle;
   String? proposalRequestId;
   String? location;
@@ -23,6 +24,7 @@ class WorkRequestProposal {
     this.requestTitle,
     this.location,
     this.isAccept,
+    this.proposerDeviceToken
   });
 
   Map<String, dynamic> toJson() {
@@ -37,6 +39,7 @@ class WorkRequestProposal {
       'requestTitle': requestTitle,
       'location': location,
       'isAccept': false,
+      'proposerDeviceToken': proposerDeviceToken
     };
   }
 
@@ -52,6 +55,7 @@ class WorkRequestProposal {
       requestTitle: json['requestTitle'],
       location: json['location'],
       isAccept: json['isAccept'],
+      proposerDeviceToken: json['proposerDeviceToken'],
     );
   }
 }

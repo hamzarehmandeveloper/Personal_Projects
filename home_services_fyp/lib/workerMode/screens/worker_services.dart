@@ -38,7 +38,6 @@ class _WorkerServicesState extends State<WorkerServices>
 
 
   Future<List<WorkerProposalModel>> fetchAcceptedWorkData() async {
-    List<WorkerProposalModel> workerProposals = [];
     try {
       final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('WorkerProposals')
@@ -58,7 +57,6 @@ class _WorkerServicesState extends State<WorkerServices>
     }
   }
   Future<List<WorkerProposalModel>> fetchPendingWorkData() async {
-    List<WorkerProposalModel> workerProposals = [];
     try {
       final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('WorkerProposals')

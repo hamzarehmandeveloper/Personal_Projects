@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/usersMode/screens/conversation_screen.dart';
 import 'package:home_services_fyp/workerMode/screens/perposal_submission_screen.dart';
+import '../../Constants.dart';
+import '../../FireStore_repo/APIsCall.dart';
 import '../../FireStore_repo/work_request_&_proposal_repo.dart';
 import '../../Widget/input_field.dart';
+import '../../Widget/richText.dart';
 import '../../models/workRequestModel.dart';
 
 
@@ -64,20 +67,20 @@ class _WHomePageState extends State<WHomePage> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          final updatePropodals = await requestRepo.fetchWorkRequestProposals();
+          final updatePropodals = await requestRepo.fetchWorkRequestProposals(Constants.userModel!.userId);
           setState(() {
             proposalList = updatePropodals;
           });
         },
         child: FutureBuilder<List<dynamic>>(
-            future: requestRepo.fetchWorkRequestProposals(),
+            future: requestRepo.fetchWorkRequestProposals(Constants.userModel!.userId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasError) {
-                return Center(
+                return const Center(
                   child: Text('Error fetching data.'),
                 );
               } else {
@@ -132,17 +135,20 @@ class ProposalListItem extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(
               horizontal: 20.0, vertical: 10.0),
           title: Text(
-            proposal!.requestTitle.toString(),
+            proposal.requestTitle.toString(),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(proposal!.workDescription.toString()),
+              const SizedBox(height: 5),
+              richText('Description: ',proposal.workDescription.toString()),
+              const SizedBox(height: 5),
+              richText('Location: ',proposal.location.toString()),
               const SizedBox(height: 4),
-              Text("Location: ${proposal!.location}"),
-              const SizedBox(height: 4),
-              Text("Date: ${setDate().toDate()}"),
+              richText('Date: ' ,setDate().toDate().toString()),
+              const SizedBox(height: 4,),
+              richText('Submitted by: ', proposal.proposerName.toString()),
               const SizedBox(height: 10,),
               /*Row(
                 children: proposal.images.map((imageAddress) {
@@ -165,3 +171,4 @@ class ProposalListItem extends StatelessWidget {
     );
   }
 }
+

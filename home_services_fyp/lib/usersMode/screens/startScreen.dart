@@ -21,7 +21,7 @@ class _StartPageState extends State<StartPage> {
     init();
   }
    init() async {
-    Constants.userModel = (await userRepo.fetchUserData())!;
+    Constants.userModel = (await userRepo.fetchUserData());
     print('done');
   }
 
@@ -29,16 +29,16 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Container(
-            padding: EdgeInsets.only(bottom: 15),
+            padding: const EdgeInsets.only(bottom: 15),
             height: 70,
             child: customButton(
               title: 'Get Start',
               onTap: () {
                 if (Constants.userModel!=null){
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TabContainer()));
+                    MaterialPageRoute(builder: (context) => const TabContainer()));
                 } else{
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LoginScreen()));
@@ -49,7 +49,7 @@ class _StartPageState extends State<StartPage> {
         ),
         body: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 100,
             ),
             Container(
@@ -62,18 +62,18 @@ class _StartPageState extends State<StartPage> {
               child: Container(
                 decoration: BoxDecoration(
                     color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(80),
                       topRight: Radius.circular(80),
                     )),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 50,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: Center(
                         child: Text(
                           'Easy, reliable way to take \ncare of your home',
@@ -86,11 +86,11 @@ class _StartPageState extends State<StartPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 60),
+                      padding: const EdgeInsets.symmetric(horizontal: 60),
                       child: Center(
                         child: Text(
                           'We provide you with the best people to help take care of your home.',
@@ -102,7 +102,7 @@ class _StartPageState extends State<StartPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                   ],

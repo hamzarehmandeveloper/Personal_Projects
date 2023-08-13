@@ -62,11 +62,11 @@ class _WorkerListState extends State<WorkerList> {
             future: fetchWorkerData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasError) {
-                return Center(
+                return const Center(
                   child: Text('Error fetching data.'),
                 );
               }
@@ -97,7 +97,7 @@ class _WorkerListState extends State<WorkerList> {
                       },
                     ),
                   ],
-                ): Center(
+                ): const Center(
                   child: Text('No workers found for this category.'),
                 );
               }

@@ -77,7 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: 20,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -103,7 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           controller: passwordController,
                           obscureText: !passwordVisible,
                           suffixIcon: IconButton(
-                            color: Color(0xff94959b),
+                            color: const Color(0xff94959b),
                             splashRadius: 1,
                             icon: Icon(passwordVisible
                                 ? Icons.visibility_outlined
@@ -127,7 +127,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: 32,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: SizedBox(
                     child: customButton(
                       title: 'Register',
@@ -145,6 +145,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           name: name,
                           email: email,
                           city: city,
+                          userToken: await userRepo.getToken(),
                         );
                         userRepo.createUser(user);
                         Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
@@ -163,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Already have an account? ",
                         style: TextStyle(
                           fontSize: 16,
@@ -176,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             context,
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           'Login',
                           style: TextStyle(
                             color: Color(0xff007aff),

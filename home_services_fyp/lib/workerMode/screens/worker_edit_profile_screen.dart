@@ -1,12 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/Widget/profile.dart';
-import 'package:home_services_fyp/models/worker_model.dart';
 import '../../../Widget/custom_button.dart';
 import '../../Constants.dart';
 import '../../FireStore_repo/user_repo.dart';
 import '../../Widget/profile_edit_screens_textfield.dart';
-import '../../models/user_model.dart';
 
 class WorkerEditProfileScreen extends StatefulWidget {
   @override
@@ -34,12 +31,11 @@ class _WorkerEditProfileScreenState extends State<WorkerEditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    WorkerModel worker = WorkerPreferences.myWorker;
     return FutureBuilder(
       future: userRepo.fetchUserData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
         } else if (snapshot.hasError) {
           return Text('Error fetching user data: ${snapshot.error}');
         } else {
@@ -52,7 +48,7 @@ class _WorkerEditProfileScreenState extends State<WorkerEditProfileScreen> {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding:
-                          EdgeInsets.only(top: 30.0, right: 20.0, left: 20.0),
+                          const EdgeInsets.only(top: 30.0, right: 20.0, left: 20.0),
                       child: Text(
                         'Register \nas a Worker',
                         style: TextStyle(
@@ -66,12 +62,12 @@ class _WorkerEditProfileScreenState extends State<WorkerEditProfileScreen> {
                 ];
               },
               body: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 32),
-                physics: BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                physics: const BouncingScrollPhysics(),
                 children: [
                   const SizedBox(height: 10),
                   ProfileWidget(
-                    imagePath: worker.imagePath,
+                    imagePath: Constants.userModel?.imagePath,
                     isEdit: true,
                     onClicked: () async {},
                   ),
@@ -113,16 +109,16 @@ class _WorkerEditProfileScreenState extends State<WorkerEditProfileScreen> {
                   const SizedBox(height: 8),
                   Container(
                     decoration: BoxDecoration(
-                      color: Color(0xfff1f1f5),
+                      color: const Color(0xfff1f1f5),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                       ),
-                      hint: Text(
+                      hint: const Text(
                         'Select a category',
                         style: TextStyle(color: Color(0xff94959b)),
                       ),

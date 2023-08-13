@@ -14,7 +14,7 @@ class NumbersWidget extends StatelessWidget {
   );
   Widget buildDivider() => Container(
     height: 24,
-    child: VerticalDivider(),
+    child: const VerticalDivider(),
   );
 
   Widget buildButton(String value, String text) =>
@@ -24,12 +24,12 @@ class NumbersWidget extends StatelessWidget {
         children: <Widget>[
           Text(
             value,
-            style: TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 24),
           ),
-          SizedBox(height: 2),
+          const SizedBox(height: 2),
           Text(
             text,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ],
       );

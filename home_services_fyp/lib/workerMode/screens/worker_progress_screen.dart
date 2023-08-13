@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:home_services_fyp/FireStore_repo/APIsCall.dart';
 import 'package:home_services_fyp/FireStore_repo/worker_proposal_repo.dart';
-import 'package:home_services_fyp/models/proposal_model.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-
-import '../../models/workRequestModel.dart';
 import '../../models/worker_proposals_model.dart';
 
 class WorkerSideWorkStatusScreen extends StatefulWidget {
@@ -48,15 +46,16 @@ class _WorkerSideWorkStatusScreenState
           future: repo.fetchProposalData(widget.proposalId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasError) {
-              return Center(
+              return const Center(
                 child: Text('Error fetching data.'),
               );
             } else {
               proposalData = snapshot.data;
+              Timestamp time = proposalData!.timestamp;
               return proposalData != null ? SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -97,7 +96,7 @@ class _WorkerSideWorkStatusScreenState
                               ),
                               const SizedBox(height: 16),
                               Text(
-                                'Estimated Time : ${(proposalData!.timestamp)}',
+                                'Estimated Time : ${(time.toDate())}',
                                 style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 16),
@@ -107,7 +106,7 @@ class _WorkerSideWorkStatusScreenState
                               ),
                               const SizedBox(height: 16),
                               Text(
-                                proposalData!.location.toString(),
+                                'Location : ${(proposalData!.location.toString())}',
                                 style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 16),
@@ -128,18 +127,21 @@ class _WorkerSideWorkStatusScreenState
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       workTimeLine(
                         reachDestinationTime: proposalData!.workReachTime,
                         workInProgressTime: proposalData!.workStartTime,
                         finalizeTaskTime: proposalData!.workEndTime,
+                        proposerDeviceToken: proposalData!.proposerDeviceToken,
+                        proposerName: proposalData!.proposerName,
+                        workerName: proposalData!.workerName,
                         proposalId: widget.proposalId,
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
-              ): Center(
+              ): const Center(
                 child: Text('Something went wrong'),
               );
             }
@@ -149,9 +151,12 @@ class _WorkerSideWorkStatusScreenState
 }
 
 Widget workTimeLine({
-  dynamic? reachDestinationTime,
-  dynamic? workInProgressTime,
-  dynamic? finalizeTaskTime,
+  dynamic reachDestinationTime,
+  dynamic workInProgressTime,
+  dynamic finalizeTaskTime,
+  String? proposerDeviceToken,
+  String? workerName,
+  String? proposerName,
   String? proposalId,
 }) {
   print( 'reach time $reachDestinationTime');
@@ -172,7 +177,7 @@ Widget workTimeLine({
   }
   return Center(
     child: ListView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: <Widget>[
         TimelineTile(
@@ -192,7 +197,8 @@ Widget workTimeLine({
             onToggle: (val) {
               reachDestinationTime = val ? DateTime.now() : null;
               print(reachDestinationTime);
-              updateProposalMilestoneTimes(); // Call the callback function to update Firestore
+              updateProposalMilestoneTimes();
+              APIsCall.sendNotification('$workerName is reached to destination to start work', proposerDeviceToken, 'Hey Mr. $proposerName');
             },
           ),
           beforeLineStyle: const LineStyle(
@@ -217,7 +223,8 @@ Widget workTimeLine({
               onToggle: (val) {
                 workInProgressTime = val ? DateTime.now() : null;
                 print(workInProgressTime);
-                updateProposalMilestoneTimes(); // Call the callback function to update Firestore
+                updateProposalMilestoneTimes();
+                APIsCall.sendNotification('$workerName start working', proposerDeviceToken, 'Hey Mr. $proposerName');
               },
             ),
           ),
@@ -245,7 +252,8 @@ Widget workTimeLine({
             onToggle: (val) {
               finalizeTaskTime = val ? DateTime.now() : null;
               print(finalizeTaskTime);
-              updateProposalMilestoneTimes(); // Call the callback function to update Firestore
+              updateProposalMilestoneTimes();
+              APIsCall.sendNotification('$workerName work just completed your work. Please leave a review', proposerDeviceToken, 'Hey Mr. $proposerName');
             },
           ),
           beforeLineStyle: const LineStyle(

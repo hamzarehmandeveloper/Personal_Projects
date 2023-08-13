@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../usersMode/screens/profile_screen/profile_screen.dart';
-import '../usersMode/screens/worker_profile_screen.dart';
 import '../workerMode/screens/w_home_screen.dart';
 import '../workerMode/screens/worker_profile_screen.dart';
 import '../workerMode/screens/worker_services.dart';
@@ -27,8 +25,8 @@ class _WorkerTabContainerState extends State<WorkerTabContainer> {
     super.initState();
 
     originalList = [
-      WHomePage(),
-      WorkerServices(),
+      const WHomePage(),
+      const WorkerServices(),
       WorkerProfile(),
     ];
     originalDic = {

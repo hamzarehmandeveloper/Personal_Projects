@@ -36,12 +36,12 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         children: [
           Text(
             widget.label!,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
-              color: Color(0xfff1f1f5),
+              color: const Color(0xfff1f1f5),
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: TextField(
@@ -49,7 +49,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
               onChanged: widget.onChanged,
               decoration: InputDecoration(
                 hintText: initTextController.text,
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   color: Colors.black
                 ),
                 border: const OutlineInputBorder(

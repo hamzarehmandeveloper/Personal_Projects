@@ -2,9 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:home_services_fyp/models/worker_proposals_model.dart';
 
 class WorkerProposalRepo{
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-
   Future<void> storeWorkRequestProposal(WorkerProposalModel proposal) async {
     try {
       CollectionReference collection = FirebaseFirestore.instance.collection('WorkerProposals');

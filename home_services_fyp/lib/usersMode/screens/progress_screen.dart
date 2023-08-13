@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_services_fyp/FireStore_repo/user_repo.dart';
-import 'package:home_services_fyp/models/proposal_model.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../FireStore_repo/worker_proposal_repo.dart';
@@ -79,7 +78,7 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                         fontWeight: FontWeight.bold,
                         fontSize: 20),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Row(
@@ -113,7 +112,7 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -125,7 +124,7 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                           fontFamily: 'Montserrat',
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       RatingBar.builder(
                         initialRating: 0,
                         minRating: 1,
@@ -133,7 +132,7 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                         allowHalfRating: true,
                         itemCount: 5,
                         itemSize: 20,
-                        itemBuilder: (context, _) => Icon(
+                        itemBuilder: (context, _) => const Icon(
                           Icons.star,
                           color: Colors.amber,
                         ),
@@ -145,7 +144,7 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -157,7 +156,7 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                           fontFamily: 'Montserrat',
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       RatingBar.builder(
                         initialRating: 0,
                         minRating: 1,
@@ -165,7 +164,7 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                         allowHalfRating: true,
                         itemCount: 5,
                         itemSize: 20,
-                        itemBuilder: (context, _) => Icon(
+                        itemBuilder: (context, _) => const Icon(
                           Icons.star,
                           color: Colors.amber,
                         ),
@@ -189,7 +188,7 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextField(
                     controller: reviewController,
                     maxLines: null,
@@ -199,7 +198,7 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                       hintText: 'Type your message ',
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   SizedBox(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -208,7 +207,7 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                           borderRadius: BorderRadius.circular(14.0),
                         ),
                       ),
-                      child: Text('Submit'),
+                      child: const Text('Submit'),
                       onPressed: () async {
                         print(reviewController.text);
                         print(_professionalismRating);
@@ -233,7 +232,7 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                         });
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                               content: Text('Rating submitted successfully!')),
                         );
                       },
@@ -269,11 +268,11 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
           future: repo.fetchProposalData(widget.proposalId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasError) {
-              return Center(
+              return const Center(
                 child: Text('Error fetching data.'),
               );
             } else {
@@ -356,14 +355,14 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       workTimeLine(
                         reachDestinationTime: proposalData!.workReachTime,
                         workInProgressTime: proposalData!.workStartTime,
                         finalizeTaskTime: proposalData!.workEndTime,
                         showReviewDialog: showReviewDialog,
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
@@ -382,7 +381,7 @@ Widget workTimeLine({
 }) {
   return Center(
     child: ListView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: <Widget>[
         TimelineTile(
@@ -544,7 +543,7 @@ class _RightChildState extends State<_RightChild> {
                         ),
                       ),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
               const SizedBox(height: 6),
               widget.button
                   ? ElevatedButton(
@@ -557,8 +556,8 @@ class _RightChildState extends State<_RightChild> {
                         ),
                       ),
                       onPressed: widget.highlighted ? widget.ontap : null,
-                      child: Text('Rate Work'))
-                  : SizedBox(),
+                      child: const Text('Rate Work'))
+                  : const SizedBox(),
             ],
           ),
         ],

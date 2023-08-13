@@ -83,18 +83,13 @@ class _UserEditProfileState extends State<UserEditProfile> {
             imagePath: widget.imagePath,
             isEdit: true,
             onClicked: () async {},
+            email: widget.email,
           ),
           const SizedBox(height: 24),
           TextFieldWidget(
             label: 'Full Name',
             text: widget.name,
             controller: nameController,
-          ),
-          const SizedBox(height: 24),
-          TextFieldWidget(
-            label: 'Email',
-            text: widget.email,
-            controller: emailController,
           ),
           const SizedBox(height: 24),
           TextFieldWidget(
@@ -106,13 +101,11 @@ class _UserEditProfileState extends State<UserEditProfile> {
           customButton(
             title: "Save",
             onTap: () async {
-              final String email = emailController.text.trim();
               final String name = nameController.text.trim();
               final String city = cityController.text.trim();
               print(currentUser.email);
               try {
                 await userRepo.firestore.collection('Users').doc(currentUser.uid).update({
-                  "email": email!=""?email:widget.email,
                   "name" : name!=""?name:widget.name,
                   "city" : city!=""?city:widget.city,
                 }).whenComplete(() => print("updated"));

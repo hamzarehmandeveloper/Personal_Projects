@@ -37,6 +37,5 @@ class CustomPrimaryButton extends StatelessWidget {
             )),
       ),
     );
-    ;
   }
 }

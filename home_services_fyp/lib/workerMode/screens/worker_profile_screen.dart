@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/Widget/profile.dart';
-import 'package:home_services_fyp/models/worker_model.dart';
-import 'package:home_services_fyp/usersMode/screens/profile_screen/user_edit_profile.dart';
 import 'package:home_services_fyp/workerMode/screens/worker_edit_profile_screen.dart';
 import '../../../Widget/button.dart';
 import '../../../Widget/member.dart';
@@ -9,6 +7,7 @@ import '../../Constants.dart';
 import '../../FireStore_repo/user_repo.dart';
 import '../../buttomBar/buttombar.dart';
 import '../../models/user_model.dart';
+import '../../usersMode/screens/login_screen.dart';
 
 class WorkerProfile extends StatefulWidget {
   @override
@@ -18,6 +17,8 @@ class WorkerProfile extends StatefulWidget {
 class _WorkerProfileState extends State<WorkerProfile> {
   UserRepo userRepo = UserRepo();
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +27,7 @@ class _WorkerProfileState extends State<WorkerProfile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Column(
                 children: [
                   ProfileWidget(
@@ -48,7 +49,7 @@ class _WorkerProfileState extends State<WorkerProfile> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => TabContainer()));
+                                builder: (context) => const TabContainer()));
                       },
                     ),
                   ),
@@ -56,7 +57,7 @@ class _WorkerProfileState extends State<WorkerProfile> {
                   NumbersWidget(),
                   const SizedBox(height: 48),
                   buildAbout(context,Constants.userModel!),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                 ],
               ),
               Padding(
@@ -70,7 +71,7 @@ class _WorkerProfileState extends State<WorkerProfile> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.shade200,
-                          offset: Offset(0, 6),
+                          offset: const Offset(0, 6),
                           blurRadius: 10.0,
                         ),
                       ],
@@ -83,7 +84,10 @@ class _WorkerProfileState extends State<WorkerProfile> {
                         color: Colors.black,
                       ),
                       title: const Text('Log out'),
-                      onTap: () => {},
+                      onTap: () async {
+                        await userRepo.signOut();
+                       LoginScreen();
+                      },
                     ),
                   ),
                 ),
@@ -95,17 +99,16 @@ class _WorkerProfileState extends State<WorkerProfile> {
     );
   }
 }
-
 Widget buildName(UserModel user) => Column(
       children: [
         Text(
           user.name.toString(),
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
         const SizedBox(height: 4),
         Text(
           user.email.toString(),
-          style: TextStyle(color: Colors.grey),
+          style: TextStyle(color: Colors.grey.shade800),
         )
       ],
     );
@@ -114,14 +117,14 @@ Widget buildAbout(BuildContext context,UserModel user) => Padding(
   padding: const EdgeInsets.symmetric(horizontal: 30.0),
   child:   Container(
         width: MediaQuery.of(context).size.width*0.9,
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.0),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.shade200,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
               blurRadius: 10.0,
             ),
           ],
@@ -129,14 +132,14 @@ Widget buildAbout(BuildContext context,UserModel user) => Padding(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'About',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             Text(
               user.about.toString(),
-              style: TextStyle(fontSize: 16, height: 1.4),
+              style: const TextStyle(fontSize: 16, height: 1.4),
             ),
           ],
         ),

@@ -53,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 24),
                   Center(
                     child: ButtonWidget(
-                      text: 'Register as worker',
+                      text: Constants.userModel?.isWorker == false ? 'Register as worker': 'Switch to Worker Mode',
                       onClicked: () async {
                         if (Constants.userModel?.isWorker == false) {
                           try {
@@ -158,7 +158,7 @@ Widget buildName(String? userName, String? userEmail) => userName != null
           const SizedBox(height: 4),
           Text(
             userEmail!,
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Colors.grey.shade600),
           )
         ],
       )

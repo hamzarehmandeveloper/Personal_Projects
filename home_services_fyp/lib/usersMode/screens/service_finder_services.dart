@@ -2,12 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/models/worker_proposals_model.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import '../Constants.dart';
-import '../models/proposal_model.dart';
-import '../models/user_model.dart';
-import '../models/workRequestModel.dart';
-import '../usersMode/screens/perposal_selection_screen.dart';
-import '../usersMode/screens/progress_screen.dart';
+import '../../Constants.dart';
+import '../../models/workRequestModel.dart';
+import 'perposal_selection_screen.dart';
+import 'progress_screen.dart';
 
 class ServiceFinderServices extends StatefulWidget {
   ServiceFinderServices({
@@ -145,11 +143,11 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
               future: fetchAcceptedWorkData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 } else if (snapshot.hasError) {
-                  return Center(
+                  return const Center(
                     child: Text('Error fetching data.'),
                   );
                 } else {
@@ -160,7 +158,7 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
                       print(index);
                       return Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -171,7 +169,7 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.shade200,
-                                offset: Offset(0, 6),
+                                offset: const Offset(0, 6),
                                 blurRadius: 10.0,
                               ),
                             ],
@@ -179,12 +177,12 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
                           ),
                           child: ListTile(
                             leading:
-                                Icon(MdiIcons.briefcase, color: Colors.black),
+                                const Icon(MdiIcons.briefcase, color: Colors.black),
                             title: Text(
                                 acceptedRequests[index]
                                     .proposalTitle
                                     .toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold)),
                             subtitle: Padding(
@@ -194,7 +192,7 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
                                   acceptedRequests[index]
                                       .workDescription
                                       .toString(),
-                                  style: TextStyle(color: Colors.black)),
+                                  style: const TextStyle(color: Colors.black)),
                             ),
                             onTap: () {
                               Navigator.push(
@@ -206,7 +204,7 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
                                                 .proposalId
                                                 .toString(),
                                           )));
-                              ;
+
                             },
                           ),
                         ),
@@ -229,11 +227,11 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
               future: fetchPendingWorkData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 } else if (snapshot.hasError) {
-                  return Center(
+                  return const Center(
                     child: Text('Error fetching data.'),
                   );
                 } else {
@@ -243,7 +241,7 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
                     itemBuilder: (context, index) {
                       return Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -254,7 +252,7 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.shade200,
-                                offset: Offset(0, 6),
+                                offset: const Offset(0, 6),
                                 blurRadius: 10.0,
                               ),
                             ],
@@ -262,10 +260,10 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
                           ),
                           child: ListTile(
                             leading:
-                                Icon(MdiIcons.briefcase, color: Colors.black),
+                                const Icon(MdiIcons.briefcase, color: Colors.black),
                             title: Text(
                                 pendingRequests[index].requestTitle.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold)),
                             subtitle: Padding(
@@ -275,7 +273,7 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
                                   pendingRequests[index]
                                       .workDescription
                                       .toString(),
-                                  style: TextStyle(color: Colors.black)),
+                                  style: const TextStyle(color: Colors.black)),
                             ),
                             onTap: () {
                               Navigator.push(

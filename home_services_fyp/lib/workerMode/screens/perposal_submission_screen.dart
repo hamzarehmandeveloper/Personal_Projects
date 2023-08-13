@@ -7,8 +7,10 @@ import 'package:home_services_fyp/models/worker_proposals_model.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../Constants.dart';
+import '../../FireStore_repo/APIsCall.dart';
 import '../../Widget/custom_button.dart';
 import '../../Widget/input_field.dart';
+import '../../Widget/richText.dart';
 
 class JobDetailsScreen extends StatefulWidget {
   WorkRequestProposal? workRequestdata;
@@ -110,15 +112,9 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
-                      Text(
-                        widget.workRequestdata!.workDescription.toString(),
-                        style: const TextStyle(fontSize: 16),
-                      ),
+                      richText('Description: ',widget.workRequestdata!.workDescription.toString()),
                       const SizedBox(height: 16),
-                      Text(
-                        widget.workRequestdata!.location.toString(),
-                        style: const TextStyle(fontSize: 16),
-                      ),
+                      richText('City: ',widget.workRequestdata!.location.toString()),
                       /*Row(
                         children: widget.workRequestdata!.imageUrls.map((imageAddress) {
                           return Expanded(
@@ -149,11 +145,12 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
               ),
               const SizedBox(height: 16),
               customButton(
-                title: "Save",
+                title: "Submit",
                 onTap: () async {
                   WorkerProposalModel rproposal = WorkerProposalModel(
                     proposerId: widget.workRequestdata!.proposerId,
                     proposerName: widget.workRequestdata!.proposerName,
+                    proposerDeviceToken: widget.workRequestdata!.proposerDeviceToken,
                     location: Constants.userModel!.city,
                     workRequestPostId: widget.workRequestdata!.proposalRequestId,
                     workDescription: widget.workRequestdata!.workDescription,
@@ -161,13 +158,16 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                     imageUrls: widget.workRequestdata!.imageUrls,
                     workerName: Constants.userModel!.name,
                     workerID: Constants.userModel!.userId,
+                    workerDeviceToken: Constants.userModel!.userToken,
                     proposalTitle: widget.workRequestdata!.requestTitle,
                     material: materialController.text.trim(),
                     rate: rateController.text.trim(),
-                    timestamp: widget.workRequestdata!.timestamp
+                    timestamp: widget.workRequestdata!.timestamp,
                   );
                   print(rproposal.proposalId);
                   await proposalRepo.storeWorkRequestProposal(rproposal);
+                  APIsCall.sendNotification(
+                      '${Constants.userModel!.name} Just submitted proposal on your work request: ${widget.workRequestdata!.requestTitle}', widget.workRequestdata!.proposerDeviceToken, 'Proposal Received');
                   showSubmittedPopup();
                 },
               )
