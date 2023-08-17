@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../Constants.dart';
@@ -171,6 +172,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                     return ConversationItem(
                       user: conversationData.name,
                       skill: conversationData.skill,
+                      imagePath: conversationData.imagePath,
                       onDelete: () async {
                         showDeleteConfirmationDialog(context, chatID);
                       },
@@ -180,7 +182,8 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                           MaterialPageRoute(
                             builder: (context) => MessagingScreen(
                               receiverID: conversationData.userId,
-                              name: conversationData.name,
+                              receiverName: conversationData.name,
+                              receiverImagePath: conversationData.imagePath,
                               receiverToken: conversationData.userToken,
                             ),
                           ),
@@ -199,6 +202,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 class ConversationItem extends StatelessWidget {
   final String? user;
   final String? skill;
+  final String? imagePath;
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
 
@@ -206,7 +210,8 @@ class ConversationItem extends StatelessWidget {
     required this.user,
     required this.onTap,
     this.onDelete,
-    required this.skill
+    required this.skill,
+    required this.imagePath,
   });
 
   @override
@@ -225,10 +230,24 @@ class ConversationItem extends StatelessWidget {
         ),
         child: ListTile(
           onTap: onTap,
-          leading: CircleAvatar(
-            child: Image.asset('assets/images/demo.png'),
-            backgroundColor: Colors.white,
-            radius: 25,
+          leading: ClipOval(
+            child: Material(
+              color: Colors.transparent,
+              child: CachedNetworkImage(
+                imageUrl: imagePath!,
+                fit: BoxFit.cover,
+                width: 60,
+                height: 60,
+                placeholder: (context, url) =>
+                new CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Image.asset(
+                  'assets/images/demo.png',
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
           ),
           title: Text(
             user!,

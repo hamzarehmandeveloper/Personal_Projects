@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/FireStore_repo/APIsCall.dart';
+import 'package:home_services_fyp/Widget/richText.dart';
 import 'package:home_services_fyp/usersMode/screens/progress_screen.dart';
 
 import '../../Constants.dart';
@@ -144,19 +145,20 @@ class _ProposalSelectionScreenState extends State<ProposalSelectionScreen> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text(
-                                'Rate : ${(proposal.rate.toString())} Rs',
-                                style: const TextStyle(fontSize: 16),
+                              richText(
+                                'Rate : ','${proposal.rate.toString()} Rs'
                               ),
                               const SizedBox(height: 10),
-                              Text(
-                                'Material Required : ${(proposal.material)}',
-                                style: const TextStyle(fontSize: 16),
+                              richText(
+                                'Material Required : ',proposal.material.toString()
                               ),
                               const SizedBox(height: 10),
-                              Text(
-                                'Estimated Time : ${(proposalTime.toDate())}',
-                                style: const TextStyle(fontSize: 16),
+                              richText(
+                                'Estimated Time : ',proposalTime.toDate().toString()
+                              ),
+                              const SizedBox(height: 10),
+                              richText(
+                                'Worker Name : ', proposal.workerName.toString()
                               ),
                               const SizedBox(height: 10),
                               ElevatedButton(

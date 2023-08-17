@@ -18,9 +18,6 @@ class WorkRequestRepo {
     }
   }
 
-  DateTime timestampToDateTime(Timestamp timestamp) {
-    return timestamp.toDate();
-  }
 
   Future<List<WorkRequestProposal>> fetchWorkRequestProposals(String? currentUserID) async {
     try {
@@ -28,7 +25,6 @@ class WorkRequestRepo {
       await _firestore.collection('WorkRequests').get();
 
       List<WorkRequestProposal> proposals = querySnapshot.docs
-          .where((doc) => doc['proposerId'] != currentUserID)
           .map((doc) {
         Map<String, dynamic> data = doc.data();
         return WorkRequestProposal.fromJson(data, doc.id);

@@ -1,5 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
 
 class ProfileWidget extends StatefulWidget {
   String? imagePath;
@@ -13,7 +13,6 @@ class ProfileWidget extends StatefulWidget {
     this.isEdit = false,
     this.onClicked,
     this.email,
-
   }) : super(key: key);
 
   @override
@@ -30,7 +29,25 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         children: [
           Stack(
             children: [
-              buildImage(),
+              ClipOval(
+                child: Material(
+                  color: Colors.transparent,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.imagePath!,
+                    fit: BoxFit.cover,
+                    width: 128,
+                    height: 128,
+                    placeholder: (context, url) =>
+                        new CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/images/demo.png',
+                      fit: BoxFit.cover,
+                      width: 120,
+                      height: 120,
+                    ),
+                  ),
+                ),
+              ),
               Positioned(
                 bottom: 0,
                 right: 4,
@@ -38,28 +55,21 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               ),
             ],
           ),
-          const SizedBox(height: 10,),
-          widget.email != null ? Align(alignment: Alignment.bottomCenter ,child: Center(child: Text(widget.email!),)):const SizedBox(),
+          const SizedBox(
+            height: 10,
+          ),
+          widget.email != null
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Center(
+                    child: Text(widget.email!),
+                  ))
+              : const SizedBox(),
         ],
       ),
     );
   }
 
-  Widget buildImage() {
-    //const image = File(widget.imagePath);
-
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: Image.asset(
-          widget.imagePath.toString(),
-          fit: BoxFit.cover,
-          width: 128,
-          height: 128,
-        ),
-      ),
-    );
-  }
 
 /*  Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -76,18 +86,18 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   }*/
 
   Widget buildEditIcon() => buildCircle(
-    color: Colors.white,
-    all: 3,
-    child: buildCircle(
-      color: color,
-      all: 8,
-      child: Icon(
-        widget.isEdit! ? Icons.add_a_photo : Icons.edit,
         color: Colors.white,
-        size: 20,
-      ),
-    ),
-  );
+        all: 3,
+        child: buildCircle(
+          color: color,
+          all: 8,
+          child: Icon(
+            widget.isEdit! ? Icons.add_a_photo : Icons.edit,
+            color: Colors.white,
+            size: 20,
+          ),
+        ),
+      );
 
   Widget buildCircle({
     required Widget child,
@@ -105,4 +115,3 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         ),
       );
 }
-

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/FireStore_repo/user_repo.dart';
@@ -8,9 +9,11 @@ import 'chat_screen.dart';
 
 class WorkerProfileScreen extends StatefulWidget {
   final String userId;
+  bool? showContactButton;
 
   WorkerProfileScreen({
     required this.userId,
+    this.showContactButton,
   });
 
   @override
@@ -115,11 +118,24 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                     ],
                                   ),
                                 ),
-                                CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 90,
-                                  backgroundImage: AssetImage(
-                                      workerProfile!.imagePath.toString()),
+                                ClipOval(
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: CachedNetworkImage(
+                                      imageUrl: workerProfile!.imagePath!,
+                                      fit: BoxFit.cover,
+                                      width: 169,
+                                      height: 169,
+                                      placeholder: (context, url) =>
+                                      new CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) => Image.asset(
+                                        'assets/images/demo.png',
+                                        fit: BoxFit.cover,
+                                        width: 170,
+                                        height: 170,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -171,7 +187,7 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                         padding: const EdgeInsets.all(15),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius: BorderRadius.circular(10.0),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.shade200,
@@ -310,7 +326,7 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: Padding(
+        child: (widget.showContactButton == true) ? Padding(
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(
               height: 60,
@@ -323,12 +339,13 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                           builder: (context) =>
                               MessagingScreen(
                                 receiverID: workerProfile!.userId ?? "",
-                                name: workerProfile!.name,
+                                receiverName: workerProfile!.name,
+                                receiverImagePath: workerProfile!.imagePath,
                                 receiverToken: workerProfile!.userToken,
                               )));
                 },
               )),
-        ),
+        ):SizedBox(),
       ),
     );
   }

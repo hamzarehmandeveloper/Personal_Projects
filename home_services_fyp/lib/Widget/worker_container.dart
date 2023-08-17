@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 
@@ -33,7 +34,20 @@ class workerContainer extends StatelessWidget {
                 children: <Widget>[
                   ClipRRect(
                       borderRadius: BorderRadius.circular(50.0),
-                      child: Image.asset(image,fit: BoxFit.cover,width: 70,height: 70,)),
+                      child: CachedNetworkImage(
+                        imageUrl: image,
+                        fit: BoxFit.cover,
+                        width: 70,
+                        height: 70,
+                        placeholder: (context, url) =>
+                        new CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Image.asset(
+                          'assets/images/demo.png',
+                          fit: BoxFit.cover,
+                          width: 70,
+                          height: 70,
+                        ),
+                      ),),
                   const SizedBox(
                     width: 20,
                   ),

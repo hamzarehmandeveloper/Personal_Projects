@@ -89,7 +89,8 @@ class _WorkerListState extends State<WorkerList> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => WorkerProfileScreen(
-                                    userId: workerData.userId.toString()),
+                                    userId: workerData.userId.toString(),
+                                showContactButton: true,),
                               ),
                             );
                           },

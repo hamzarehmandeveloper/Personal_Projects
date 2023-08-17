@@ -1,10 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_services_fyp/FireStore_repo/user_repo.dart';
+import 'package:home_services_fyp/Widget/richText.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../FireStore_repo/worker_proposal_repo.dart';
+import '../../Widget/custom_button.dart';
+import '../../Widget/image_viewer.dart';
 import '../../models/worker_proposals_model.dart';
 import '../../models/worker_review_model.dart';
 
@@ -251,6 +257,39 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
   UserRepo userRepo= UserRepo();
   WorkerProposalRepo repo = WorkerProposalRepo();
 
+
+  Future<void> deleteProposalAndImages() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('WorkerProposals')
+          .doc(widget.proposalId)
+          .delete();
+
+      await FirebaseFirestore.instance
+          .collection('WorkRequests')
+          .doc(proposalData!.workRequestPostId)
+          .delete();
+
+      List<String>? imageUrls = proposalData!.imageUrls;
+      for (String? imageUrl in imageUrls!) {
+        if (imageUrl != null && imageUrl.isNotEmpty) {
+          await FirebaseStorage.instance.refFromURL(imageUrl).delete();
+        }
+      }
+      proposalData = null;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Proposal and images deleted.')),
+      );
+      Navigator.pop(context);
+    } catch (e) {
+      print('Error deleting proposal: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete proposal.')),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -264,111 +303,136 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: FutureBuilder(
-          future: repo.fetchProposalData(widget.proposalId),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Text('Error fetching data.'),
-              );
-            } else {
-              proposalData = snapshot.data;
-              Timestamp proposalTime = proposalData!.timestamp;
+      body: LoaderOverlay(
+        child: FutureBuilder(
+            future: repo.fetchProposalData(widget.proposalId),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Error fetching data.'),
+                );
+              } else {
+                proposalData = snapshot.data;
+                Timestamp proposalTime = proposalData!.timestamp;
 
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.95,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                            width: 2.0,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
                               color: Colors.grey.shade200,
-                              offset: const Offset(0, 6),
-                              blurRadius: 10.0,
+                              width: 2.0,
                             ),
-                          ],
-                          borderRadius: BorderRadius.circular(14.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                proposalData!.proposalTitle.toString(),
-                                style: const TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade200,
+                                offset: const Offset(0, 6),
+                                blurRadius: 10.0,
                               ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Description : ${(proposalData!.workDescription.toString())}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Rate : ${(proposalData!.rate.toString())} Rs',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Estimated Time : ${(proposalTime.toDate())}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Material : ${(proposalData!.material)}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Locations : ${(proposalData!.location.toString())}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 16),
-                              /*Row(
-                          children: requestModel[widget.index]
-                              .images
-                              .map((imageAddress) {
-                            return Expanded(
-                              child: Padding(
-                                padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Image.asset(imageAddress),
-                              ),
-                            );
-                          }).toList(),
-                        ),*/
                             ],
+                            borderRadius: BorderRadius.circular(14.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  proposalData!.proposalTitle.toString(),
+                                  style: const TextStyle(
+                                      fontSize: 24, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 16),
+                                richText(
+                                  'Description : ' , proposalData!.workDescription.toString()
+                                ),
+                                const SizedBox(height: 16),
+                                richText(
+                                  'Rate :' ,'${(proposalData!.rate.toString())} Rs'
+                                ),
+                                const SizedBox(height: 16),
+                                richText(
+                                  'Estimated Time : ', proposalTime.toDate().toString()
+                                ),
+                                const SizedBox(height: 16),
+                                richText(
+                                  'Material : ',proposalData!.material.toString()
+                                ),
+                                const SizedBox(height: 16),
+                                richText(
+                                  'Locations : ',proposalData!.location.toString()
+                                ),
+                                const SizedBox(height: 16),
+                                richText(
+                                    'Submitted by : ',proposalData!.proposerName.toString()
+                                ),
+                                const SizedBox(height: 16),
+                                Row(
+                                  children: proposalData!.imageUrls!.map((imageAddress) {
+                                    return Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>FullScreenImagePage(imageUrl: imageAddress,)));
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(5),
+                                            child: CachedNetworkImage(
+                                              imageUrl: imageAddress,
+                                              fit: BoxFit.cover,
+                                              width: 128,
+                                              height: 128,
+                                              placeholder: (context, url) =>
+                                              new CircularProgressIndicator(),
+                                              errorWidget: (context, url, error) =>
+                                              new Icon(Icons.error),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      workTimeLine(
-                        reachDestinationTime: proposalData!.workReachTime,
-                        workInProgressTime: proposalData!.workStartTime,
-                        finalizeTaskTime: proposalData!.workEndTime,
-                        showReviewDialog: showReviewDialog,
-                      ),
-                      const SizedBox(height: 10),
-                    ],
+                        const SizedBox(height: 20),
+                        workTimeLine(
+                          reachDestinationTime: proposalData!.workReachTime,
+                          workInProgressTime: proposalData!.workStartTime,
+                          finalizeTaskTime: proposalData!.workEndTime,
+                          showReviewDialog: showReviewDialog,
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                            height: 60,
+                            child: customButton(
+                              title: 'Discontinue',
+                              onTap: () {
+                                context.loaderOverlay.show();
+                                deleteProposalAndImages();
+                                context.loaderOverlay.hide();
+                              },
+                            )),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }
-          }),
+                );
+              }
+            }),
+      ),
     );
   }
 }

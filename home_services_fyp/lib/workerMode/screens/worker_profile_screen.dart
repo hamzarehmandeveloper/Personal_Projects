@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/Widget/profile.dart';
 import 'package:home_services_fyp/workerMode/screens/worker_edit_profile_screen.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import '../../../Widget/button.dart';
 import '../../../Widget/member.dart';
 import '../../Constants.dart';
@@ -22,77 +23,81 @@ class _WorkerProfileState extends State<WorkerProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 24),
-              Column(
-                children: [
-                  ProfileWidget(
-                    imagePath: Constants.userModel?.imagePath,
-                    onClicked: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => WorkerEditProfileScreen()),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                  buildName(Constants.userModel!),
-                  const SizedBox(height: 24),
-                  Center(
-                    child: ButtonWidget(
-                      text: 'Switch To User Mode',
+      body: LoaderOverlay(
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 24),
+                Column(
+                  children: [
+                    ProfileWidget(
+                      imagePath: Constants.userModel?.imagePath,
                       onClicked: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const TabContainer()));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => WorkerEditProfileScreen()),
+                        );
                       },
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  NumbersWidget(),
-                  const SizedBox(height: 48),
-                  buildAbout(context,Constants.userModel!),
-                  const SizedBox(height: 24),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 30, right: 30, bottom: 7.5, top: 24),
-                child: Material(
-                  borderRadius: BorderRadius.circular(14.0),
-                  elevation: 0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade200,
-                          offset: const Offset(0, 6),
-                          blurRadius: 10.0,
-                        ),
-                      ],
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(14.0),
-                    ),
-                    child: ListTile(
-                      leading: const Icon(
-                        Icons.exit_to_app_rounded,
-                        color: Colors.black,
+                    const SizedBox(height: 24),
+                    buildName(Constants.userModel!),
+                    const SizedBox(height: 24),
+                    Center(
+                      child: ButtonWidget(
+                        text: 'Switch To User Mode',
+                        onClicked: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const TabContainer()));
+                        },
                       ),
-                      title: const Text('Log out'),
-                      onTap: () async {
-                        await userRepo.signOut();
-                       LoginScreen();
-                      },
+                    ),
+                    const SizedBox(height: 24),
+                    NumbersWidget(),
+                    const SizedBox(height: 48),
+                    buildAbout(context,Constants.userModel!),
+                    const SizedBox(height: 24),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 30, right: 30, bottom: 7.5, top: 24),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(14.0),
+                    elevation: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade200,
+                            offset: const Offset(0, 6),
+                            blurRadius: 10.0,
+                          ),
+                        ],
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(14.0),
+                      ),
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.exit_to_app_rounded,
+                          color: Colors.black,
+                        ),
+                        title: const Text('Log out'),
+                        onTap: () async {
+                          context.loaderOverlay.show();
+                          await userRepo.signOut();
+                          context.loaderOverlay.hide();
+                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

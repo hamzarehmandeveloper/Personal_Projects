@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:home_services_fyp/usersMode/screens/worker_profile_screen.dart';
+import 'package:intl/intl.dart';
 import "dart:convert";
 import '../../Constants.dart';
 import '../../FireStore_repo/APIsCall.dart';
@@ -7,10 +10,15 @@ import '../../models/message_model.dart';
 
 class MessagingScreen extends StatefulWidget {
   final String? receiverID;
-  final String? name;
+  final String? receiverName;
+  final String? receiverImagePath;
   final String? receiverToken;
 
-  MessagingScreen({required this.receiverID, required this.name,required this.receiverToken});
+  MessagingScreen(
+      {required this.receiverID,
+      required this.receiverName,
+      required this.receiverImagePath,
+      required this.receiverToken});
 
   @override
   State<MessagingScreen> createState() => _MessagingScreenState();
@@ -21,7 +29,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
 
   ScrollController scrollController = ScrollController();
   final TextEditingController messageTextController = TextEditingController();
-
+  DateTime? lastDisplayedDate;
 
   String _getCurrentDate() {
     final now = DateTime.now();
@@ -63,26 +71,26 @@ class _MessagingScreenState extends State<MessagingScreen> {
           .collection('Messages')
           .add(message.toJson());
     });
-    APIsCall.sendNotification(messageText,widget.receiverToken,Constants.userModel!.name);
+    APIsCall.sendNotification(
+        messageText, widget.receiverToken, Constants.userModel!.name);
     _scrollToBottom();
     messageTextController.clear();
   }
 
-
   Stream<List<Message>> getMessagesStream() {
-
     List<String?> ids = [Constants.userModel!.userId, widget.receiverID];
     ids.sort();
     String chatIDs = ids.join('_');
 
     return FirebaseFirestore.instance
-        .collection('ChatRoom').doc(chatIDs).collection('Messages')
+        .collection('ChatRoom')
+        .doc(chatIDs)
+        .collection('Messages')
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) => Message.fromJson(doc.data())).toList();
     });
   }
-
 
   void _scrollToBottom() {
     if (scrollController.hasClients) {
@@ -98,22 +106,52 @@ class _MessagingScreenState extends State<MessagingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 0,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: Colors.transparent,
-        title: Row(
-          children: [
-            const CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 20,
-              backgroundImage: AssetImage('assets/images/demo.png'),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              widget.name!,
-              style: const TextStyle(color: Colors.black),
-            ),
-          ],
+        title: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WorkerProfileScreen(
+                  userId: widget.receiverID.toString(),
+                  showContactButton: false,
+                ),
+              ),
+            );
+          },
+          child: Row(
+            children: [
+              ClipOval(
+                child: Material(
+                  color: Colors.transparent,
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: widget.receiverImagePath!,
+                      fit: BoxFit.cover,
+                      width: 45,
+                      height: 45,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/demo.png',
+                        fit: BoxFit.cover,
+                        width: 45,
+                        height: 45,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                widget.receiverName!,
+                style: const TextStyle(color: Colors.black),
+              ),
+            ],
+          ),
         ),
       ),
       body: Column(
@@ -129,106 +167,122 @@ class _MessagingScreenState extends State<MessagingScreen> {
                   return const Center(child: CircularProgressIndicator());
                 }
                 List<Message> receivedMessages = snapshot.data!;
-                receivedMessages.sort((a,b){
+                receivedMessages.sort((a, b) {
                   Timestamp aValue = a.date;
                   Timestamp bValue = b.date;
-                  return aValue.compareTo(bValue);});
-                return receivedMessages.isNotEmpty ? ListView.builder(
-                  controller: scrollController,
-                  itemCount: receivedMessages.length,
-                  padding: const EdgeInsets.all(8.0),
-                  itemBuilder: (context, index) {
-                    final message = receivedMessages[index];
-                    Timestamp date = message.date;
-                    final isUserMessage = message.senderID == Constants.userModel!.userId;
-                    print('is user : $isUserMessage');
-                    return Container(
-                      alignment: isUserMessage
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      child: Column(
-                        crossAxisAlignment: isUserMessage
-                            ? CrossAxisAlignment.end
-                            : CrossAxisAlignment.start,
-                        children: [
-                          if (date != null)
-                            Center(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Text(
-                                  date.toDate().toString(),
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          Row(
-                            mainAxisAlignment: isUserMessage
-                                ? MainAxisAlignment.end
-                                : MainAxisAlignment.start,
-                            children: [
-                              if (!isUserMessage)
-                                CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 15,
-                                  child: Image.asset('assets/images/demo.png'),
-                                ),
-                              Flexible(
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width * 0.7,
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(12.0),
-                                    margin: const EdgeInsets.only(
-                                        bottom: 8.0, left: 8.0, right: 8.0),
-                                    decoration: BoxDecoration(
-                                      color: isUserMessage
-                                          ? Colors.green
-                                          : Colors.blue,
-                                      borderRadius: BorderRadius.circular(16.0),
+                  return aValue.compareTo(bValue);
+                });
+                return receivedMessages.isNotEmpty
+                    ? ListView.builder(
+                        controller: scrollController,
+                        itemCount: receivedMessages.length,
+                        padding: const EdgeInsets.all(8.0),
+                        itemBuilder: (context, index) {
+                          final message = receivedMessages[index];
+                          Timestamp date = message.date;
+                          final isUserMessage =
+                              message.senderID == Constants.userModel!.userId;
+                          bool isNewDate = lastDisplayedDate == null ||
+                              lastDisplayedDate?.day != date.toDate().day;
+                          lastDisplayedDate = date.toDate();
+                          print('is user : $isUserMessage');
+                          return Container(
+                            alignment: isUserMessage
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                            child: Column(
+                              crossAxisAlignment: isUserMessage
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
+                              children: [
+                                if (isNewDate)
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Text(
+                                        DateFormat('MMM dd, yyyy')
+                                            .format(date.toDate())
+                                            .toString(),
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                        ),
+                                      ),
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          message.msg.toString(),
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
+                                  ),
+                                Row(
+                                  mainAxisAlignment: isUserMessage
+                                      ? MainAxisAlignment.end
+                                      : MainAxisAlignment.start,
+                                  children: [
+                                    /*if (!isUserMessage)
+                                      CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        radius: 15,
+                                        child: Image.asset(
+                                            'assets/images/demo.png'),
+                                      ),*/
+                                    Flexible(
+                                      child: ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          maxWidth: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                        ),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12.0),
+                                          margin: const EdgeInsets.only(
+                                              left: 8.0, right: 8.0, top: 8.0),
+                                          decoration: BoxDecoration(
+                                            color: isUserMessage
+                                                ? Colors.green
+                                                : Colors.blue,
+                                            borderRadius:
+                                                BorderRadius.circular(16.0),
+                                          ),
+                                          child: Text(
+                                            message.msg.toString(),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                            ),
                                           ),
                                         ),
-                                        const SizedBox(height: 4),
-                                        /*Text(
-                                          '${message.date.hour}:${message.time.minute.toString().padLeft(2, '0')}',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                          ),
-                                        ),*/
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
-                              /*if (isUserMessage)
+
+                                    /*if (isUserMessage)
                                 CircleAvatar(
                                   backgroundColor: Colors.white,
                                   radius: 15,
                                   child: Text(message.sender[0]),
                                 ),*/
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ):const Center(child: Text('Start Converstion'),) ;
+                                  ],
+                                ),
+                                const SizedBox(height: 3),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(
+                                    DateFormat.jm()
+                                        .format(date.toDate())
+                                        .toString(),
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      )
+                    : const Center(
+                        child: Text('Start Conversation'),
+                      );
               },
             ),
           ),
@@ -243,9 +297,11 @@ class _MessagingScreenState extends State<MessagingScreen> {
                       hintText: 'Type your message...',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: const BorderSide(color: Colors.black, width: 5),
+                        borderSide:
+                            const BorderSide(color: Colors.black, width: 5),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 20),
                     ),
                   ),
                 ),

@@ -1,16 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/FireStore_repo/user_repo.dart';
 import 'package:home_services_fyp/FireStore_repo/worker_proposal_repo.dart';
 import 'package:home_services_fyp/models/workRequestModel.dart';
 import 'package:home_services_fyp/models/worker_proposals_model.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../Constants.dart';
 import '../../FireStore_repo/APIsCall.dart';
 import '../../Widget/custom_button.dart';
+import '../../Widget/image_viewer.dart';
 import '../../Widget/input_field.dart';
 import '../../Widget/richText.dart';
+import '../../buttomBar/workerBottombar.dart';
 
 class JobDetailsScreen extends StatefulWidget {
   WorkRequestProposal? workRequestdata;
@@ -57,13 +62,31 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WorkerTabContainer()));
               },
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> updateSubmittedByWorkerIds(String? currentUserId) async {
+    try {
+      final proposalRef = FirebaseFirestore.instance
+          .collection('WorkRequests')
+          .doc(widget.workRequestdata!.proposalRequestId);
+      final proposalSnapshot = await proposalRef.get();
+      final existingWorkerIds = List<String>.from(
+          proposalSnapshot.data()!['proposalSubmittedByWorkerIds'] ?? []);
+      if (!existingWorkerIds.contains(currentUserId)) {
+        existingWorkerIds.add(currentUserId!);
+      }
+      await proposalRef
+          .update({'proposalSubmittedByWorkerIds': existingWorkerIds});
+    } catch (e) {
+      print('Error while updating submit worker IDs $e');
+    }
   }
 
   @override
@@ -79,99 +102,138 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: Colors.grey.shade200,
-                    width: 2.0,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
+      body: LoaderOverlay(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
                       color: Colors.grey.shade200,
-                      offset: const Offset(0, 6),
-                      blurRadius: 10.0,
+                      width: 2.0,
                     ),
-                  ],
-                  borderRadius: BorderRadius.circular(14.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.workRequestdata!.requestTitle.toString(),
-                        style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade200,
+                        offset: const Offset(0, 6),
+                        blurRadius: 10.0,
                       ),
-                      const SizedBox(height: 16),
-                      richText('Description: ',widget.workRequestdata!.workDescription.toString()),
-                      const SizedBox(height: 16),
-                      richText('City: ',widget.workRequestdata!.location.toString()),
-                      /*Row(
-                        children: widget.workRequestdata!.imageUrls.map((imageAddress) {
-                          return Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Image.asset(imageAddress),
-                            ),
-                          );
-                        }).toList(),
-                      ),*/
                     ],
+                    borderRadius: BorderRadius.circular(14.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.workRequestdata!.requestTitle.toString(),
+                          style: const TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        richText('Description: ',
+                            widget.workRequestdata!.workDescription.toString()),
+                        const SizedBox(height: 16),
+                        richText('City: ',
+                            widget.workRequestdata!.location.toString()),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: widget.workRequestdata!.imageUrls!
+                              .map((imageAddress) {
+                            return Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FullScreenImagePage(
+                                                    imageUrl: imageAddress,
+                                                  )));
+                                    },
+                                    child: CachedNetworkImage(
+                                      imageUrl: imageAddress,
+                                      fit: BoxFit.cover,
+                                      width: 128,
+                                      height: 128,
+                                      placeholder: (context, url) =>
+                                          new CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          new Icon(Icons.error),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              InputField(
-                hintText: 'Rate',
-                suffixIcon: const SizedBox(),
-                controller: rateController,
-              ),
-              const SizedBox(height: 16),
-              const SizedBox(height: 5),
-              InputField(
-                hintText: 'Material',
-                suffixIcon: const SizedBox(),
-                controller: materialController,
-              ),
-              const SizedBox(height: 16),
-              customButton(
-                title: "Submit",
-                onTap: () async {
-                  WorkerProposalModel rproposal = WorkerProposalModel(
-                    proposerId: widget.workRequestdata!.proposerId,
-                    proposerName: widget.workRequestdata!.proposerName,
-                    proposerDeviceToken: widget.workRequestdata!.proposerDeviceToken,
-                    location: Constants.userModel!.city,
-                    workRequestPostId: widget.workRequestdata!.proposalRequestId,
-                    workDescription: widget.workRequestdata!.workDescription,
-                    selectedCategory: widget.workRequestdata!.selectedCategory,
-                    imageUrls: widget.workRequestdata!.imageUrls,
-                    workerName: Constants.userModel!.name,
-                    workerID: Constants.userModel!.userId,
-                    workerDeviceToken: Constants.userModel!.userToken,
-                    proposalTitle: widget.workRequestdata!.requestTitle,
-                    material: materialController.text.trim(),
-                    rate: rateController.text.trim(),
-                    timestamp: widget.workRequestdata!.timestamp,
-                  );
-                  print(rproposal.proposalId);
-                  await proposalRepo.storeWorkRequestProposal(rproposal);
-                  APIsCall.sendNotification(
-                      '${Constants.userModel!.name} Just submitted proposal on your work request: ${widget.workRequestdata!.requestTitle}', widget.workRequestdata!.proposerDeviceToken, 'Proposal Received');
-                  showSubmittedPopup();
-                },
-              )
-            ],
+                const SizedBox(height: 16),
+                InputField(
+                  hintText: 'Rate',
+                  suffixIcon: const SizedBox(),
+                  controller: rateController,
+                ),
+                const SizedBox(height: 16),
+                const SizedBox(height: 5),
+                InputField(
+                  hintText: 'Material',
+                  suffixIcon: const SizedBox(),
+                  controller: materialController,
+                ),
+                const SizedBox(height: 16),
+                customButton(
+                  title: "Submit",
+                  onTap: () async {
+                    context.loaderOverlay.show();
+                    WorkerProposalModel rproposal = WorkerProposalModel(
+                      proposerId: widget.workRequestdata!.proposerId,
+                      proposerName: widget.workRequestdata!.proposerName,
+                      proposerDeviceToken:
+                          widget.workRequestdata!.proposerDeviceToken,
+                      location: Constants.userModel!.city,
+                      workRequestPostId:
+                          widget.workRequestdata!.proposalRequestId,
+                      workDescription: widget.workRequestdata!.workDescription,
+                      selectedCategory:
+                          widget.workRequestdata!.selectedCategory,
+                      imageUrls: widget.workRequestdata!.imageUrls,
+                      workerName: Constants.userModel!.name,
+                      workerID: Constants.userModel!.userId,
+                      workerDeviceToken: Constants.userModel!.userToken,
+                      proposalTitle: widget.workRequestdata!.requestTitle,
+                      material: materialController.text.trim(),
+                      rate: rateController.text.trim(),
+                      timestamp: widget.workRequestdata!.timestamp,
+                    );
+                    print(rproposal.proposalId);
+                    await proposalRepo.storeWorkRequestProposal(rproposal);
+
+                    updateSubmittedByWorkerIds(Constants.userModel!.userId);
+
+                    APIsCall.sendNotification(
+                        '${Constants.userModel!.name} Just submitted proposal on your work request: ${widget.workRequestdata!.requestTitle}',
+                        widget.workRequestdata!.proposerDeviceToken,
+                        'Proposal Received');
+                    context.loaderOverlay.hide();
+                    showSubmittedPopup();
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),

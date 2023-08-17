@@ -10,6 +10,7 @@ class WorkRequestProposal {
   String? requestTitle;
   String? proposalRequestId;
   String? location;
+  List<String>? proposalSubmittedByWorkerIds = [];
   dynamic timestamp;
   bool? isAccept;
 
@@ -24,7 +25,8 @@ class WorkRequestProposal {
     this.requestTitle,
     this.location,
     this.isAccept,
-    this.proposerDeviceToken
+    this.proposerDeviceToken,
+    this.proposalSubmittedByWorkerIds
   });
 
   Map<String, dynamic> toJson() {
@@ -39,7 +41,8 @@ class WorkRequestProposal {
       'requestTitle': requestTitle,
       'location': location,
       'isAccept': false,
-      'proposerDeviceToken': proposerDeviceToken
+      'proposerDeviceToken': proposerDeviceToken,
+      'proposalSubmittedByWorkerIds': proposalSubmittedByWorkerIds,
     };
   }
 
@@ -56,6 +59,10 @@ class WorkRequestProposal {
       location: json['location'],
       isAccept: json['isAccept'],
       proposerDeviceToken: json['proposerDeviceToken'],
+      proposalSubmittedByWorkerIds:
+      json['proposalSubmittedByWorkerIds'] != null
+          ? List<String>.from(json['proposalSubmittedByWorkerIds'])
+          : [],
     );
   }
 }

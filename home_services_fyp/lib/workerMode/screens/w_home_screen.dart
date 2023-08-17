@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_services_fyp/usersMode/screens/conversation_screen.dart';
@@ -8,7 +9,7 @@ import '../../FireStore_repo/work_request_&_proposal_repo.dart';
 import '../../Widget/input_field.dart';
 import '../../Widget/richText.dart';
 import '../../models/workRequestModel.dart';
-
+import '../../themes.dart';
 
 class WHomePage extends StatefulWidget {
   const WHomePage({Key? key}) : super(key: key);
@@ -22,12 +23,10 @@ class _WHomePageState extends State<WHomePage> {
   WorkRequestRepo requestRepo = WorkRequestRepo();
   List<dynamic> proposalList = [];
 
-
   @override
   void initState() {
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +42,10 @@ class _WHomePageState extends State<WHomePage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => ConversationsScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ConversationsScreen()));
             },
             icon: Icon(
               Icons.message,
@@ -67,13 +68,15 @@ class _WHomePageState extends State<WHomePage> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          final updatePropodals = await requestRepo.fetchWorkRequestProposals(Constants.userModel!.userId);
+          final updatePropodals = await requestRepo
+              .fetchWorkRequestProposals(Constants.userModel!.userId);
           setState(() {
             proposalList = updatePropodals;
           });
         },
         child: FutureBuilder<List<dynamic>>(
-            future: requestRepo.fetchWorkRequestProposals(Constants.userModel!.userId),
+            future: requestRepo
+                .fetchWorkRequestProposals(Constants.userModel!.userId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -88,12 +91,13 @@ class _WHomePageState extends State<WHomePage> {
                 return ListView.builder(
                   itemCount: proposalList.length,
                   itemBuilder: (context, index) {
-                    return ProposalListItem(proposal: proposalList[index],);
+                    return ProposalListItem(
+                      proposal: proposalList[index],
+                    );
                   },
                 );
               }
-            }
-        ),
+            }),
       ),
     );
   }
@@ -104,15 +108,29 @@ class ProposalListItem extends StatelessWidget {
 
   ProposalListItem({super.key, required this.proposal});
 
-  Timestamp setDate (){
+  Timestamp setDate() {
     Timestamp prosaltime = proposal.timestamp;
     return prosaltime;
   }
 
+  bool isSubmittedByCurrentUser(
+      List<String> submittedByWorkerIds, String currentUserId) {
+    return submittedByWorkerIds.contains(currentUserId);
+  }
 
   @override
   Widget build(BuildContext context) {
     print(proposal.location);
+
+    final currentUserId = Constants
+        .userModel!.userId; // Replace this with actual user ID retrieval
+
+    final submittedByWorkerIds =
+        List<String>.from(proposal.proposalSubmittedByWorkerIds ?? []);
+
+    final bool submittedByCurrentUser =
+        isSubmittedByCurrentUser(submittedByWorkerIds, currentUserId!);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10),
       child: Container(
@@ -131,44 +149,83 @@ class ProposalListItem extends StatelessWidget {
           ],
           borderRadius: BorderRadius.circular(14.0),
         ),
-        child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(
-              horizontal: 20.0, vertical: 10.0),
-          title: Text(
-            proposal.requestTitle.toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 5),
-              richText('Description: ',proposal.workDescription.toString()),
-              const SizedBox(height: 5),
-              richText('Location: ',proposal.location.toString()),
-              const SizedBox(height: 4),
-              richText('Date: ' ,setDate().toDate().toString()),
-              const SizedBox(height: 4,),
-              richText('Submitted by: ', proposal.proposerName.toString()),
-              const SizedBox(height: 10,),
-              /*Row(
-                children: proposal.images.map((imageAddress) {
-                  return Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Image.asset(imageAddress),
-                    ),
-                  );
-                }).toList(),
-              ),*/
-            ],
-          ),
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                JobDetailsScreen(workRequestdata: proposal,)));
-          },
+        child: Column(
+          children: [
+            ListTile(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              title: Text(
+                proposal.requestTitle.toString(),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 5),
+                  richText('Description: ', proposal.workDescription.toString()),
+                  const SizedBox(height: 5),
+                  richText('Location: ', proposal.location.toString()),
+                  const SizedBox(height: 4),
+                  richText('Date: ', setDate().toDate().toString()),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  richText('Submitted by: ', proposal.proposerName.toString()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  proposal.imageUrls!.isNotEmpty
+                      ? Row(
+                          children: proposal.imageUrls!.map((imageAddress) {
+                            return Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: CachedNetworkImage(
+                                    imageUrl: imageAddress,
+                                    fit: BoxFit.cover,
+                                    width: 128,
+                                    height: 128,
+                                    placeholder: (context, url) =>
+                                        new CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        new Icon(Icons.error),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              onTap: () {
+                submittedByCurrentUser
+                    ? showErrorMessage(context , 'Proposal Already Submitted'):Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => JobDetailsScreen(
+                          workRequestdata: proposal,
+                        )));
+              },
+            ),
+            submittedByCurrentUser
+                ? Center(
+                  child: Text(
+              'Submitted',
+              style: TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+              ),
+            ),
+                )
+                : SizedBox(),
+            SizedBox(height: 10,)
+          ],
         ),
       ),
     );
   }
 }
-

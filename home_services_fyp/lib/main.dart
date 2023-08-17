@@ -58,6 +58,8 @@ class MessagingService {
       print('...Received message...');
       print('Message Title: ${message.notification?.title}');
       print('Message Body: ${message.notification?.body}');
+
+
       BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
         message.notification!.body.toString(),
         htmlFormatBigText: true,

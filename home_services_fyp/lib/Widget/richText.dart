@@ -13,7 +13,7 @@ RichText richText(String title, String text){
         TextSpan(
             text: text,
             style: TextStyle(
-                color: Colors.grey.shade700)),
+                color: Colors.grey.shade800)),
       ],
     ),
   );
