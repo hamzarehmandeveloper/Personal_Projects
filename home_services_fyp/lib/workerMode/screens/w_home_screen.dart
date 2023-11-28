@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:home_services_fyp/usersMode/screens/conversation_screen.dart';
 import 'package:home_services_fyp/workerMode/screens/perposal_submission_screen.dart';
 import '../../Constants.dart';
-import '../../FireStore_repo/APIsCall.dart';
 import '../../FireStore_repo/work_request_&_proposal_repo.dart';
 import '../../Widget/input_field.dart';
 import '../../Widget/richText.dart';
@@ -212,7 +211,7 @@ class ProposalListItem extends StatelessWidget {
               },
             ),
             submittedByCurrentUser
-                ? Center(
+                ? const Center(
                   child: Text(
               'Submitted',
               style: TextStyle(

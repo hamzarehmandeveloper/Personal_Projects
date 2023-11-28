@@ -4,25 +4,25 @@ import 'package:home_services_fyp/Widget/input_field.dart';
 import 'package:home_services_fyp/usersMode/screens/register_screen.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import '../../Constants.dart';
-import '../../FireStore_repo/user_repo.dart';
+import '../../FireStore_repo/admin_repo.dart';
 import '../../Validators.dart';
-import '../../adminMode/admin-home.dart';
-import '../../adminMode/admin-login.dart';
 import '../../buttomBar/buttombar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../themes.dart';
+import 'admin-home.dart';
 
-class LoginScreen extends StatefulWidget {
+class AdminLogin extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _AdminLoginState createState() => _AdminLoginState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _AdminLoginState extends State<AdminLogin> {
   final TextEditingController emailController = TextEditingController(text: '');
   final TextEditingController passwordController =
-      TextEditingController(text: '');
-  UserRepo userRepo = UserRepo();
+  TextEditingController(text: '');
+
+  AdminRepo adminRepo = AdminRepo();
 
   bool passwordVisible = false;
   final _formKey = GlobalKey<FormState>();
@@ -45,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+
                 children: [
                   const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Center(
                         child: Text(
-                          'Sign in to continue',
+                          'Sign In',
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
@@ -85,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: [
                           InputField(
-                              hintText: 'Email',
+                              hintText: 'Admin Email',
                               suffixIcon: const SizedBox(),
                               controller: emailController,
                               textFieldValidator: (value) {
@@ -100,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 20,
                           ),
                           InputField(
-                              hintText: 'Password',
+                              hintText: 'Admin Password',
                               controller: passwordController,
                               obscureText: !passwordVisible,
                               suffixIcon: IconButton(
@@ -130,22 +131,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: SizedBox(
                         child: customButton(
-                          fontSize: 18,
                             title: 'Login',
+                            fontSize: 18,
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
                                 context.loaderOverlay.show();
                                 final String email =
-                                    emailController.text.trim();
+                                emailController.text.trim();
                                 final String password =
-                                    passwordController.text.trim();
+                                passwordController.text.trim();
                                 User? user =
-                                    await userRepo.signInWithEmailAndPassword(
-                                        email, password);
+                                await adminRepo.adminSignIn(
+                                    email, password);
                                 if (user != null) {
-                                  Constants.userModel =
-                                      await userRepo.fetchUserData();
-                                  userRepo.setupToken();
+
                                   context.loaderOverlay.hide();
                                   emailController.clear();
                                   passwordController.clear();
@@ -153,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const TabContainer()),
+                                        const AdminHomeScreen()),
                                   );
                                 } else {
                                   context.loaderOverlay.hide();
@@ -163,63 +162,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             })),
                   ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Don't have an account? ",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff94959b),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const RegisterScreen()));
-                          },
-                          child: const Text(
-                            'Register',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xff007aff),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AdminLogin()));
-                      },
-                      child: Text(
-                        'Admin Login',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xff007aff),
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),

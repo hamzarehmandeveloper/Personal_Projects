@@ -17,9 +17,10 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   List<dynamic> workers = [];
   UserRepo userRepo = UserRepo();
+  TabController? _tabController;
 
   Future<List<dynamic>> fetchWorkerData() async {
     try {
@@ -44,7 +45,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 6, vsync: this);
     fetchWorkerData();
+  }
+
+  @override
+  void dispose() {
+    _tabController!.dispose();
+    super.dispose();
   }
 
   @override
@@ -101,6 +109,7 @@ class _HomePageState extends State<HomePage> {
                   UserModel recentWorker = workers[0];
                   return workers.isNotEmpty
                       ? Column(
+                    mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
                               padding:
@@ -110,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 130,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.0),
-                                  gradient: LinearGradient(colors: [
+                                  gradient: const LinearGradient(colors: [
                                     Color(0xff4338CA),
                                     Color(0xff6D28D9)
                                   ]),
@@ -136,7 +145,8 @@ class _HomePageState extends State<HomePage> {
                                           Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               Text(
                                                 'Welcome',
@@ -151,11 +161,19 @@ class _HomePageState extends State<HomePage> {
                                               Text(
                                                 Constants.userModel!.name
                                                     .toString(),
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 28,
                                                     fontWeight:
                                                         FontWeight.bold),
+                                              ),
+                                              Text(
+                                                Constants.userModel!.city
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  color: Colors.grey.shade400,
+                                                  fontSize: 14,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -172,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                                               width: 70,
                                               height: 70,
                                               placeholder: (context, url) =>
-                                                  new CircularProgressIndicator(),
+                                                  const CircularProgressIndicator(),
                                               errorWidget:
                                                   (context, url, error) =>
                                                       Image.asset(
@@ -244,10 +262,10 @@ class _HomePageState extends State<HomePage> {
                                             width: 70,
                                             height: 70,
                                             placeholder: (context, url) =>
-                                                new CircularProgressIndicator(),
+                                                const CircularProgressIndicator(),
                                             errorWidget:
                                                 (context, url, error) =>
-                                                    new Icon(Icons.error),
+                                                    const Icon(Icons.error),
                                           ),
                                         ),
                                         const SizedBox(
@@ -310,13 +328,13 @@ class _HomePageState extends State<HomePage> {
                                                 WorkerProfileScreen(
                                               userId: recentWorker.userId
                                                   .toString(),
-                                                  showContactButton: true,
+                                              showContactButton: true,
                                             ),
                                           ),
                                         );
                                       },
                                       child: Container(
-                                        height: 50,
+                                        height: 49,
                                         decoration: BoxDecoration(
                                             color: Colors.black,
                                             borderRadius:
@@ -446,56 +464,99 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20.0, right: 10.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                            SizedBox(
+                              width: double.infinity,
+                              child: ListView(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
                                 children: [
-                                  const Text(
-                                    'Top Rated',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                  DefaultTabController(
+                                    length: 6,
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20.0, right: 10.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text(
+                                                'Top Rated',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => WorkerList(
+                                                            skill: 'All',
+                                                          )));
+                                                },
+                                                child: const Text(
+                                                  'View all',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        TabBar(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          indicatorSize: TabBarIndicatorSize.tab,
+                                          controller: _tabController,
+                                          isScrollable: true,
+                                          indicatorColor: Colors.black,
+                                          labelColor: Colors.white,
+                                          unselectedLabelColor: Colors.black,
+                                          indicator: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            // Creates border
+                                            color: Colors.black,
+                                          ),
+                                          tabs: const [
+                                            Tab(
+                                              text: 'All',
+                                            ),
+                                            Tab(
+                                              text: 'Plumber',
+                                            ),
+                                            Tab(text: 'Painter'),
+                                            Tab(text: 'Electrician'),
+                                            Tab(text: 'Cleaning'),
+                                            Tab(text: 'Carpenter'),
+                                          ],
+                                        ),
+                                        ListView(
+                                          shrinkWrap: true,
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          children: [
+                                          SizedBox(
+                                            height: 400,
+                                            child: TabBarView(
+                                              physics: const NeverScrollableScrollPhysics(),
+                                              controller: _tabController,
+                                              children: [
+                                                _buildTopRatedList(workers,'All'),
+                                                _buildTopRatedList(workers,'Plumber'),
+                                                _buildTopRatedList(workers,'Painter'),
+                                                _buildTopRatedList(workers,'Electrician'),
+                                                _buildTopRatedList(workers,'Cleaning'),
+                                                _buildTopRatedList(workers,'Carpenter'),
+                                              ],
+                                            ),
+                                          ),
+                                        ]
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                  TextButton(
-                                      onPressed: () {},
-                                      child: const Text(
-                                        'View all',
-                                      ))
                                 ],
                               ),
-                            ),
-                            Column(
-                              children: [
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: workers.length,
-                                  itemBuilder: (context, index) {
-                                    UserModel workerData = workers[index];
-                                    return workerContainer(
-                                      name: workerData.name.toString(),
-                                      job: workerData.skill.toString(),
-                                      image: workerData.imagePath.toString(),
-                                      rating:
-                                          workerData.rating!.toStringAsFixed(1),
-                                      ontap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                WorkerProfileScreen(
-                                                    userId: workerData.userId
-                                                        .toString(),showContactButton: true,),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
                             ),
                             const SizedBox(
                               height: 20,
@@ -519,7 +580,7 @@ class ServiceContainer extends StatelessWidget {
   final Function() ontap;
 
   const ServiceContainer(
-      {required this.icon, required this.name, required this.ontap});
+      {super.key, required this.icon, required this.name, required this.ontap});
 
   @override
   Widget build(BuildContext context) {
@@ -561,3 +622,41 @@ class ServiceContainer extends StatelessWidget {
     );
   }
 }
+
+Widget _buildTopRatedList(List<dynamic> workers, String skill) {
+  List<dynamic> filteredWorkers = (skill != 'All') ? workers.where((worker) => worker.skill == skill).toList(): workers;
+  filteredWorkers.sort((a, b) => b.rating!.compareTo(a.rating!));
+  if (filteredWorkers.isEmpty) {
+    return Center(
+      child: Text('No workers available for $skill'),
+    );
+  }
+
+  return ListView.builder(
+    itemCount: filteredWorkers.length,
+    physics: const NeverScrollableScrollPhysics(),
+    itemBuilder: (context, index) {
+      UserModel workerData = filteredWorkers[index];
+      return workerContainer(
+        name: workerData.name.toString(),
+        job: workerData.skill.toString(),
+        image: workerData.imagePath.toString(),
+        rating: workerData.rating!.toStringAsFixed(1),
+        isWorker: true,
+        ontap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WorkerProfileScreen(
+                userId: workerData.userId.toString(),
+                showContactButton: true,
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
+}
+
+

@@ -14,7 +14,9 @@ class WorkerProposalModel {
   String? material;
   String? rate;
   bool? isAccept;
+  bool? isCompleted;
   String? location;
+  String? estimatedTime;
   dynamic timestamp;
   dynamic workReachTime;
   dynamic workStartTime;
@@ -32,6 +34,7 @@ class WorkerProposalModel {
     this.material,
     this.rate,
     this.isAccept,
+    this.isCompleted,
     this.workerID,
     this.location,
     this.workerName,
@@ -41,6 +44,7 @@ class WorkerProposalModel {
     this.workEndTime,
     this.proposerDeviceToken,
     this.workerDeviceToken,
+    this.estimatedTime
   });
 
   Map<String, dynamic> toJson() {
@@ -55,6 +59,7 @@ class WorkerProposalModel {
       'material': material,
       'rate': rate,
       'isAccept': false,
+      'isCompleted': false,
       'workerID': workerID,
       'workerName': workerName,
       'location': location,
@@ -65,6 +70,7 @@ class WorkerProposalModel {
       'workEndTime': workEndTime,
       'proposerDeviceToken': proposerDeviceToken,
       'workerDeviceToken': workerDeviceToken,
+      'estimatedTime': estimatedTime
     };
   }
 
@@ -80,6 +86,7 @@ class WorkerProposalModel {
       material: json['material'],
       rate: json['rate'],
       isAccept: json['isAccept'],
+      isCompleted: json['isCompleted'],
       workerID: json['workerID'],
       workerName: json['workerName'],
       location: json['location'],
@@ -89,7 +96,8 @@ class WorkerProposalModel {
       workReachTime: json['workReachTime'],
       workEndTime: json['workEndTime'],
       proposerDeviceToken: json['proposerDeviceToken'],
-      workerDeviceToken: json['workerDeviceToken']
+      workerDeviceToken: json['workerDeviceToken'],
+      estimatedTime: json['estimatedTime'],
     );
   }
 }

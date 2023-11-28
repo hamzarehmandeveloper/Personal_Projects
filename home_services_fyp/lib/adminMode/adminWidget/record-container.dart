@@ -2,14 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 
-class workerContainer extends StatelessWidget {
+class recordContainer extends StatelessWidget {
   final String name;
+  final String? city;
   final String job;
   final String image;
   final String rating;
   final Function() ontap;
   final bool isWorker;
-  const workerContainer({Key? key, required this.name, required this.job, required this.image, required this.rating, required this.ontap, required this.isWorker}) : super(key: key);
+  const recordContainer({Key? key, required this.name, this.city,required this.job, required this.image, required this.rating, required this.ontap, required this.isWorker}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +35,21 @@ class workerContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   ClipRRect(
-                      borderRadius: BorderRadius.circular(50.0),
-                      child: CachedNetworkImage(
-                        imageUrl: image,
+                    borderRadius: BorderRadius.circular(50.0),
+                    child: CachedNetworkImage(
+                      imageUrl: image,
+                      fit: BoxFit.cover,
+                      width: 70,
+                      height: 70,
+                      placeholder: (context, url) =>
+                      new CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/demo.png',
                         fit: BoxFit.cover,
                         width: 70,
                         height: 70,
-                        placeholder: (context, url) =>
-                        new CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Image.asset(
-                          'assets/images/demo.png',
-                          fit: BoxFit.cover,
-                          width: 70,
-                          height: 70,
-                        ),
-                      ),),
+                      ),
+                    ),),
                   const SizedBox(
                     width: 20,
                   ),
@@ -67,7 +68,9 @@ class workerContainer extends StatelessWidget {
                       isWorker?Text(
                         job,
                         style: const TextStyle(fontSize: 15),
-                      ):SizedBox()
+                      ):Text(
+                        city!,
+                        style: const TextStyle(fontSize: 15),),
                     ],
                   ),
                   const Spacer(),

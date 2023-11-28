@@ -37,6 +37,24 @@ class _WorkerListState extends State<WorkerList> {
     }
   }
 
+  Future<List<dynamic>> fetchAllWorkerData() async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot = await userRepo
+          .firestore
+          .collection("Users")
+          .where("isWorker", isEqualTo: true)
+          .get();
+
+      final workers = querySnapshot.docs
+          .map((doc) => UserModel.fromJson(doc.data(), doc.id))
+          .toList();
+      return workers;
+    } catch (e) {
+      print('Error fetching worker data: $e');
+      return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +77,7 @@ class _WorkerListState extends State<WorkerList> {
         },
         child: SingleChildScrollView(
           child: FutureBuilder<List<dynamic>>(
-            future: fetchWorkerData(),
+            future: widget.skill != "All" ? fetchWorkerData() : fetchAllWorkerData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -84,6 +102,7 @@ class _WorkerListState extends State<WorkerList> {
                           job: workerData.skill.toString(),
                           image: workerData.imagePath.toString(),
                           rating: workerData.rating!.toStringAsFixed(1),
+                          isWorker:true,
                           ontap: () {
                             Navigator.push(
                               context,

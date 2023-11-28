@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 
 
 
-class customButton extends StatelessWidget {
+class AdminCustomButton extends StatelessWidget {
   final String title;
   final Function() onTap;
   final double fontSize;
-  const customButton({Key? key, required this.title, required this.onTap, required this.fontSize}) : super(key: key);
+  final Color color;
+  const AdminCustomButton({Key? key, required this.title, required this.onTap, required this.fontSize, required this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       elevation: 0,
-      color: Colors.black,
+      color: color,
       onPressed: onTap,
       height: 55,
       shape: RoundedRectangleBorder(

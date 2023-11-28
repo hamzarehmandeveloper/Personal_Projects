@@ -8,7 +8,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
 import '../../Constants.dart';
+import '../../Validators.dart';
 import '../../Widget/custom_button.dart';
+import '../../Widget/input_field.dart';
 import '../../models/workRequestModel.dart';
 
 class SubmitWorkScreen extends StatefulWidget {
@@ -126,33 +128,17 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                   style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 5),
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xfff1f1f5),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextFormField(
-                    controller: titleController,
-                    decoration: const InputDecoration(
-                      hintText: "Title",
-                      hintStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff94959b),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    maxLines: 1,
-                    keyboardType: TextInputType.multiline,
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter a work Title';
+                InputField(
+                  controller: titleController,
+                  hintText: "Title",
+                    textFieldValidator: (value) {
+                      if (!Validators().validateName(
+                          titleController.text.trim())) {
+                        return 'Please enter a valid title';
+                      } else {
+                        return null;
                       }
-                      return null;
-                    },
-                  ),
+                    }, suffixIcon: const SizedBox(),
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -160,33 +146,25 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                   style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 5),
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xfff1f1f5),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextFormField(
-                    controller: descriptionController,
-                    decoration: const InputDecoration(
-                      hintText: "Description",
-                      hintStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff94959b),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
+                TextFormField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(
+                    hintText: "Description",
+                    hintStyle: TextStyle(
+                      color: Color(0xff94959b),
                     ),
-                    maxLines: 5,
-                    keyboardType: TextInputType.multiline,
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter a work description';
-                      }
-                      return null;
-                    },
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                    ),
                   ),
+                  maxLines: 5,
+                  keyboardType: TextInputType.multiline,
+                  validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a work description';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -194,49 +172,45 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                   style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 5),
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xfff1f1f5),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(borderSide: BorderSide.none),
+                DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))
                     ),
-                    hint: const Text(
-                      'Select a category',
-                      style: TextStyle(color: Color(0xff94959b)),
-                    ),
-                    items: <String>[
-                      'Cleaning',
-                      'Plumber',
-                      'Electrician',
-                      'Painter',
-                      'Carpenter',
-                      'Gardener',
-                      'Tailor',
-                      'Maid',
-                      'Driver',
-                      'Cook',
-                    ].map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _selectedCategory = value;
-                      });
-                    },
-                    validator: (String? value) {
-                      if (value == null) {
-                        return 'Please select a category';
-                      }
-                      return null;
-                    },
-                    value: _selectedCategory,
                   ),
+                  hint: const Text(
+                    'Select a category',
+                    style: TextStyle(color: Color(0xff94959b)),
+                  ),
+                  items: <String>[
+                    'Cleaning',
+                    'Plumber',
+                    'Electrician',
+                    'Painter',
+                    'Carpenter',
+                    'Gardener',
+                    'Tailor',
+                    'Maid',
+                    'Driver',
+                    'Cook',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      _selectedCategory = value;
+                    });
+                  },
+                  validator: (String? value) {
+                    if (value == null) {
+                      return 'Please select a category';
+                    }
+                    return null;
+                  },
+                  value: _selectedCategory,
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -260,10 +234,13 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                   spacing: 8,
                   children: _images
                       .map(
-                        (image) => SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: Image.file(File(image.path)),
+                        (image) => ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: Image.file(File(image.path)),
+                          ),
                         ),
                       )
                       .toList(),
@@ -271,25 +248,33 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                 const SizedBox(height: 16),
                 customButton(
                   title: 'Submit',
+                  fontSize: 18,
                   onTap: () async {
-                    context.loaderOverlay.show();
-                    List<String>? imageUrls = await _uploadImages(
-                      _images.map((xFile) => File(xFile.path)).toList(),
-                    );
-                    WorkRequestProposal wrproposal = WorkRequestProposal(
-                      proposerId: userRepo.auth.currentUser!.uid,
-                      proposerName: Constants.userModel!.name,
-                      workDescription: descriptionController.text.trim(),
-                      selectedCategory: _selectedCategory,
-                      imageUrls: imageUrls,
-                      timestamp: Timestamp.now(),
-                      requestTitle: titleController.text.trim(),
-                      location: Constants.userModel!.city,
-                      proposerDeviceToken: Constants.userModel!.userToken,
-                    );
-                    await repo.storeWorkRequestProposal(wrproposal);
-                    context.loaderOverlay.hide();
-                    _showSubmittedPopup();
+                    if(_formKey.currentState!.validate()){
+                      context.loaderOverlay.show();
+                      List<String>? imageUrls = await _uploadImages(
+                        _images.map((xFile) => File(xFile.path)).toList(),
+                      );
+                      WorkRequestProposal wrproposal = WorkRequestProposal(
+                        proposerId: userRepo.auth.currentUser!.uid,
+                        proposerName: Constants.userModel!.name,
+                        workDescription: descriptionController.text.trim(),
+                        selectedCategory: _selectedCategory,
+                        imageUrls: imageUrls,
+                        timestamp: Timestamp.now(),
+                        requestTitle: titleController.text.trim(),
+                        location: Constants.userModel!.city,
+                        proposerDeviceToken: Constants.userModel!.userToken,
+                      );
+                      await repo.storeWorkRequestProposal(wrproposal);
+                      context.loaderOverlay.hide();
+                      _showSubmittedPopup();
+                      titleController.clear();
+                      descriptionController.clear();
+                      setState(() {
+                        _images = [];
+                      });
+                    }
                   },
                 ),
               ],

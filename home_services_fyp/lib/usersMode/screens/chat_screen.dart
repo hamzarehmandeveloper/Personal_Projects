@@ -78,6 +78,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
   }
 
   Stream<List<Message>> getMessagesStream() {
+    _scrollToBottom();
     List<String?> ids = [Constants.userModel!.userId, widget.receiverID];
     ids.sort();
     String chatIDs = ids.join('_');

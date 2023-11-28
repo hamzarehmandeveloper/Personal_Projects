@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class APIsCall{
-
   static void sendNotification(String? msgBody,String? receiverToken, String? title) async {
     var data = {
       'to' : receiverToken,
@@ -36,5 +35,4 @@ class APIsCall{
     });
     print(receiverToken);
   }
-
 }

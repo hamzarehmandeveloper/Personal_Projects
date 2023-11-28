@@ -18,6 +18,24 @@ class WorkRequestRepo {
     }
   }
 
+  Future<List<WorkRequestProposal>> fetchUserWorkRequests(String userId) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+      await _firestore.collection('WorkRequests').where('proposerId', isEqualTo: userId).get();
+
+      List<WorkRequestProposal> proposals = querySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data();
+        return WorkRequestProposal.fromJson(data, doc.id);
+      }).toList();
+      print(proposals.length);
+      print('data fetched');
+      return proposals;
+    } catch (e) {
+      print('Error fetching work request proposals: $e');
+      throw e;
+    }
+  }
+
 
   Future<List<WorkRequestProposal>> fetchWorkRequestProposals(String? currentUserID) async {
     try {
@@ -25,6 +43,7 @@ class WorkRequestRepo {
       await _firestore.collection('WorkRequests').get();
 
       List<WorkRequestProposal> proposals = querySnapshot.docs
+
           .map((doc) {
         Map<String, dynamic> data = doc.data();
         return WorkRequestProposal.fromJson(data, doc.id);

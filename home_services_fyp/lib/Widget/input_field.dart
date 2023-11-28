@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 
 class InputField extends StatefulWidget {
-  final String hintText;
+  final String? hintText;
   final bool obscureText;
   final Widget suffixIcon;
   final TextEditingController controller;
+  final String? Function(String?)? textFieldValidator;
 
   const InputField({
     Key? key,
@@ -13,6 +14,7 @@ class InputField extends StatefulWidget {
     this.obscureText = false,
     required this.suffixIcon,
     required this.controller,
+    this.textFieldValidator,
   }) : super(key: key);
 
   @override
@@ -22,11 +24,6 @@ class InputField extends StatefulWidget {
 class _InputFieldState extends State<InputField> {
   late final TextEditingController controller;
 
-  void initState() {
-    super.initState();
-    //controller = TextEditingController(text: widget.text);
-  }
-
   @override
   void dispose() {
     widget.controller.dispose();
@@ -35,33 +32,22 @@ class _InputFieldState extends State<InputField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xfff1f1f5),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: TextFormField(
-        controller: widget.controller,
-        obscureText: widget.obscureText,
-        decoration: InputDecoration(
-          hintText: widget.hintText,
-          hintStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color:Color(0xff94959b),
-          ),
-          border: const OutlineInputBorder(
-            borderSide: BorderSide.none,
-          ),
-          suffixIcon: widget.suffixIcon,
+    return TextFormField(
+      validator: widget.textFieldValidator,
+      controller: widget.controller,
+      obscureText: widget.obscureText,
+      decoration: InputDecoration(
+        hintText: widget.hintText,
+        hintStyle: const TextStyle(
+          color:Color(0xff94959b),
         ),
-        validator: (input) =>
-        input == null
-            ? 'Please enter a valid Data'
-            : null,
-        keyboardType: TextInputType.emailAddress,
-        style: const TextStyle(color: Colors.black),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        suffixIcon: widget.suffixIcon,
       ),
+      keyboardType: TextInputType.emailAddress,
+      style: const TextStyle(color: Colors.black),
     );
   }
 }

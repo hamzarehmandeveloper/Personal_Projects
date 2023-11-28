@@ -1,3 +1,4 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -229,8 +230,8 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                         );
                         double rating = (_professionalismRating + _qualityOfWorkRating + _punctualityRating)/3;
                         await addWorkerReview(reviewModel);
-
                         await userRepo.updateRatingForWorker(proposalData!.workerID, rating);
+                        await updateIsCompletedField(proposalData!.proposalId);
                         setState(() {
                           _punctualityRating = 0;
                           _qualityOfWorkRating = 0;
@@ -256,6 +257,19 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
   WorkerProposalModel? proposalData;
   UserRepo userRepo= UserRepo();
   WorkerProposalRepo repo = WorkerProposalRepo();
+
+  Future<void> updateIsCompletedField(String? documentId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('WorkerProposals')
+          .doc(documentId)
+          .update({'isCompleted': true});
+
+      print('Document updated successfully.');
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
 
 
   Future<void> deleteProposalAndImages() async {
@@ -318,8 +332,9 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
               } else {
                 proposalData = snapshot.data;
                 Timestamp proposalTime = proposalData!.timestamp;
+                print(proposalData!.isCompleted);
 
-                return SingleChildScrollView(
+                return proposalData!.isCompleted != true ? SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -362,8 +377,8 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                                 ),
                                 const SizedBox(height: 16),
                                 richText(
-                                  'Estimated Time : ', proposalTime.toDate().toString()
-                                ),
+                                  'Estimated Time : ',
+                                    '${proposalData!.estimatedTime.toString()} hour(s)'),
                                 const SizedBox(height: 16),
                                 richText(
                                   'Material : ',proposalData!.material.toString()
@@ -420,16 +435,18 @@ class _UserSideWorkStatusScreenState extends State<UserSideWorkStatusScreen> {
                             height: 60,
                             child: customButton(
                               title: 'Discontinue',
+                              fontSize: 18,
                               onTap: () {
                                 context.loaderOverlay.show();
                                 deleteProposalAndImages();
+
                                 context.loaderOverlay.hide();
                               },
                             )),
                       ],
                     ),
                   ),
-                );
+                ): Center(child: Text('Project Completed'),);
               }
             }),
       ),

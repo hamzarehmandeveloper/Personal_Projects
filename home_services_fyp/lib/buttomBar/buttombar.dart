@@ -25,7 +25,6 @@ class _TabContainerState extends State<TabContainer> {
   @override
   void initState() {
     super.initState();
-
     originalList = [
       const HomePage(),
       const SelectService(),

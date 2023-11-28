@@ -201,6 +201,7 @@ class _WorkerEditProfileScreenState extends State<WorkerEditProfileScreen> {
                     const SizedBox(height: 24),
                     customButton(
                       title: "Save",
+                      fontSize: 18,
                       onTap: () async {
                         final String email = emailController.text.trim();
                         final String name = nameController.text.trim();

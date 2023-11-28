@@ -56,7 +56,7 @@ class _WorkerProfileState extends State<WorkerProfile> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    NumbersWidget(),
+                    NumbersWidget(Constants.userModel!.rating,Constants.userModel!.numOfRatings),
                     const SizedBox(height: 48),
                     buildAbout(context,Constants.userModel!),
                     const SizedBox(height: 24),

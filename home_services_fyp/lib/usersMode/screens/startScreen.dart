@@ -14,17 +14,6 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  UserRepo userRepo = UserRepo();
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-   init() async {
-    Constants.userModel = (await userRepo.fetchUserData());
-    print('done');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,14 +24,10 @@ class _StartPageState extends State<StartPage> {
             height: 70,
             child: customButton(
               title: 'Get Start',
+              fontSize: 18,
               onTap: () {
-                if (Constants.userModel!=null){
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const TabContainer()));
-                } else{
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
-                }
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
               },
             ),
           ),
@@ -53,10 +38,10 @@ class _StartPageState extends State<StartPage> {
               height: 100,
             ),
             Container(
-              height: MediaQuery.of(context).size.height*0.5,
+              height: MediaQuery.of(context).size.height * 0.5,
               child: Lottie.asset(
-                  'assets/lottie_animation/HomeServicesLogo.json',
-                  ),
+                'assets/lottie_animation/HomeServicesLogo.json',
+              ),
             ),
             Expanded(
               child: Container(

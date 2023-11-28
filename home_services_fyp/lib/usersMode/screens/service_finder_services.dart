@@ -29,10 +29,10 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
     super.initState();
     print('hello');
     _tabController = TabController(length: 2, vsync: this);
+    print('hello');
     setState(() {
       init();
     });
-    print('hello');
   }
 
   init() async {
@@ -108,6 +108,9 @@ class _ServiceFinderServicesState extends State<ServiceFinderServices>
             TextButton(
               onPressed: () {
                 deletePendingRequest(pendingRequest);
+                setState(() {
+                  init();
+                });
                 Navigator.of(context).pop();
               },
               child: const Text('Delete'),

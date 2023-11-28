@@ -12,6 +12,7 @@ import 'package:lottie/lottie.dart';
 import '../../Constants.dart';
 import '../../FireStore_repo/APIsCall.dart';
 import '../../Widget/custom_button.dart';
+import '../../Widget/hours_counter.dart';
 import '../../Widget/image_viewer.dart';
 import '../../Widget/input_field.dart';
 import '../../Widget/richText.dart';
@@ -84,9 +85,26 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
       }
       await proposalRef
           .update({'proposalSubmittedByWorkerIds': existingWorkerIds});
+      print('proposal Submitted by worker ID successfully');
     } catch (e) {
       print('Error while updating submit worker IDs $e');
     }
+  }
+
+  int _counter = 1;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void _decrementCounter() {
+    setState(() {
+      if( _counter > 1){
+        _counter--;
+      }
+    });
   }
 
   @override
@@ -182,12 +200,21 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                const Text(
+                  'Enter rate for work completion',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 5),
                 InputField(
                   hintText: 'Rate',
                   suffixIcon: const SizedBox(),
                   controller: rateController,
                 ),
                 const SizedBox(height: 16),
+                const Text(
+                  'Enter material required for complete work',
+                  style: TextStyle(fontSize: 16),
+                ),
                 const SizedBox(height: 5),
                 InputField(
                   hintText: 'Material',
@@ -195,8 +222,15 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                   controller: materialController,
                 ),
                 const SizedBox(height: 16),
+                CounterWidget(
+                  value: _counter,
+                  onDecrement: _decrementCounter,
+                  onIncrement: _incrementCounter,
+                ),
+                const SizedBox(height: 16),
                 customButton(
                   title: "Submit",
+                  fontSize: 18,
                   onTap: () async {
                     context.loaderOverlay.show();
                     WorkerProposalModel rproposal = WorkerProposalModel(
@@ -218,6 +252,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                       material: materialController.text.trim(),
                       rate: rateController.text.trim(),
                       timestamp: widget.workRequestdata!.timestamp,
+                      estimatedTime: _counter.toString(),
                     );
                     print(rproposal.proposalId);
                     await proposalRepo.storeWorkRequestProposal(rproposal);
